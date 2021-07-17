@@ -1,0 +1,3 @@
+Permissions are used to allow user accounts access to certain things
+
+The default "guest" user is anyone signed in without an access token. By default they are only able to view certain data but a very limited amount.
