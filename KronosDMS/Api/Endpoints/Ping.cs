@@ -8,7 +8,7 @@ namespace KronosDMS.Api.Endpoints
     {
         public Ping()
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/ping");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/ping");
         }
 
         public override async Task<PingResponse> PerformRequestAsync()

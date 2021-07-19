@@ -60,6 +60,8 @@ namespace KronosDMS.Api
         }
         private static string _clientToken;
 
+        public static string AccessToken = "";
+
         /// <summary>
         /// Represents the http client used in the web requests.
         /// </summary>
@@ -102,6 +104,8 @@ namespace KronosDMS.Api
                         endpoint.Arguments[i] +
                         (i < endpoint.Arguments.Count - 1 ? "&" : ""));
                 }
+
+                Requester.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
 
                 httpResponse = await Requester.Client.GetAsync(endpoint.Address, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
                 rawMessage = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -158,6 +162,8 @@ namespace KronosDMS.Api
 
             try
             {
+                Requester.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+
                 StringContent contents = new StringContent(endpoint.PostContent, Requester.Encoding, "application/json");
                 httpResponse = await Requester.Client.PostAsync($"{endpoint.Address}", contents);
                 //Console.WriteLine(httpResponse.RequestMessage);
@@ -209,7 +215,7 @@ namespace KronosDMS.Api
             try
             {
                 //application/x-www-form-urlencoded
-                Requester.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", endpoint.Arguments[0]);
+                Requester.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
                 Requester.Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
                 Requester.Client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("KronosDMS", "0.1"));
 

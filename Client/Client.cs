@@ -17,16 +17,9 @@ namespace KronosDMS_Client
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             ActiveTheme = ThemeManager.LoadTheme("Dark");
-
-            PingResponse ping = new Ping().PerformRequestAsync().Result;
-            if (!ping.Success)
-            {
-                MessageBox.Show("Failed to connect to the server");
-                return;
-            }
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -37,6 +30,12 @@ namespace KronosDMS_Client
                 return;
 
             Application.Run(MainWindow = new MainWindow());
+        }
+
+        public static void Exit()
+        {
+            Response logout = new AccountLogout(ActiveAccount.Username, ActiveAccount.PasswordHash).PerformRequestAsync().Result;
+            Application.Exit();
         }
     }
 }

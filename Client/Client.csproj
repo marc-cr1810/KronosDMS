@@ -21,6 +21,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Update="UserControls\KListView - Copy.Designer.cs">
       <DependentUpon>KListView.Designer.cs</DependentUpon>
     </Compile>
@@ -34,6 +39,13 @@
     <EmbeddedResource Update="UserControls\KListView - Copy.resx">
       <DependentUpon>KListView.resx</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@ namespace KronosDMS.Api.Endpoints
 
         public PartsSearch(string make, string number, string description)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/getpart");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/parts/get");
 
             this.Make = make;
             this.Number = number;
@@ -26,7 +26,7 @@ namespace KronosDMS.Api.Endpoints
 
         public PartsSearch(string id)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/getpart");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/parts/get");
 
             this.ID = id;
         }

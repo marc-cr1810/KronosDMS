@@ -7,7 +7,7 @@ namespace KronosDMS_Server.Handlers
         public static Route Get = new Route()
         {
             Name = "Get Make Handler",
-            UrlRegex = @"^/api/getmake$",
+            UrlRegex = @"^/api/v1/makes/get$",
             Method = "GET",
             Callable = (HttpRequest request) =>
             {
@@ -25,7 +25,7 @@ namespace KronosDMS_Server.Handlers
         public static Route Set = new Route()
         {
             Name = "Set Make Handler",
-            UrlRegex = @"^/api/setmake$",
+            UrlRegex = @"^/api/v1/makes/set$",
             Method = "POST",
             Callable = (HttpRequest request) =>
             {
@@ -53,7 +53,7 @@ namespace KronosDMS_Server.Handlers
         public static Route Add = new Route()
         {
             Name = "Add Make Handler",
-            UrlRegex = @"^/api/addmake$",
+            UrlRegex = @"^/api/v1/makes/add$",
             Method = "POST",
             Callable = (HttpRequest request) =>
             {

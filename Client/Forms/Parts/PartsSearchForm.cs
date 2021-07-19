@@ -66,11 +66,8 @@ namespace KronosDMS_Client.Forms.Parts
         private void ListParts_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             string id = ListParts.SelectedItems[0].Name;
-            string number = ListParts.SelectedItems[0].Text;
-            string make = ListParts.SelectedItems[0].SubItems[1].Text;
-            string description = ListParts.SelectedItems[0].SubItems[2].Text;
 
-            PartsSearchResponse response = new PartsSearch(make, number, description).PerformRequestAsync().Result;
+            PartsSearchResponse response = new PartsSearch(id).PerformRequestAsync().Result;
             Result = response.Parts[id];
             Client.MainWindow.CloseForm(this);
         }

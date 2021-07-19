@@ -18,7 +18,7 @@ namespace KronosDMS.Api.Endpoints
 
         public RecallsSearch(string make, string model, string number, string description)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/getrecall");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/recalls/get");
 
             this.Make = make;
             this.Model = model;
@@ -28,7 +28,7 @@ namespace KronosDMS.Api.Endpoints
 
         public RecallsSearch(string id)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/getrecall");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/recalls/get");
 
             this.ID = id;
         }

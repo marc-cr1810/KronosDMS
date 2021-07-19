@@ -1,19 +1,15 @@
-﻿using KronosDMS.Objects;
+﻿using KronosDMS.Files;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace KronosDMS.Manager
+namespace KronosDMS.Objects
 {
     public class UserAccountManager
     {
-        private Dictionary<int, UserAccount> Accounts;
-
         public struct Credentials
         {
             public string Username;
@@ -21,15 +17,27 @@ namespace KronosDMS.Manager
             public string ClientToken;
         }
 
+        private UserAccountsFile File { get; set; }
+        private Dictionary<string, int> AccessTokenAccounts;
+
         public UserAccountManager()
         {
-            if (File.Exists(@"data/UserAccounts.json"))
-                try
-                {
-                    Accounts = JsonConvert.DeserializeObject<Dictionary<int, UserAccount>>(File.ReadAllText(@"data/UserAccounts.json"));
-                } catch { }
-            if (Accounts is null)
-                Accounts = new Dictionary<int, UserAccount>();
+            File = new UserAccountsFile();
+
+            // Ensure the sysad user account exists (yes it is a weak password, CHANGE IT!!!!)
+            if (!File.Accounts.ContainsKey(1000))
+            {
+                Create("sysad", "sysad", "System", "Administrator");
+            }
+
+            AccessTokenAccounts = new Dictionary<string, int>();
+        }
+
+        public bool Create(string json)
+        {
+            UserAccount account = JsonConvert.DeserializeObject<UserAccount>(json);
+            account.ID = (File.Accounts.Count == 0) ? 1000 : File.Accounts.Last().Key + 1;
+            return File.Add(account);
         }
 
         public bool Create(string username, string password, string firstname, string lastname)
@@ -48,37 +56,67 @@ namespace KronosDMS.Manager
 
             UserAccount account = new UserAccount()
             {
-                ID = 1000 + Accounts.Count,
+                ID = (File.Accounts.Count == 0) ? 1000 : File.Accounts.Last().Key + 1,
                 Username = username,
                 PasswordHash = passwordHash,
                 FirstName = firstname,
                 LastName = lastname,
             };
 
-            foreach (KeyValuePair<int, UserAccount> a in Accounts)
+            return File.Add(account);
+        }
+
+        public bool Set(string json)
+        {
+            UserAccount account = JsonConvert.DeserializeObject<UserAccount>(json);
+            if (!File.Accounts.ContainsKey(account.ID))
+                return false;
+            if (account.ID == 1000)
             {
-                if (a.Value.Username == account.Username)
+                if (account.Username != "sysad" ||
+                    account.Group != "Administrator")
                     return false;
             }
+            File.Accounts[account.ID] = account;
+            File.Write();
+            return true;
+        }
 
-            Accounts.Add(account.ID, account);
-            Write();
-
+        public bool Remove(int id)
+        {
+            if (!File.Accounts.ContainsKey(id))
+                return false;
+            UserAccount account = File.Accounts[id];
+            if (account.ID == 1000)
+                return false;
+            File.Accounts.Remove(id);
+            File.Write();
             return true;
         }
 
         public string Login(string json)
         {
             Credentials credentials = JsonConvert.DeserializeObject<Credentials>(json);
-            foreach (KeyValuePair<int, UserAccount> a in Accounts)
+            foreach (KeyValuePair<int, UserAccount> a in File.Accounts)
             {
                 if (a.Value.Username == credentials.Username && a.Value.PasswordHash == credentials.Password)
                 {
                     UserAccount user = a.Value;
+
+                    // Remove the old access token from the user
+                    if (user.AccessToken is not null)
+                    {
+                        if (AccessTokenAccounts.ContainsKey(user.AccessToken))
+                            AccessTokenAccounts.Remove(user.AccessToken);
+                    }
+
                     user.ClientToken = credentials.ClientToken;
                     user.AccessToken = Guid.NewGuid().ToString();
-                    Accounts[a.Key] = user;
-                    user.PasswordHash = null;
+                    File.Accounts[a.Key] = user;
+                    //user.PasswordHash = null;
+
+                    AccessTokenAccounts.Add(user.AccessToken, user.ID);
+
                     return JsonConvert.SerializeObject(user);
                 }
             }
@@ -86,10 +124,46 @@ namespace KronosDMS.Manager
             return "";
         }
 
-        public void Write()
+        public string Logout(string json)
         {
-            string output = JsonConvert.SerializeObject(Accounts, Formatting.Indented);
-            File.WriteAllText(@"data/Accounts.json", output);
+            Credentials credentials = JsonConvert.DeserializeObject<Credentials>(json);
+            foreach (KeyValuePair<int, UserAccount> a in File.Accounts)
+            {
+                if (a.Value.Username == credentials.Username && a.Value.PasswordHash == credentials.Password)
+                {
+                    UserAccount user = a.Value;
+
+                    // Remove the old access token from the user
+                    if (user.AccessToken is not null)
+                    {
+                        if (AccessTokenAccounts.ContainsKey(user.AccessToken))
+                            AccessTokenAccounts.Remove(user.AccessToken);
+                    }
+
+                    user.ClientToken = null;
+                    user.AccessToken = null;
+                    File.Accounts[a.Key] = user;
+                    File.Write();
+
+                    return "{}";
+                }
+            }
+            return "";
+        }
+
+        public string Search(string username, string firstname, string lastname, int id = -1)
+        {
+            return File.Search(username, firstname, lastname, id);
+        }
+
+        public UserAccount GetAccount(string accessToken)
+        {
+            if (accessToken is not null)
+            {
+                if (AccessTokenAccounts.ContainsKey(accessToken))
+                    return File.Accounts[AccessTokenAccounts[accessToken]];
+            }
+            return new UserAccount();
         }
     }
 }

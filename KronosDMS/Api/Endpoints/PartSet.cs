@@ -12,7 +12,7 @@ namespace KronosDMS.Api.Endpoints
 
         public PartSet(Part part)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/setpart");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/parts/set");
             this.Part = part;
         }
 

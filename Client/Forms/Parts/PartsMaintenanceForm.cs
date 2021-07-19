@@ -85,7 +85,7 @@ namespace KronosDMS_Client.Forms.Parts
                 {
                     if (MessageBox.Show($"Create new part \"{this.textPartNumber.Text.ToUpper()}\"?", "Create new part?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        this.Text = $"Recall | {this.textPartNumber.Text.ToUpper()} - Creating new part";
+                        this.Text = $"Parts Maintenance | {this.textPartNumber.Text.ToUpper()} - Creating new part";
                         this.textPartNumber.Text = this.textPartNumber.Text.ToUpper();
                         this.NewPart = true;
                         SelectedPart.Number = this.textPartNumber.Text;
@@ -149,8 +149,10 @@ namespace KronosDMS_Client.Forms.Parts
             {
                 response = new PartAdd(SelectedPart).PerformRequestAsync().Result;
                 if (!response.IsSuccess)
+                {
                     MessageBox.Show($"Failed to save part\n{response.RawMessage}");
-                return;
+                    return;
+                }
             }
 
             response = new PartSet(SelectedPart).PerformRequestAsync().Result;

@@ -15,5 +15,6 @@ namespace KronosDMS.Objects
         public string LastName;
         public string ClientToken;
         public string AccessToken;
+        public string Group;
     }
 }

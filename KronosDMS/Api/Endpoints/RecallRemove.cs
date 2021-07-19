@@ -13,7 +13,7 @@ namespace KronosDMS.Api.Endpoints
 
         public RecallRemove(string id)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/deleterecall");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/recalls/delete");
             this.ID = id;
         }
 

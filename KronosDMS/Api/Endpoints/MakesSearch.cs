@@ -14,7 +14,7 @@ namespace KronosDMS.Api.Endpoints
 
         public MakesSearch(string name)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/getmake");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/makes/get");
 
             this.Name = name;
         }

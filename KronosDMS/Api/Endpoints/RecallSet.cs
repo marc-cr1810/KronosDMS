@@ -12,7 +12,7 @@ namespace KronosDMS.Api.Endpoints
 
         public RecallSet(Recall recall)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/setrecall");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/recalls/set");
             this.Recall = recall;
         }
 

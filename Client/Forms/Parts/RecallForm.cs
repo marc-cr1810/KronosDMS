@@ -246,8 +246,10 @@ namespace KronosDMS_Client.Forms.Parts
             {
                 response = new RecallAdd(SelectedRecall).PerformRequestAsync().Result;
                 if (!response.IsSuccess)
+                {
                     MessageBox.Show($"Failed to save recall\n{response.RawMessage}");
-                return;
+                    return;
+                }
             }
 
             response = new RecallSet(SelectedRecall).PerformRequestAsync().Result;

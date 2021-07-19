@@ -12,7 +12,7 @@ namespace KronosDMS.Api.Endpoints
 
         public MakeSet(Make make)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/setmake");
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/makes/set");
             this.Make = make;
         }
 

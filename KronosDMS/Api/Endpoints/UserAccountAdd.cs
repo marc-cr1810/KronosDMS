@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace KronosDMS.Api.Endpoints
 {
-    public class PartAdd : IEndpoint<Response>
+    public class UserAccountAdd : IEndpoint<Response>
     {
-        public Part Part { get; set; }
+        public UserAccount UserAccount { get; set; }
 
-        public PartAdd(Part part)
+        public UserAccountAdd(UserAccount account)
         {
-            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/parts/add");
-            this.Part = part;
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/accounts/add");
+            this.UserAccount = account;
         }
 
         public override async Task<Response> PerformRequestAsync()
         {
-            this.PostContent = JsonConvert.SerializeObject(this.Part);
+            this.PostContent = JsonConvert.SerializeObject(this.UserAccount);
             this.Response = Task.Run(() => Requester.Post(this)).Result;
 
             if (this.Response.IsSuccess)

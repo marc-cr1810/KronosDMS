@@ -49,7 +49,7 @@ namespace KronosDMS_Client
 
         private void FileMenuExit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Client.Exit();
         }
 
         private void PartsMenuSearch_Click(object sender, EventArgs e)
@@ -65,6 +65,16 @@ namespace KronosDMS_Client
         private void PartsMenuKitsRecalls_Click(object sender, EventArgs e)
         {
             OpenForm(new Forms.Parts.RecallForm());
+        }
+
+        private void SetupUserAccounts_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Forms.Server.UserAccountsForm());
+        }
+
+        private void SetupUserGroups_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

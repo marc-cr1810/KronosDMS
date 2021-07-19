@@ -3,6 +3,8 @@ using KronosDMS.Files;
 using KronosDMS.Http.Server;
 using System.Threading;
 using KronosDMS.Manager;
+using KronosDMS.Security;
+using System.Collections.Generic;
 
 namespace KronosDMS_Server
 {
@@ -22,6 +24,9 @@ namespace KronosDMS_Server
             Makes = new MakeFile();
             Parts = new PartsFile();
             Recalls = new RecallFile();
+
+            PermissionHandler.GroupsFile = new GroupsFile();
+
             KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
 
             log4net.Config.XmlConfigurator.Configure();

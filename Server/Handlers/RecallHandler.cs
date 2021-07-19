@@ -1,4 +1,5 @@
 ﻿using KronosDMS.Http.Server.Models;
+using KronosDMS.Security;
 
 namespace KronosDMS_Server.Handlers
 {
@@ -7,10 +8,13 @@ namespace KronosDMS_Server.Handlers
         public static Route Get = new Route()
         {
             Name = "Get Recalls Handler",
-            UrlRegex = @"^/api/getrecall$",
+            UrlRegex = @"^/api/v1/recalls/get$",
             Method = "GET",
             Callable = (HttpRequest request) =>
             {
+                if (!Routes.HasPermission(request, "recalls.get"))
+                    return PermissionHandler.UnauthorizedResponse;
+
                 string make = Routes.GetArgValue(request, "f");
                 string model = Routes.GetArgValue(request, "m");
                 string number = Routes.GetArgValue(request, "n");
@@ -29,10 +33,13 @@ namespace KronosDMS_Server.Handlers
         public static Route Set = new Route()
         {
             Name = "Set Recall Handler",
-            UrlRegex = @"^/api/setrecall$",
+            UrlRegex = @"^/api/v1/recalls/set$",
             Method = "POST",
             Callable = (HttpRequest request) =>
             {
+                if (!Routes.HasPermission(request, "recalls.modify.set"))
+                    return PermissionHandler.UnauthorizedResponse;
+
                 if (Server.Recalls.Set(request.Content))
                 {
                     return new HttpResponse()
@@ -57,10 +64,13 @@ namespace KronosDMS_Server.Handlers
         public static Route Add = new Route()
         {
             Name = "Add Recall Handler",
-            UrlRegex = @"^/api/addrecall$",
+            UrlRegex = @"^/api/v1/recalls/add$",
             Method = "POST",
             Callable = (HttpRequest request) =>
             {
+                if (!Routes.HasPermission(request, "recalls.modify.add"))
+                    return PermissionHandler.UnauthorizedResponse;
+
                 if (Server.Recalls.Add(request.Content))
                 {
                     return new HttpResponse()
@@ -85,10 +95,13 @@ namespace KronosDMS_Server.Handlers
         public static Route Remove = new Route()
         {
             Name = "Delete Recall Handler",
-            UrlRegex = @"^/api/deleterecall$",
+            UrlRegex = @"^/api/v1/recalls/delete$",
             Method = "GET",
             Callable = (HttpRequest request) =>
             {
+                if (!Routes.HasPermission(request, "recalls.modify.remove"))
+                    return PermissionHandler.UnauthorizedResponse;
+
                 string id = Routes.GetArgValue(request, "id");
 
                 if (Server.Recalls.Remove(id))
