@@ -7,12 +7,12 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class RecallsSearchForm : Window
+    public partial class KitsSearchForm : Window
     {
         private bool IsDialog;
-        public Recall Result;
+        public Kit Result;
 
-        public RecallsSearchForm(string number = "", bool dialog = true)
+        public KitsSearchForm(string number = "", bool dialog = true)
         {
             InitializeComponent();
 
@@ -29,7 +29,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelPartNumber.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.labelDescription.ForeColor = Client.ActiveTheme.Colors.Text.Default;
 
-            this.textRecallNumber.Text = number;
+            this.textKitNumber.Text = number;
             if (number != "")
                 Search();
 
@@ -38,17 +38,17 @@ namespace KronosDMS_Client.Forms.Parts
 
         public void Search()
         {
-            RecallsSearchResponse response = new RecallsSearch(this.boxMakes.Text, this.boxModel.Text, this.textRecallNumber.Text, this.textDescription.Text).PerformRequestAsync().Result;
+            KitsSearchResponse response = new KitsSearch(this.boxMakes.Text, this.boxModel.Text, this.textKitNumber.Text, this.textDescription.Text).PerformRequestAsync().Result;
 
             ListParts.Items.Clear();
 
-            foreach (KeyValuePair<string, Recall> recall in response.Recalls)
+            foreach (KeyValuePair<string, Kit> kit in response.Kits)
             {
-                ListViewItem partItem = ListParts.Items.Add(recall.Value.Number);
-                partItem.Name = recall.Key;
-                partItem.SubItems.Add(recall.Value.Make);
-                partItem.SubItems.Add(recall.Value.Model);
-                partItem.SubItems.Add(recall.Value.Description);
+                ListViewItem partItem = ListParts.Items.Add(kit.Value.Number);
+                partItem.Name = kit.Key;
+                partItem.SubItems.Add(kit.Value.Make);
+                partItem.SubItems.Add(kit.Value.Model);
+                partItem.SubItems.Add(kit.Value.Description);
             };
 
             ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
@@ -85,10 +85,10 @@ namespace KronosDMS_Client.Forms.Parts
             string model = ListParts.SelectedItems[0].SubItems[2].Text;
             string description = ListParts.SelectedItems[0].SubItems[3].Text;
 
-            RecallsSearchResponse response = new RecallsSearch(make, model, number, description).PerformRequestAsync().Result;
-            Result = response.Recalls[id];
+            KitsSearchResponse response = new KitsSearch(make, model, number, description).PerformRequestAsync().Result;
+            Result = response.Kits[id];
             if (!IsDialog)
-                Client.MainWindow.OpenForm(new RecallForm(Result));
+                Client.MainWindow.OpenForm(new KitForm(Result));
             Client.MainWindow.CloseForm(this);
         }
     }

@@ -38,6 +38,8 @@ namespace KronosDMS_Client.Forms
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "Window";
             this.Text = "Form1";
+            this.SizeChanged += new System.EventHandler(this.Window_SizeChanged);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Window_MouseClick);
             this.ResumeLayout(false);
 
         }

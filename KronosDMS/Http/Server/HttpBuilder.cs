@@ -1,10 +1,4 @@
 ﻿using KronosDMS.Http.Server.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KronosDMS.Http.Server
 {
@@ -12,7 +6,7 @@ namespace KronosDMS.Http.Server
     {
         public static HttpResponse InternalServerError()
         {
-            string content = "Internal Error: 500"; 
+            string content = "Internal Error: 500";
 
             return new HttpResponse()
             {

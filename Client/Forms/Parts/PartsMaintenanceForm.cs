@@ -13,7 +13,7 @@ namespace KronosDMS_Client.Forms.Parts
         private bool NewPart = false;
         Part SelectedPart = new Part();
 
-        public PartsMaintenanceForm()
+        public PartsMaintenanceForm(Part part = new Part())
         {
             InitializeComponent();
 
@@ -26,6 +26,9 @@ namespace KronosDMS_Client.Forms.Parts
             this.groupDetails.ForeColor = Client.ActiveTheme.Colors.Text.Default;
 
             this.Tools.BackColor = Client.ActiveTheme.Colors.Foreground;
+
+            if (part.Number is not null)
+                FillDetails(part);
         }
 
         private void FillDetails(Part part)
@@ -35,7 +38,8 @@ namespace KronosDMS_Client.Forms.Parts
 
             SelectedPart = part;
 
-            this.Text = $"Parts Maintenance | {part.Number} \"{part.Description}\" - Editing";
+            if (this.NewPart != true)
+                this.Text = $"Parts Maintenance | {part.Number} \"{part.Description}\" - Editing";
 
             MakesSearchResponse makes = new MakesSearch("").PerformRequestAsync().Result;
             foreach (KeyValuePair<string, Make> make in makes.Makes)
@@ -47,6 +51,15 @@ namespace KronosDMS_Client.Forms.Parts
             textBin.Text = part.Bin;
             textPredecessor.Text = part.Predecessor;
             textSuccessor.Text = part.Successor;
+
+            boxMakes.Enabled = true;
+            textDescription.Enabled = true;
+            textBin.Enabled = true;
+            textPredecessor.Enabled = true;
+            textSuccessor.Enabled = true;
+
+            buttonPredecessorSearch.Enabled = true;
+            buttonSuccessorSearch.Enabled = true;
         }
 
         private void ClearDetails()
@@ -63,6 +76,42 @@ namespace KronosDMS_Client.Forms.Parts
             textBin.Text = "";
             textPredecessor.Text = "";
             textSuccessor.Text = "";
+
+            boxMakes.Enabled = false;
+            textDescription.Enabled = false;
+            textBin.Enabled = false;
+            textPredecessor.Enabled = false;
+            textSuccessor.Enabled = false;
+
+            buttonPredecessorSearch.Enabled = false;
+            buttonSuccessorSearch.Enabled = false;
+        }
+
+        private void SearchPart()
+        {
+            if (this.textPartNumber.Text == "" || this.textPartNumber.Text == SelectedPart.Number)
+                return;
+            PartsSearchResponse response = new PartsSearch(this.textPartNumber.Text.ToUpper()).PerformRequestAsync().Result;
+            if (response.Parts.Count != 1)
+            {
+                if (MessageBox.Show($"Create new part \"{this.textPartNumber.Text.ToUpper()}\"?", "Create new part?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    this.Text = $"Parts Maintenance | {this.textPartNumber.Text.ToUpper()} - Creating new part";
+                    this.textPartNumber.Text = this.textPartNumber.Text.ToUpper();
+                    this.NewPart = true;
+                    SelectedPart.Number = this.textPartNumber.Text;
+                    FillDetails(SelectedPart);
+                    return;
+                }
+                else
+                {
+                    PartsSearchForm form = new PartsSearchForm(this.textPartNumber.Text);
+                    Client.MainWindow.OpenFormDialog(form);
+                    FillDetails(form.Result);
+                    form.Dispose();
+                }
+            }
+            else FillDetails(response.Parts.ElementAt(0).Value);
         }
 
         private Part SearchForPart(string number)
@@ -78,31 +127,8 @@ namespace KronosDMS_Client.Forms.Parts
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (this.textPartNumber.Text == "" || this.textPartNumber.Text == SelectedPart.Number)
-                    return;
-                PartsSearchResponse response = new PartsSearch(this.textPartNumber.Text.ToUpper()).PerformRequestAsync().Result;
-                if (response.Parts.Count != 1)
-                {
-                    if (MessageBox.Show($"Create new part \"{this.textPartNumber.Text.ToUpper()}\"?", "Create new part?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        this.Text = $"Parts Maintenance | {this.textPartNumber.Text.ToUpper()} - Creating new part";
-                        this.textPartNumber.Text = this.textPartNumber.Text.ToUpper();
-                        this.NewPart = true;
-                        SelectedPart.Number = this.textPartNumber.Text;
-                        FillDetails(SelectedPart);
-                        return;
-                    }
-                    else
-                    {
-                        PartsSearchForm form = new PartsSearchForm(this.textPartNumber.Text);
-                        Client.MainWindow.OpenFormDialog(form);
-                        FillDetails(form.Result);
-                        form.Dispose();
-                    }
-                }
-                else FillDetails(response.Parts.ElementAt(0).Value);
+                SearchPart();
             }
-            this.NewPart = false;
         }
 
         private void buttonPartSearch_Click(object sender, EventArgs e)
@@ -154,12 +180,14 @@ namespace KronosDMS_Client.Forms.Parts
                     return;
                 }
             }
-
-            response = new PartSet(SelectedPart).PerformRequestAsync().Result;
-            if (!response.IsSuccess)
+            else
             {
-                MessageBox.Show($"Failed to save part\n{response.RawMessage}");
-                return;
+                response = new PartSet(SelectedPart).PerformRequestAsync().Result;
+                if (!response.IsSuccess)
+                {
+                    MessageBox.Show($"Failed to save part\n{response.RawMessage}");
+                    return;
+                }
             }
             ClearDetails();
         }
@@ -183,6 +211,11 @@ namespace KronosDMS_Client.Forms.Parts
                 return;
             }
             ClearDetails();
+        }
+
+        private void textPartNumber_Leave(object sender, EventArgs e)
+        {
+            SearchPart();
         }
     }
 }

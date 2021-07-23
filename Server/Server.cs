@@ -1,10 +1,8 @@
-﻿using KronosDMS.Objects;
-using KronosDMS.Files;
+﻿using KronosDMS.Files;
 using KronosDMS.Http.Server;
-using System.Threading;
-using KronosDMS.Manager;
+using KronosDMS.Objects;
 using KronosDMS.Security;
-using System.Collections.Generic;
+using System.Threading;
 
 namespace KronosDMS_Server
 {
@@ -15,6 +13,7 @@ namespace KronosDMS_Server
         public static PartsFile Parts { get; set; }
         public static MakeFile Makes { get; set; }
         public static RecallFile Recalls { get; set; }
+        public static KitFile Kits { get; set; }
 
         static void Main(string[] args)
         {
@@ -24,6 +23,7 @@ namespace KronosDMS_Server
             Makes = new MakeFile();
             Parts = new PartsFile();
             Recalls = new RecallFile();
+            Kits = new KitFile();
 
             PermissionHandler.GroupsFile = new GroupsFile();
 

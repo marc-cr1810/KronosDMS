@@ -1,11 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KronosDMS_Client
 {
@@ -51,7 +47,8 @@ namespace KronosDMS_Client
             try
             {
                 loadedTheme = JsonConvert.DeserializeObject<Theme>(File.ReadAllText($"themes/{theme}.json"));
-            } catch { }
+            }
+            catch { }
             return loadedTheme;
         }
 

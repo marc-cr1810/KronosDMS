@@ -64,7 +64,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.deleteToolStripButton});
             this.Tools.Location = new System.Drawing.Point(0, 0);
             this.Tools.Name = "Tools";
-            this.Tools.Size = new System.Drawing.Size(423, 25);
+            this.Tools.Size = new System.Drawing.Size(424, 25);
             this.Tools.TabIndex = 27;
             this.Tools.Text = "toolStrip1";
             // 
@@ -112,6 +112,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.textPartNumber.Size = new System.Drawing.Size(146, 23);
             this.textPartNumber.TabIndex = 29;
             this.textPartNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textPartNumberSearch);
+            this.textPartNumber.Leave += new System.EventHandler(this.textPartNumber_Leave);
             // 
             // labelPartNumber
             // 
@@ -140,13 +141,14 @@ namespace KronosDMS_Client.Forms.Parts
             this.groupDetails.Controls.Add(this.labelMake);
             this.groupDetails.Location = new System.Drawing.Point(12, 57);
             this.groupDetails.Name = "groupDetails";
-            this.groupDetails.Size = new System.Drawing.Size(399, 163);
+            this.groupDetails.Size = new System.Drawing.Size(400, 163);
             this.groupDetails.TabIndex = 30;
             this.groupDetails.TabStop = false;
             this.groupDetails.Text = "Details";
             // 
             // textBin
             // 
+            this.textBin.Enabled = false;
             this.textBin.Location = new System.Drawing.Point(87, 74);
             this.textBin.Name = "textBin";
             this.textBin.Size = new System.Drawing.Size(146, 23);
@@ -163,6 +165,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // buttonSuccessorSearch
             // 
+            this.buttonSuccessorSearch.Enabled = false;
             this.buttonSuccessorSearch.Location = new System.Drawing.Point(233, 132);
             this.buttonSuccessorSearch.Name = "buttonSuccessorSearch";
             this.buttonSuccessorSearch.Size = new System.Drawing.Size(22, 23);
@@ -173,6 +176,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textSuccessor
             // 
+            this.textSuccessor.Enabled = false;
             this.textSuccessor.Location = new System.Drawing.Point(87, 132);
             this.textSuccessor.Name = "textSuccessor";
             this.textSuccessor.Size = new System.Drawing.Size(146, 23);
@@ -189,6 +193,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // buttonPredecessorSearch
             // 
+            this.buttonPredecessorSearch.Enabled = false;
             this.buttonPredecessorSearch.Location = new System.Drawing.Point(233, 103);
             this.buttonPredecessorSearch.Name = "buttonPredecessorSearch";
             this.buttonPredecessorSearch.Size = new System.Drawing.Size(22, 23);
@@ -201,13 +206,15 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             this.textDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textDescription.Enabled = false;
             this.textDescription.Location = new System.Drawing.Point(87, 45);
             this.textDescription.Name = "textDescription";
-            this.textDescription.Size = new System.Drawing.Size(306, 23);
+            this.textDescription.Size = new System.Drawing.Size(307, 23);
             this.textDescription.TabIndex = 22;
             // 
             // textPredecessor
             // 
+            this.textPredecessor.Enabled = false;
             this.textPredecessor.Location = new System.Drawing.Point(87, 103);
             this.textPredecessor.Name = "textPredecessor";
             this.textPredecessor.Size = new System.Drawing.Size(146, 23);
@@ -234,6 +241,7 @@ namespace KronosDMS_Client.Forms.Parts
             // boxMakes
             // 
             this.boxMakes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.boxMakes.Enabled = false;
             this.boxMakes.FormattingEnabled = true;
             this.boxMakes.Location = new System.Drawing.Point(87, 16);
             this.boxMakes.Name = "boxMakes";
@@ -263,12 +271,13 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(423, 232);
+            this.ClientSize = new System.Drawing.Size(424, 231);
             this.Controls.Add(this.buttonPartSearch);
             this.Controls.Add(this.groupDetails);
             this.Controls.Add(this.textPartNumber);
             this.Controls.Add(this.labelPartNumber);
             this.Controls.Add(this.Tools);
+            this.MinimumSize = new System.Drawing.Size(440, 270);
             this.Name = "PartsMaintenanceForm";
             this.Text = "Parts Maintenance";
             this.Tools.ResumeLayout(false);

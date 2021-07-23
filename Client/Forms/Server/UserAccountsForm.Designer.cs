@@ -116,6 +116,7 @@ namespace KronosDMS_Client.Forms.Server
             this.textUserID.Size = new System.Drawing.Size(123, 23);
             this.textUserID.TabIndex = 29;
             this.textUserID.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textUserID_KeyDown);
+            this.textUserID.Leave += new System.EventHandler(this.textUserID_Leave);
             // 
             // textUsername
             // 
@@ -124,6 +125,7 @@ namespace KronosDMS_Client.Forms.Server
             this.textUsername.Size = new System.Drawing.Size(123, 23);
             this.textUsername.TabIndex = 31;
             this.textUsername.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textUsername_KeyDown);
+            this.textUsername.Leave += new System.EventHandler(this.textUsername_Leave);
             // 
             // labelUsername
             // 

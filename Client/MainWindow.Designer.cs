@@ -34,17 +34,20 @@ namespace KronosDMS_Client
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.PartsMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.PartsMenuSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.serviceKitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.generalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PartsMenuKitsGeneral = new System.Windows.Forms.ToolStripMenuItem();
             this.PartsMenuKitsRecalls = new System.Windows.Forms.ToolStripMenuItem();
+            this.queriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PartsMenuSearch = new System.Windows.Forms.ToolStripMenuItem();
+            this.RecallsMenuSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.PartsMenuMaintenance = new System.Windows.Forms.ToolStripMenuItem();
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.systemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.WindowView = new System.Windows.Forms.Panel();
             this.serverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetupUserAccounts = new System.Windows.Forms.ToolStripMenuItem();
             this.SetupUserGroups = new System.Windows.Forms.ToolStripMenuItem();
+            this.WindowView = new System.Windows.Forms.Panel();
+            this.KitsMenuSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,6 +68,7 @@ namespace KronosDMS_Client
             this.setupToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
+            this.Menu.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Menu.Size = new System.Drawing.Size(952, 24);
             this.Menu.TabIndex = 1;
             this.Menu.Text = "menuStrip1";
@@ -87,46 +91,64 @@ namespace KronosDMS_Client
             // PartsMenu
             // 
             this.PartsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.PartsMenuSearch,
             this.serviceKitsToolStripMenuItem,
+            this.queriesToolStripMenuItem,
             this.PartsMenuMaintenance});
             this.PartsMenu.Name = "PartsMenu";
             this.PartsMenu.Size = new System.Drawing.Size(45, 20);
             this.PartsMenu.Text = "Parts";
             // 
-            // PartsMenuSearch
-            // 
-            this.PartsMenuSearch.Name = "PartsMenuSearch";
-            this.PartsMenuSearch.Size = new System.Drawing.Size(172, 22);
-            this.PartsMenuSearch.Text = "Parts Search";
-            this.PartsMenuSearch.Click += new System.EventHandler(this.PartsMenuSearch_Click);
-            // 
             // serviceKitsToolStripMenuItem
             // 
             this.serviceKitsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.generalToolStripMenuItem,
+            this.PartsMenuKitsGeneral,
             this.PartsMenuKitsRecalls});
             this.serviceKitsToolStripMenuItem.Name = "serviceKitsToolStripMenuItem";
-            this.serviceKitsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.serviceKitsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.serviceKitsToolStripMenuItem.Text = "Service Kits";
             // 
-            // generalToolStripMenuItem
+            // PartsMenuKitsGeneral
             // 
-            this.generalToolStripMenuItem.Name = "generalToolStripMenuItem";
-            this.generalToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
-            this.generalToolStripMenuItem.Text = "General";
+            this.PartsMenuKitsGeneral.Name = "PartsMenuKitsGeneral";
+            this.PartsMenuKitsGeneral.Size = new System.Drawing.Size(180, 22);
+            this.PartsMenuKitsGeneral.Text = "General";
+            this.PartsMenuKitsGeneral.Click += new System.EventHandler(this.PartsMenuKitsGeneral_Click);
             // 
             // PartsMenuKitsRecalls
             // 
             this.PartsMenuKitsRecalls.Name = "PartsMenuKitsRecalls";
-            this.PartsMenuKitsRecalls.Size = new System.Drawing.Size(114, 22);
+            this.PartsMenuKitsRecalls.Size = new System.Drawing.Size(180, 22);
             this.PartsMenuKitsRecalls.Text = "Recalls";
             this.PartsMenuKitsRecalls.Click += new System.EventHandler(this.PartsMenuKitsRecalls_Click);
+            // 
+            // queriesToolStripMenuItem
+            // 
+            this.queriesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.PartsMenuSearch,
+            this.RecallsMenuSearch,
+            this.KitsMenuSearch});
+            this.queriesToolStripMenuItem.Name = "queriesToolStripMenuItem";
+            this.queriesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.queriesToolStripMenuItem.Text = "Queries";
+            // 
+            // PartsMenuSearch
+            // 
+            this.PartsMenuSearch.Name = "PartsMenuSearch";
+            this.PartsMenuSearch.Size = new System.Drawing.Size(180, 22);
+            this.PartsMenuSearch.Text = "Parts Search";
+            this.PartsMenuSearch.Click += new System.EventHandler(this.PartsMenuSearch_Click);
+            // 
+            // RecallsMenuSearch
+            // 
+            this.RecallsMenuSearch.Name = "RecallsMenuSearch";
+            this.RecallsMenuSearch.Size = new System.Drawing.Size(180, 22);
+            this.RecallsMenuSearch.Text = "Recalls Search";
+            this.RecallsMenuSearch.Click += new System.EventHandler(this.RecallsMenuSearch_Click);
             // 
             // PartsMenuMaintenance
             // 
             this.PartsMenuMaintenance.Name = "PartsMenuMaintenance";
-            this.PartsMenuMaintenance.Size = new System.Drawing.Size(172, 22);
+            this.PartsMenuMaintenance.Size = new System.Drawing.Size(180, 22);
             this.PartsMenuMaintenance.Text = "Parts Maintenance";
             this.PartsMenuMaintenance.Click += new System.EventHandler(this.PartsMenuMaintenance_Click);
             // 
@@ -136,14 +158,38 @@ namespace KronosDMS_Client
             this.systemToolStripMenuItem,
             this.serverToolStripMenuItem});
             this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
+            this.setupToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.setupToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
             this.setupToolStripMenuItem.Text = "Setup";
             // 
             // systemToolStripMenuItem
             // 
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
-            this.systemToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.systemToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.systemToolStripMenuItem.Text = "System";
+            // 
+            // serverToolStripMenuItem
+            // 
+            this.serverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SetupUserAccounts,
+            this.SetupUserGroups});
+            this.serverToolStripMenuItem.Name = "serverToolStripMenuItem";
+            this.serverToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.serverToolStripMenuItem.Text = "Server";
+            // 
+            // SetupUserAccounts
+            // 
+            this.SetupUserAccounts.Name = "SetupUserAccounts";
+            this.SetupUserAccounts.Size = new System.Drawing.Size(150, 22);
+            this.SetupUserAccounts.Text = "User Accounts";
+            this.SetupUserAccounts.Click += new System.EventHandler(this.SetupUserAccounts_Click);
+            // 
+            // SetupUserGroups
+            // 
+            this.SetupUserGroups.Name = "SetupUserGroups";
+            this.SetupUserGroups.Size = new System.Drawing.Size(150, 22);
+            this.SetupUserGroups.Text = "User Groups";
+            this.SetupUserGroups.Click += new System.EventHandler(this.SetupUserGroups_Click);
             // 
             // WindowView
             // 
@@ -153,28 +199,12 @@ namespace KronosDMS_Client
             this.WindowView.Size = new System.Drawing.Size(952, 525);
             this.WindowView.TabIndex = 2;
             // 
-            // serverToolStripMenuItem
+            // KitsMenuSearch
             // 
-            this.serverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SetupUserAccounts,
-            this.SetupUserGroups});
-            this.serverToolStripMenuItem.Name = "serverToolStripMenuItem";
-            this.serverToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.serverToolStripMenuItem.Text = "Server";
-            // 
-            // SetupUserAccounts
-            // 
-            this.SetupUserAccounts.Name = "SetupUserAccounts";
-            this.SetupUserAccounts.Size = new System.Drawing.Size(180, 22);
-            this.SetupUserAccounts.Text = "User Accounts";
-            this.SetupUserAccounts.Click += new System.EventHandler(this.SetupUserAccounts_Click);
-            // 
-            // SetupUserGroups
-            // 
-            this.SetupUserGroups.Name = "SetupUserGroups";
-            this.SetupUserGroups.Size = new System.Drawing.Size(180, 22);
-            this.SetupUserGroups.Text = "User Groups";
-            this.SetupUserGroups.Click += new System.EventHandler(this.SetupUserGroups_Click);
+            this.KitsMenuSearch.Name = "KitsMenuSearch";
+            this.KitsMenuSearch.Size = new System.Drawing.Size(180, 22);
+            this.KitsMenuSearch.Text = "Kits Search";
+            this.KitsMenuSearch.Click += new System.EventHandler(this.KitsMenuSearch_Click);
             // 
             // MainWindow
             // 
@@ -202,17 +232,20 @@ namespace KronosDMS_Client
         private System.Windows.Forms.ToolStripMenuItem FileMenu;
         private System.Windows.Forms.ToolStripMenuItem FileMenuExit;
         private System.Windows.Forms.ToolStripMenuItem PartsMenu;
-        private System.Windows.Forms.ToolStripMenuItem PartsMenuSearch;
         private System.Windows.Forms.Panel WindowView;
         private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serviceKitsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem generalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem PartsMenuKitsGeneral;
         private System.Windows.Forms.ToolStripMenuItem PartsMenuKitsRecalls;
         private System.Windows.Forms.ToolStripMenuItem systemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem PartsMenuMaintenance;
         private System.Windows.Forms.ToolStripMenuItem serverToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SetupUserAccounts;
         private System.Windows.Forms.ToolStripMenuItem SetupUserGroups;
+        private System.Windows.Forms.ToolStripMenuItem queriesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem PartsMenuSearch;
+        private System.Windows.Forms.ToolStripMenuItem RecallsMenuSearch;
+        private System.Windows.Forms.ToolStripMenuItem KitsMenuSearch;
     }
 }
 

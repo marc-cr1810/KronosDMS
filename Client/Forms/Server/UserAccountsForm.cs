@@ -41,7 +41,8 @@ namespace KronosDMS_Client.Forms.Server
             foreach (KeyValuePair<string, Group> group in groups.Groups)
                 boxGroups.Items.Add(group.Key);
 
-            textUserID.Text = account.ID.ToString();
+            if (account.ID != 0)
+                textUserID.Text = account.ID.ToString();
             textUserID.Enabled = false;
             textUsername.Text = account.Username;
             textFirstname.Text = account.FirstName;
@@ -67,6 +68,57 @@ namespace KronosDMS_Client.Forms.Server
             textLastname.Text = "";
         }
 
+        private void SearchUserID()
+        {
+            try
+            {
+                UserAccountsSearchResponse response = new UserAccountsSearch(int.Parse(this.textUserID.Text)).PerformRequestAsync().Result;
+                if (response.UserAccounts.Count == 1)
+                {
+                    FillDetails(response.UserAccounts.ElementAt(0).Value);
+                    return;
+                }
+                MessageBox.Show("Invalid User ID");
+                ClearDetails();
+                return;
+            }
+            catch
+            {
+                ClearDetails();
+                return;
+            }
+        }
+
+        private void SearchUsername()
+        {
+            if (this.textUsername.Text == "" || this.textUsername.Text == SelectedAccount.Username)
+                return;
+            if (this.textUserID.Text != "")
+                return;
+            UserAccountsSearchResponse response = new UserAccountsSearch(this.textUsername.Text, "", "").PerformRequestAsync().Result;
+            if (response.UserAccounts.Count != 1)
+            {
+                if (MessageBox.Show($"Create new user account \"{this.textUsername.Text}\"?", "Create new part account?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    this.Text = $"User Accounts | {this.textUsername.Text.ToUpper()} - Creating new user account";
+                    this.textUsername.Text = this.textUsername.Text;
+                    this.NewUserAccount = true;
+                    SelectedAccount.Username = this.textUsername.Text;
+                    FillDetails(SelectedAccount);
+                    return;
+                }
+                else
+                {
+                    UserAccountsSearchForm form = new UserAccountsSearchForm("", this.textUsername.Text);
+                    Client.MainWindow.OpenFormDialog(form);
+                    FillDetails(form.Result);
+                    form.Dispose();
+                }
+            }
+            else FillDetails(response.UserAccounts.ElementAt(0).Value);
+            this.NewUserAccount = false;
+        }
+
         private void buttonSearchID_Click(object sender, EventArgs e)
         {
             UserAccountsSearchForm form = new UserAccountsSearchForm(textUserID.Text, "");
@@ -87,23 +139,7 @@ namespace KronosDMS_Client.Forms.Server
         {
             if (e.KeyCode == Keys.Enter)
             {
-                try
-                {
-                    UserAccountsSearchResponse response = new UserAccountsSearch(int.Parse(this.textUserID.Text)).PerformRequestAsync().Result;
-                    if (response.UserAccounts.Count == 1)
-                    {
-                        FillDetails(response.UserAccounts.ElementAt(0).Value);
-                        return;
-                    }
-                    MessageBox.Show("Invalid User ID");
-                    ClearDetails();
-                    return;
-                }
-                catch
-                {
-                    ClearDetails();
-                    return;
-                }
+                SearchUserID();
             }
         }
 
@@ -111,33 +147,8 @@ namespace KronosDMS_Client.Forms.Server
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (this.textUsername.Text == "" || this.textUsername.Text == SelectedAccount.Username)
-                    return;
-                if (this.textUserID.Text != "")
-                    return;
-                UserAccountsSearchResponse response = new UserAccountsSearch(this.textUsername.Text, "", "").PerformRequestAsync().Result;
-                if (response.UserAccounts.Count != 1)
-                {
-                    if (MessageBox.Show($"Create new user account \"{this.textUsername.Text}\"?", "Create new part account?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        this.Text = $"User Accounts | {this.textUsername.Text.ToUpper()} - Creating new user account";
-                        this.textUsername.Text = this.textUsername.Text;
-                        this.NewUserAccount = true;
-                        SelectedAccount.Username = this.textUsername.Text;
-                        FillDetails(SelectedAccount);
-                        return;
-                    }
-                    else
-                    {
-                        UserAccountsSearchForm form = new UserAccountsSearchForm("", this.textUsername.Text);
-                        Client.MainWindow.OpenFormDialog(form);
-                        FillDetails(form.Result);
-                        form.Dispose();
-                    }
-                }
-                else FillDetails(response.UserAccounts.ElementAt(0).Value);
+                SearchUsername();
             }
-            this.NewUserAccount = false;
         }
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
@@ -195,6 +206,16 @@ namespace KronosDMS_Client.Forms.Server
                 return;
             }
             ClearDetails();
+        }
+
+        private void textUserID_Leave(object sender, EventArgs e)
+        {
+            SearchUserID();
+        }
+
+        private void textUsername_Leave(object sender, EventArgs e)
+        {
+            SearchUsername();
         }
     }
 }

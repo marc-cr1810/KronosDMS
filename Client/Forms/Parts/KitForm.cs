@@ -8,12 +8,12 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class RecallForm : Window
+    public partial class KitForm : Window
     {
-        private bool NewRecall = false;
-        private Recall SelectedRecall = new Recall();
+        private bool NewKit = true;
+        private Kit SelectedKit = new Kit();
 
-        public RecallForm(Recall recall = new Recall())
+        public KitForm(Kit kit = new Kit())
         {
             InitializeComponent();
 
@@ -21,7 +21,7 @@ namespace KronosDMS_Client.Forms.Parts
 
             this.labelMake.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.labelModel.ForeColor = Client.ActiveTheme.Colors.Text.Default;
-            this.labelRecallNumber.ForeColor = Client.ActiveTheme.Colors.Text.Default;
+            this.labelKitNumber.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.labelDescription.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.groupDetails.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.labelPartNumber.ForeColor = Client.ActiveTheme.Colors.Text.Default;
@@ -31,14 +31,19 @@ namespace KronosDMS_Client.Forms.Parts
             this.ListParts.SetReadonly(false, false, true, true);
             this.ListParts.ItemEdited += PartsList_ItemEdited;
 
-            SelectedRecall.Parts = new List<PartQuantityPair>();
+            MakesSearchResponse makes = new MakesSearch("").PerformRequestAsync().Result;
+            foreach (KeyValuePair<string, Make> make in makes.Makes)
+                boxMakes.Items.Add(make.Value.Name);
 
-            if (recall.Number is not null)
-                FillDetails(recall);
+            SelectedKit.Parts = new List<PartQuantityPair>();
+
+            if (kit.Number is not null)
+                FillDetails(kit);
         }
 
         private void PartsList_ItemEdited(ListViewItem item, int index)
         {
+            int itemIndex = item.Index;
             if (index == 0)
             {
                 string partNumber = item.SubItems[index].Text;
@@ -59,7 +64,7 @@ namespace KronosDMS_Client.Forms.Parts
                 item.SubItems[2].Text = part.Make;
                 item.SubItems[3].Text = part.Description;
 
-                SelectedRecall.Parts[index] = new PartQuantityPair(part.Number, SelectedRecall.Parts[index].Quantity);
+                SelectedKit.Parts[itemIndex] = new PartQuantityPair(part.Number, SelectedKit.Parts[itemIndex].Quantity);
             }
             else if (index == 1)
             {
@@ -69,10 +74,10 @@ namespace KronosDMS_Client.Forms.Parts
                     if (qty < 1)
                     {
                         ListParts.Items.Remove(item);
-                        SelectedRecall.Parts.RemoveAt(index);
+                        SelectedKit.Parts.RemoveAt(itemIndex);
                         return;
                     }
-                    SelectedRecall.Parts[index] = new PartQuantityPair(SelectedRecall.Parts[index].Number, qty);
+                    SelectedKit.Parts[itemIndex] = new PartQuantityPair(SelectedKit.Parts[itemIndex].Number, qty);
                 }
                 catch
                 {
@@ -81,30 +86,26 @@ namespace KronosDMS_Client.Forms.Parts
             }
         }
 
-        private void FillDetails(Recall recall)
+        private void FillDetails(Kit kit)
         {
-            if (recall.Number == null)
+            if (kit.Number == null)
                 return;
+            NewKit = false;
 
+            if (kit.Parts == null)
+                kit.Parts = new List<PartQuantityPair>();
 
-            if (recall.Parts == null)
-                recall.Parts = new List<PartQuantityPair>();
+            SelectedKit = kit;
 
-            SelectedRecall = recall;
+            this.Text = $"Kit | {kit.Number} \"{kit.Description}\" - Editing";
 
-            this.Text = $"Recall | {recall.Number} \"{recall.Description}\" - Editing";
-
-            MakesSearchResponse makes = new MakesSearch("").PerformRequestAsync().Result;
-            foreach (KeyValuePair<string, Make> make in makes.Makes)
-                boxMakes.Items.Add(make.Value.Name);
-
-            textRecallNumber.Text = recall.Number;
-            boxMakes.Text = recall.Make;
-            boxModel.Text = recall.Model;
-            textDescription.Text = recall.Description;
+            textKitNumber.Text = kit.Number;
+            boxMakes.Text = kit.Make;
+            boxModel.Text = kit.Model;
+            textDescription.Text = kit.Description;
 
             ListParts.Items.Clear();
-            foreach (PartQuantityPair part in recall.Parts)
+            foreach (PartQuantityPair part in kit.Parts)
             {
                 PartsSearchResponse response = new PartsSearch("", part.Number, "").PerformRequestAsync().Result;
                 Part p = response.Parts.ElementAt(0).Value;
@@ -120,66 +121,66 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void ClearDetails()
         {
-            SelectedRecall = new Recall();
+            SelectedKit = new Kit();
+            NewKit = true;
 
-            textRecallNumber.Text = "";
+            textKitNumber.Text = "";
             boxMakes.Text = "";
             boxModel.Text = "";
             textDescription.Text = "";
-            this.boxMakes.Items.Clear();
-            this.boxModel.Items.Clear();
 
-            this.Text = $"Recall";
+            this.Text = $"Kit";
 
             ListParts.Items.Clear();
         }
 
-        private void SearchRecall()
+        private void SearchKit()
         {
-            if (this.textRecallNumber.Text == "" || this.textRecallNumber.Text == SelectedRecall.Number)
+            if (this.textKitNumber.Text == SelectedKit.Number)
                 return;
-            RecallsSearchResponse response = new RecallsSearch(this.textRecallNumber.Text.ToUpper()).PerformRequestAsync().Result;
-            if (response.Recalls.Count != 1)
+            if (this.textKitNumber.Text != "")
             {
-                if (MessageBox.Show($"Create new recall \"{this.textRecallNumber.Text.ToUpper()}\"?", "Create new recall?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                KitsSearchForm form = new KitsSearchForm(this.textKitNumber.Text);
+                Client.MainWindow.OpenFormDialog(form);
+                FillDetails(form.Result);
+                form.Dispose();
+                return;
+            }
+
+            KitsSearchResponse response = new KitsSearch(this.textKitNumber.Text.ToUpper()).PerformRequestAsync().Result;
+            if (response.Kits.Count != 1)
+            {
+                if (MessageBox.Show($"Create new kit?", "Create new kit?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    this.Text = $"Recall | {this.textRecallNumber.Text.ToUpper()} - Creating new recall";
-                    this.textRecallNumber.Text = this.textRecallNumber.Text.ToUpper();
-                    this.NewRecall = true;
-                    SelectedRecall.Number = this.textRecallNumber.Text;
-                    FillDetails(SelectedRecall);
+                    this.Text = $"Kit | Creating new kit";
+                    this.NewKit = true;
+                    SelectedKit.Number = this.textKitNumber.Text;
                     return;
                 }
-                else
-                {
-                    RecallsSearchForm form = new RecallsSearchForm(this.textRecallNumber.Text);
-                    Client.MainWindow.OpenFormDialog(form);
-                    FillDetails(form.Result);
-                    form.Dispose();
-                }
             }
-            else FillDetails(response.Recalls.ElementAt(0).Value);
+            else FillDetails(response.Kits.ElementAt(0).Value);
         }
 
-        private void buttonRecallSearch_Click(object sender, EventArgs e)
+        private void buttonKitSearch_Click(object sender, EventArgs e)
         {
-            RecallsSearchForm form = new RecallsSearchForm();
+            KitsSearchForm form = new KitsSearchForm();
             Client.MainWindow.OpenFormDialog(form);
             FillDetails(form.Result);
             form.Dispose();
         }
 
-        private void buttonRecallSearch_Leave(object sender, EventArgs e)
+        private void buttonKitSearch_Leave(object sender, EventArgs e)
         {
-            SearchRecall();
+            SearchKit();
         }
 
-        private void textRecallNumber_KeyDown(object sender, KeyEventArgs e)
+        private void textKitNumber_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SearchRecall();
+                SearchKit();
             }
+            this.NewKit = false;
         }
 
         private void boxMakes_TextUpdate(object sender, EventArgs e)
@@ -226,7 +227,7 @@ namespace KronosDMS_Client.Forms.Parts
                 part = response.Parts.ElementAt(0).Value;
             }
 
-            SelectedRecall.Parts.Add(new PartQuantityPair(part.Number, 1));
+            SelectedKit.Parts.Add(new PartQuantityPair(part.Number, 1));
             ListViewItem partItem = ListParts.Items.Add(part.Number);
             partItem.Name = part.Number;
             partItem.SubItems.Add("1");
@@ -238,30 +239,29 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
-            if (SelectedRecall.Number is null)
+            if (SelectedKit.Number is null && NewKit == false)
                 return;
 
-            SelectedRecall.Number = SelectedRecall.Number.ToUpper();
-            SelectedRecall.Make = this.boxMakes.Text;
-            SelectedRecall.Model = this.boxModel.Text;
-            SelectedRecall.Description = this.textDescription.Text;
+            SelectedKit.Make = this.boxMakes.Text;
+            SelectedKit.Model = this.boxModel.Text;
+            SelectedKit.Description = this.textDescription.Text;
 
             Response response;
-            if (NewRecall)
+            if (NewKit)
             {
-                response = new RecallAdd(SelectedRecall).PerformRequestAsync().Result;
+                response = new KitAdd(SelectedKit).PerformRequestAsync().Result;
                 if (!response.IsSuccess)
                 {
-                    MessageBox.Show($"Failed to save recall\n{response.RawMessage}");
+                    MessageBox.Show($"Failed to save kit\n{response.RawMessage}");
                     return;
                 }
             }
             else
             {
-                response = new RecallSet(SelectedRecall).PerformRequestAsync().Result;
+                response = new KitSet(SelectedKit).PerformRequestAsync().Result;
                 if (!response.IsSuccess)
                 {
-                    MessageBox.Show($"Failed to save recall\n{response.RawMessage}");
+                    MessageBox.Show($"Failed to save kit\n{response.RawMessage}");
                     return;
                 }
             }
@@ -270,20 +270,20 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void refreshToolStripButton_Click(object sender, EventArgs e)
         {
-            if (SelectedRecall.Number is null)
+            if (SelectedKit.Number is null)
                 return;
             ClearDetails();
         }
 
         private void deleteToolStripButton_Click(object sender, EventArgs e)
         {
-            if (SelectedRecall.Number is null)
+            if (SelectedKit.Number is null)
                 return;
 
-            Response response = new RecallRemove(SelectedRecall.Number).PerformRequestAsync().Result;
+            Response response = new KitRemove(SelectedKit.Number).PerformRequestAsync().Result;
             if (!response.IsSuccess)
             {
-                MessageBox.Show($"Failed to delete recall\n{response.RawMessage}");
+                MessageBox.Show($"Failed to delete kit\n{response.RawMessage}");
                 return;
             }
             ClearDetails();

@@ -33,6 +33,11 @@ namespace KronosDMS_Server
                 RecallHandler.Add,
                 RecallHandler.Remove,
 
+                KitHandler.Get,
+                KitHandler.Set,
+                KitHandler.Add,
+                KitHandler.Remove,
+
                 new Route {
                     Name = "Ping Handler",
                     UrlRegex = @"^/api/v1/ping$",

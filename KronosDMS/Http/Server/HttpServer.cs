@@ -1,9 +1,6 @@
-﻿using log4net;
-using KronosDMS.Http.Server.Models;
-using System;
-using System.Collections;
+﻿using KronosDMS.Http.Server.Models;
+using log4net;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;

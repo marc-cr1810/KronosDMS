@@ -1,7 +1,7 @@
 ﻿
 namespace KronosDMS_Client.Forms.Parts
 {
-    partial class RecallsSearchForm
+    partial class KitsSearchForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,12 +32,12 @@ namespace KronosDMS_Client.Forms.Parts
             this.buttonSearch = new System.Windows.Forms.Button();
             this.textDescription = new System.Windows.Forms.TextBox();
             this.labelDescription = new System.Windows.Forms.Label();
-            this.textRecallNumber = new System.Windows.Forms.TextBox();
+            this.textKitNumber = new System.Windows.Forms.TextBox();
             this.labelPartNumber = new System.Windows.Forms.Label();
             this.boxMakes = new System.Windows.Forms.ComboBox();
             this.labelMake = new System.Windows.Forms.Label();
             this.ListParts = new System.Windows.Forms.ListView();
-            this.columnRecallNumber = new System.Windows.Forms.ColumnHeader();
+            this.columnKitNumber = new System.Windows.Forms.ColumnHeader();
             this.columnMake = new System.Windows.Forms.ColumnHeader();
             this.columnModel = new System.Windows.Forms.ColumnHeader();
             this.columnDescription = new System.Windows.Forms.ColumnHeader();
@@ -71,12 +71,12 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelDescription.TabIndex = 11;
             this.labelDescription.Text = "Description";
             // 
-            // textRecallNumber
+            // textKitNumber
             // 
-            this.textRecallNumber.Location = new System.Drawing.Point(101, 70);
-            this.textRecallNumber.Name = "textRecallNumber";
-            this.textRecallNumber.Size = new System.Drawing.Size(146, 23);
-            this.textRecallNumber.TabIndex = 10;
+            this.textKitNumber.Location = new System.Drawing.Point(101, 70);
+            this.textKitNumber.Name = "textKitNumber";
+            this.textKitNumber.Size = new System.Drawing.Size(146, 23);
+            this.textKitNumber.TabIndex = 10;
             // 
             // labelPartNumber
             // 
@@ -85,7 +85,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelPartNumber.Name = "labelPartNumber";
             this.labelPartNumber.Size = new System.Drawing.Size(85, 15);
             this.labelPartNumber.TabIndex = 9;
-            this.labelPartNumber.Text = "Recall Number";
+            this.labelPartNumber.Text = "Kit Number";
             // 
             // boxMakes
             // 
@@ -114,7 +114,7 @@ namespace KronosDMS_Client.Forms.Parts
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListParts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ListParts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnRecallNumber,
+            this.columnKitNumber,
             this.columnMake,
             this.columnModel,
             this.columnDescription});
@@ -133,10 +133,10 @@ namespace KronosDMS_Client.Forms.Parts
             this.ListParts.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListParts_MouseDoubleClick);
             this.ListParts.Resize += new System.EventHandler(this.ListParts_Resize);
             // 
-            // columnRecallNumber
+            // columnKitNumber
             // 
-            this.columnRecallNumber.Text = "Recall Number";
-            this.columnRecallNumber.Width = 120;
+            this.columnKitNumber.Text = "Kit Number";
+            this.columnKitNumber.Width = 120;
             // 
             // columnMake
             // 
@@ -171,7 +171,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelModel.TabIndex = 15;
             this.labelModel.Text = "Model";
             // 
-            // RecallsSearchForm
+            // KitsSearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -182,13 +182,13 @@ namespace KronosDMS_Client.Forms.Parts
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.textDescription);
             this.Controls.Add(this.labelDescription);
-            this.Controls.Add(this.textRecallNumber);
+            this.Controls.Add(this.textKitNumber);
             this.Controls.Add(this.labelPartNumber);
             this.Controls.Add(this.boxMakes);
             this.Controls.Add(this.labelMake);
             this.MinimumSize = new System.Drawing.Size(584, 338);
-            this.Name = "RecallsSearchForm";
-            this.Text = "Recalls Search";
+            this.Name = "KitsSearchForm";
+            this.Text = "Kits Search";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -199,12 +199,12 @@ namespace KronosDMS_Client.Forms.Parts
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.TextBox textDescription;
         private System.Windows.Forms.Label labelDescription;
-        private System.Windows.Forms.TextBox textRecallNumber;
+        private System.Windows.Forms.TextBox textKitNumber;
         private System.Windows.Forms.Label labelPartNumber;
         private System.Windows.Forms.ComboBox boxMakes;
         private System.Windows.Forms.Label labelMake;
         private System.Windows.Forms.ListView ListParts;
-        private System.Windows.Forms.ColumnHeader columnRecallNumber;
+        private System.Windows.Forms.ColumnHeader columnKitNumber;
         private System.Windows.Forms.ColumnHeader columnMake;
         private System.Windows.Forms.ColumnHeader columnDescription;
         private System.Windows.Forms.ComboBox boxModel;

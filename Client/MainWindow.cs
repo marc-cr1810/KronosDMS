@@ -27,6 +27,7 @@ namespace KronosDMS_Client
         public void OpenForm(Window window)
         {
             window.TopLevel = false;
+            window.AutoScroll = true;
             window.Parent = this.WindowView;
             window.StartPosition = FormStartPosition.CenterParent;
             this.WindowView.Controls.Add(window);
@@ -52,14 +53,14 @@ namespace KronosDMS_Client
             Client.Exit();
         }
 
-        private void PartsMenuSearch_Click(object sender, EventArgs e)
-        {
-            OpenForm(new Forms.Parts.PartsSearchForm());
-        }
-
         private void PartsMenuMaintenance_Click(object sender, EventArgs e)
         {
             OpenForm(new Forms.Parts.PartsMaintenanceForm());
+        }
+
+        private void PartsMenuKitsGeneral_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Forms.Parts.KitForm());
         }
 
         private void PartsMenuKitsRecalls_Click(object sender, EventArgs e)
@@ -75,6 +76,21 @@ namespace KronosDMS_Client
         private void SetupUserGroups_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void PartsMenuSearch_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Forms.Parts.PartsSearchForm("", false));
+        }
+
+        private void RecallsMenuSearch_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Forms.Parts.RecallsSearchForm("", false));
+        }
+
+        private void KitsMenuSearch_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Forms.Parts.KitsSearchForm("", false));
         }
     }
 }

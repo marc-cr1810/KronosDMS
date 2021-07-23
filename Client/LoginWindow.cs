@@ -2,13 +2,6 @@
 using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace KronosDMS_Client
@@ -57,7 +50,8 @@ namespace KronosDMS_Client
                 {
                     labelInvalid.Visible = true;
                 }
-            } catch { }
+            }
+            catch { }
         }
 
         private void buttonAdvanced_Click(object sender, EventArgs e)

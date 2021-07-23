@@ -9,9 +9,10 @@ namespace KronosDMS_Client.Forms.Parts
 {
     public partial class PartsSearchForm : Window
     {
+        private bool IsDialog;
         public Part Result;
 
-        public PartsSearchForm(string number = "")
+        public PartsSearchForm(string number = "", bool dialog = true)
         {
             InitializeComponent();
 
@@ -31,6 +32,8 @@ namespace KronosDMS_Client.Forms.Parts
 
             if (number != "")
                 Search();
+
+            this.IsDialog = dialog;
         }
 
         private void Search()
@@ -69,6 +72,8 @@ namespace KronosDMS_Client.Forms.Parts
 
             PartsSearchResponse response = new PartsSearch(id).PerformRequestAsync().Result;
             Result = response.Parts[id];
+            if (!IsDialog)
+                Client.MainWindow.OpenForm(new PartsMaintenanceForm(Result));
             Client.MainWindow.CloseForm(this);
         }
     }
