@@ -73,6 +73,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textKitNumber
             // 
+            this.textKitNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textKitNumber.Location = new System.Drawing.Point(101, 70);
             this.textKitNumber.Name = "textKitNumber";
             this.textKitNumber.Size = new System.Drawing.Size(146, 23);
@@ -83,7 +84,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelPartNumber.AutoSize = true;
             this.labelPartNumber.Location = new System.Drawing.Point(10, 73);
             this.labelPartNumber.Name = "labelPartNumber";
-            this.labelPartNumber.Size = new System.Drawing.Size(85, 15);
+            this.labelPartNumber.Size = new System.Drawing.Size(68, 15);
             this.labelPartNumber.TabIndex = 9;
             this.labelPartNumber.Text = "Kit Number";
             // 

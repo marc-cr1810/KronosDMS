@@ -8,6 +8,9 @@ namespace KronosDMS_Server
 {
     class Server
     {
+        public static Config Config { get; set; }
+        public static UpdateConfig UpdateConfig { get; set; }
+
         public static UserAccountManager AccountManager { get; set; }
 
         public static PartsFile Parts { get; set; }
@@ -15,17 +18,11 @@ namespace KronosDMS_Server
         public static RecallFile Recalls { get; set; }
         public static KitFile Kits { get; set; }
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             KConsole.WriteColored(System.ConsoleColor.DarkCyan, "[KromosDMS Server] Initializing server... ");
-            AccountManager = new UserAccountManager();
 
-            Makes = new MakeFile();
-            Parts = new PartsFile();
-            Recalls = new RecallFile();
-            Kits = new KitFile();
-
-            PermissionHandler.GroupsFile = new GroupsFile();
+            Load();
 
             KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
 
@@ -36,11 +33,27 @@ namespace KronosDMS_Server
             KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
 
             KConsole.WriteColored(System.ConsoleColor.DarkCyan, "[KromosDMS Server] Starting server... ");
-            HttpServer httpServer = new HttpServer(8080, route_config);
+            HttpServer httpServer = new HttpServer(Config.Port, route_config);
 
             Thread thread = new Thread(new ThreadStart(httpServer.Listen));
             thread.Start();
             KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
+        }
+
+        public static void Load()
+        {
+            Config = Config.LoadConfig();
+            UpdateConfig = UpdateConfig.LoadConfig();
+
+            AccountManager = new UserAccountManager();
+
+            Makes = new MakeFile();
+            Parts = new PartsFile();
+            Recalls = new RecallFile();
+            Kits = new KitFile();
+
+            PermissionHandler.GroupsFile = new GroupsFile();
+            PermissionHandler.SetDefaultGroup(Config.DefaultGroup);
         }
     }
 }

@@ -29,7 +29,6 @@ namespace KronosDMS_Client.Forms.Parts
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.textKitNumber = new System.Windows.Forms.TextBox();
             this.labelKitNumber = new System.Windows.Forms.Label();
             this.buttonKitSearch = new System.Windows.Forms.Button();
@@ -40,7 +39,6 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelModel = new System.Windows.Forms.Label();
             this.boxMakes = new System.Windows.Forms.ComboBox();
             this.labelMake = new System.Windows.Forms.Label();
-            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ListParts = new KronosDMS_Client.UserControls.KListView();
             this.columnPartNumber = new System.Windows.Forms.ColumnHeader();
             this.columnQuantity = new System.Windows.Forms.ColumnHeader();
@@ -60,19 +58,20 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textKitNumber
             // 
+            this.textKitNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textKitNumber.Location = new System.Drawing.Point(103, 28);
             this.textKitNumber.Name = "textKitNumber";
             this.textKitNumber.Size = new System.Drawing.Size(152, 23);
             this.textKitNumber.TabIndex = 12;
             this.textKitNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textKitNumber_KeyDown);
-            this.textKitNumber.Leave += new System.EventHandler(this.buttonKitSearch_Leave);
+            this.textKitNumber.Leave += new System.EventHandler(this.textKitNumber_Leave);
             // 
             // labelKitNumber
             // 
             this.labelKitNumber.AutoSize = true;
             this.labelKitNumber.Location = new System.Drawing.Point(12, 31);
             this.labelKitNumber.Name = "labelKitNumber";
-            this.labelKitNumber.Size = new System.Drawing.Size(85, 15);
+            this.labelKitNumber.Size = new System.Drawing.Size(68, 15);
             this.labelKitNumber.TabIndex = 11;
             this.labelKitNumber.Text = "Kit Number";
             // 
@@ -159,11 +158,6 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelMake.TabIndex = 17;
             this.labelMake.Text = "Make";
             // 
-            // contextMenu
-            // 
-            this.contextMenu.Name = "contextMenuStrip1";
-            this.contextMenu.Size = new System.Drawing.Size(61, 4);
-            // 
             // ListParts
             // 
             this.ListParts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -209,6 +203,7 @@ namespace KronosDMS_Client.Forms.Parts
             // textPartNumber
             // 
             this.textPartNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.textPartNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textPartNumber.Location = new System.Drawing.Point(93, 451);
             this.textPartNumber.Name = "textPartNumber";
             this.textPartNumber.Size = new System.Drawing.Size(264, 23);
@@ -324,7 +319,6 @@ namespace KronosDMS_Client.Forms.Parts
         private System.Windows.Forms.Label labelMake;
         private System.Windows.Forms.TextBox textDescription;
         private System.Windows.Forms.Label labelDescription;
-        private System.Windows.Forms.ContextMenuStrip contextMenu;
         private UserControls.KListView ListParts;
         private System.Windows.Forms.ColumnHeader columnPartNumber;
         private System.Windows.Forms.ColumnHeader columnQuantity;

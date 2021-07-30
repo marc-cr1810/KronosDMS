@@ -16,20 +16,12 @@ namespace KronosDMS.Api.Endpoints
         public string Username { get; set; }
         public string PasswordHash { get; set; }
 
-        public AccountLogin(string username, string password)
+        public AccountLogin(string username, string password, bool hashed = false)
         {
             this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/auth/login");
 
-            byte[] password256 = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(password));
-            StringBuilder pwBuilder = new StringBuilder();
-            for (int i = 0; i < password256.Length; i++)
-            {
-                pwBuilder.Append(password256[i].ToString("x2"));
-            }
-            string passwordHash = pwBuilder.ToString();
-
             this.Username = username;
-            this.PasswordHash = passwordHash;
+            this.PasswordHash = !hashed ? Utils.SHA256Hash(password) : password;
         }
 
         public override async Task<AccountLoginResponse> PerformRequestAsync()
@@ -74,6 +66,26 @@ namespace KronosDMS.Api.Endpoints
                                        new JProperty("ClientToken", Requester.ClientToken)).ToString();
 
             this.Response = Task.Run(() => Requester.Post(this)).Result;
+
+            if (this.Response.IsSuccess)
+            {
+                return new Response(this.Response);
+            }
+            else
+                return new Response(Error.GetError(this.Response));
+        }
+    }
+
+    public class AccountValidate : IEndpoint<Response>
+    {
+        public AccountValidate()
+        {
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/accounts/validate");
+        }
+
+        public override async Task<Response> PerformRequestAsync()
+        {
+            this.Response = Task.Run(() => Requester.Get(this)).Result;
 
             if (this.Response.IsSuccess)
             {
@@ -150,6 +162,39 @@ namespace KronosDMS.Api.Endpoints
         {
             this.PostContent = JsonConvert.SerializeObject(this.UserAccount);
             this.Response = Task.Run(() => Requester.Post(this)).Result;
+
+            if (this.Response.IsSuccess)
+            {
+                return new Response(this.Response);
+            }
+            else
+                return new Response(Error.GetError(this.Response));
+        }
+    }
+
+    public class UserAccountsSetPassword : IEndpoint<Response>
+    {
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
+        public int ID { get; set; }
+
+        public UserAccountsSetPassword(string oldPassword, string newPassword, int id = -1)
+        {
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/accounts/set/password");
+
+            this.OldPassword = Utils.SHA256Hash(oldPassword);
+            this.NewPassword = Utils.SHA256Hash(newPassword);
+            this.ID = id;
+        }
+
+        public override async Task<Response> PerformRequestAsync()
+        {
+            if (ID != -1)
+                this.Arguments.Add($"id={HttpUtility.UrlEncode(this.ID.ToString())}");
+            this.Arguments.Add($"o={HttpUtility.UrlEncode(this.OldPassword)}");
+            this.Arguments.Add($"n={HttpUtility.UrlEncode(this.NewPassword)}");
+
+            this.Response = Task.Run(() => Requester.Get(this)).Result;
 
             if (this.Response.IsSuccess)
             {

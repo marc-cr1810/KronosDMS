@@ -42,8 +42,11 @@ namespace KronosDMS.Http.Server
 
             // route and handle the request...
             HttpResponse response = RouteRequest(inputStream, outputStream, request);
+            
+            // just print requests that return non success codes
+            if (response.StatusCode != "200")
+                Console.WriteLine("{0} {1}", response.StatusCode, request.Url);
 
-            Console.WriteLine("{0} {1}", response.StatusCode, request.Url);
             // build a default response for errors
             if (response.Content == null)
             {

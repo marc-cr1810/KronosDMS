@@ -22,17 +22,5 @@ namespace KronosDMS_Client.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://127.0.0.1:8080")]
-        public string IPAddress {
-            get {
-                return ((string)(this["IPAddress"]));
-            }
-            set {
-                this["IPAddress"] = value;
-            }
-        }
     }
 }

@@ -11,18 +11,21 @@ namespace KronosDMS_Client
         public LoginWindow()
         {
             InitializeComponent();
+
+            this.Text = $"{this.Text} v{Application.ProductVersion}";
+
             this.BackColor = Client.ActiveTheme.Colors.Foreground;
             this.label1.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.label2.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.labelInvalid.ForeColor = Client.ActiveTheme.Colors.Text.Error;
             this.labelIPAddress.ForeColor = Client.ActiveTheme.Colors.Text.Default;
 
-            this.textIPAddress.Text = Properties.Settings.Default.IPAddress;
+            this.textIPAddress.Text = Client.Config.IPAddress;
         }
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
-            Requester.BaseAPIAddr = textIPAddress.Text;
+            Requester.BaseAPIAddr = $"http://{textIPAddress.Text}";
 
             if (textUsername.Text == "" && textPassword.Text == "")
                 return;
@@ -42,8 +45,8 @@ namespace KronosDMS_Client
                 {
                     Client.ActiveAccount = response.Account;
                     Requester.AccessToken = response.Account.AccessToken;
-                    Properties.Settings.Default.IPAddress = this.textIPAddress.Text;
-                    Properties.Settings.Default.Save();
+                    Client.Config.IPAddress = this.textIPAddress.Text;
+                    Client.Config.Save();
                     this.Close();
                 }
                 else

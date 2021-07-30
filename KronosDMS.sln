@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KronosDMS", "KronosDMS\Kron
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KronosDMS-CLI", "KronosDMS-CLI\KronosDMS-CLI.csproj", "{81FD4837-EA49-4757-93ED-0D2E599FEAF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{13DD7592-9537-4088-8951-C660E72F32FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{13DD7592-9537-4088-8951-C660E72F32FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientUpdater", "ClientUpdater\ClientUpdater.csproj", "{0B04436A-ACEE-49EF-B071-B53740AD3AEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{13DD7592-9537-4088-8951-C660E72F32FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13DD7592-9537-4088-8951-C660E72F32FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13DD7592-9537-4088-8951-C660E72F32FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B04436A-ACEE-49EF-B071-B53740AD3AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B04436A-ACEE-49EF-B071-B53740AD3AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B04436A-ACEE-49EF-B071-B53740AD3AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B04436A-ACEE-49EF-B071-B53740AD3AEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

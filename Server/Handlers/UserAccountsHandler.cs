@@ -63,6 +63,37 @@ namespace KronosDMS_Server.Handlers
             }
         };
 
+        public static Route Validate = new Route()
+        {
+            Name = "Validate User Account Login Handler",
+            UrlRegex = @"^/api/v1/accounts/validate$",
+            Method = "GET",
+            Callable = (HttpRequest request) =>
+            {
+                int id = Routes.GetUserFromKey(request).ID;
+                string accessToken = Routes.GetAccessToken(request);
+
+                if (Server.AccountManager.ValidateLogin(id, accessToken))
+                {
+                    return new HttpResponse()
+                    {
+                        ContentAsUTF8 = "{}",
+                        ReasonPhrase = "OK",
+                        StatusCode = "200"
+                    };
+                }
+                else
+                {
+                    return new HttpResponse()
+                    {
+                        ContentAsUTF8 = "Invalid token",
+                        ReasonPhrase = "InvalidToken",
+                        StatusCode = "498"
+                    };
+                }
+            }
+        };
+
         public static Route Get = new Route()
         {
             Name = "Get User Accounts Handler",
@@ -113,6 +144,43 @@ namespace KronosDMS_Server.Handlers
                     return new HttpResponse()
                     {
                         ContentAsUTF8 = "User Account not modified",
+                        ReasonPhrase = "NotModified",
+                        StatusCode = "304"
+                    };
+                }
+            }
+        };
+
+        public static Route SetPassword = new Route()
+        {
+            Name = "Set User Password Account Handler",
+            UrlRegex = @"^/api/v1/accounts/set/password$",
+            Method = "GET",
+            Callable = (HttpRequest request) =>
+            {
+                if (!Routes.HasPermission(request, "server.accounts.set.password"))
+                    return PermissionHandler.UnauthorizedResponse;
+
+                string oldPassword = Routes.GetArgValue(request, "o");
+                string newPassword = Routes.GetArgValue(request, "n");
+                int id = Routes.GetUserFromKey(request).Username is not null ? Routes.GetUserFromKey(request).ID : -1;
+                if (Routes.GetArgValue(request, "id") != "")
+                    id = int.Parse(Routes.GetArgValue(request, "id"));
+
+                if (Server.AccountManager.SetPassword(id, oldPassword, newPassword))
+                {
+                    return new HttpResponse()
+                    {
+                        ContentAsUTF8 = "{}",
+                        ReasonPhrase = "OK",
+                        StatusCode = "200"
+                    };
+                }
+                else
+                {
+                    return new HttpResponse()
+                    {
+                        ContentAsUTF8 = "Failed to change password",
                         ReasonPhrase = "NotModified",
                         StatusCode = "304"
                     };

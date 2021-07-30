@@ -1,7 +1,10 @@
 ﻿using KronosDMS.Http.Server.Models;
+using KronosDMS.Http.Server.RouteHandlers;
+using KronosDMS.Objects;
 using KronosDMS.Security;
 using KronosDMS_Server.Handlers;
 using System.Collections.Generic;
+using System.IO;
 
 namespace KronosDMS_Server
 {
@@ -10,10 +13,14 @@ namespace KronosDMS_Server
         public static List<Route> GetRoutes()
         {
             return new List<Route>() {
+                ServerHandler.Reload,
+
                 UserAccountsHandler.Login,
                 UserAccountsHandler.Logout,
+                UserAccountsHandler.Validate,
                 UserAccountsHandler.Get,
                 UserAccountsHandler.Set,
+                UserAccountsHandler.SetPassword,
                 UserAccountsHandler.Add,
                 UserAccountsHandler.Remove,
 
@@ -51,6 +58,36 @@ namespace KronosDMS_Server
                         };
                      }
                 },
+
+                new Route {
+                    Name = "Client Update Handler",
+                    UrlRegex = @"^/api/v1/client/update$",
+                    Method = "GET",
+                    Callable = (HttpRequest request) => {
+
+                        bool download = Routes.GetArgValue(request, "download") == "1";
+
+                        if (download)
+                        {
+                            if (File.Exists("data/update/client.zip"))
+                            {
+                                var response = new HttpResponse();
+                                response.StatusCode = "200";
+                                response.ReasonPhrase = "Ok";
+                                response.Headers["Content-Type"] = QuickMimeTypeMapper.GetMimeType(".zip");
+                                response.Content = File.ReadAllBytes("data/update/client.zip");
+
+                                return response;
+                            }
+                        }
+                        return new HttpResponse()
+                        {
+                            ContentAsUTF8 = Server.UpdateConfig.ToJSON(),
+                            ReasonPhrase = "OK",
+                            StatusCode = "200"
+                        };
+        }
+    },
             };
         }
 
@@ -63,12 +100,22 @@ namespace KronosDMS_Server
 
         public static bool HasPermission(HttpRequest request, string permission)
         {
+            if (!PermissionHandler.Has(GetUserFromKey(request), permission))
+                return false;
+            return true;
+        }
+
+        public static string GetAccessToken(HttpRequest request)
+        {
             string accessToken = "";
             if (request.Headers.ContainsKey("Authorization"))
                 accessToken = request.Headers["Authorization"].Split(' ')[1];
-            if (!PermissionHandler.Has(Server.AccountManager.GetAccount(accessToken), permission))
-                return false;
-            return true;
+            return accessToken;
+        }
+
+        public static UserAccount GetUserFromKey(HttpRequest request)
+        {
+            return Server.AccountManager.GetAccount(GetAccessToken(request));
         }
     }
 }

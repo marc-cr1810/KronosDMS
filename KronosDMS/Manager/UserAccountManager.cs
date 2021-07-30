@@ -82,6 +82,20 @@ namespace KronosDMS.Objects
             return true;
         }
 
+        public bool SetPassword(int id, string passwordHash, string newPasswordHash)
+        {
+            if (!File.Accounts.ContainsKey(id) || id == -1)
+                return false;
+            UserAccount user = File.Accounts[id];
+            if (File.Accounts[id].PasswordHash == passwordHash)
+            {
+                user.PasswordHash = newPasswordHash;
+                File.Accounts[id] = user;
+                return true;
+            }
+            return false;
+        }
+
         public bool Remove(int id)
         {
             if (!File.Accounts.ContainsKey(id))
@@ -149,6 +163,16 @@ namespace KronosDMS.Objects
                 }
             }
             return "";
+        }
+
+        public bool ValidateLogin(int userId, string accessToken)
+        {
+            if (AccessTokenAccounts.ContainsKey(accessToken))
+            {
+                if (AccessTokenAccounts[accessToken] == userId)
+                    return true;
+            }
+            return false;
         }
 
         public string Search(string username, string firstname, string lastname, int id = -1)

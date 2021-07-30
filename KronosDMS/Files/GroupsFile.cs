@@ -16,10 +16,14 @@ namespace KronosDMS.Files
             if (Groups is null)
                 Groups = new Dictionary<string, Group>();
 
-            // Ensure the Administrator group exists
+            // Ensure the Administrator and Defaut group exists
             if (!Groups.ContainsKey("Administrator"))
             {
                 Groups.Add("Administrator", new Group(255, new List<string>() { "*" }));
+            }
+            if (!Groups.ContainsKey("Default"))
+            {
+                Groups.Add("Default", new Group(0, new List<string>()));
             }
         }
 

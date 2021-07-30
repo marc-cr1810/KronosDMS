@@ -123,6 +123,57 @@ namespace KronosDMS_Client.Forms.Parts
             return p;
         }
 
+        public override void Save()
+        {
+            if (SelectedPart.Number is null)
+                return;
+
+            SelectedPart.Number = SelectedPart.Number.ToUpper();
+            SelectedPart.Make = boxMakes.Text;
+            SelectedPart.Description = textDescription.Text;
+            SelectedPart.Bin = textBin.Text;
+            SelectedPart.Predecessor = textPredecessor.Text;
+            SelectedPart.Successor = textSuccessor.Text;
+
+            Response response;
+            if (NewPart)
+            {
+                response = new PartAdd(SelectedPart).PerformRequestAsync().Result;
+                if (!response.IsSuccess)
+                {
+                    MessageBox.Show($"Failed to save part\n{response.RawMessage}");
+                    return;
+                }
+            }
+            else
+            {
+                response = new PartSet(SelectedPart).PerformRequestAsync().Result;
+                if (!response.IsSuccess)
+                {
+                    MessageBox.Show($"Failed to save part\n{response.RawMessage}");
+                    return;
+                }
+            }
+            ClearDetails();
+        }
+
+        public override void Delete()
+        {
+            if (SelectedPart.Number is null)
+                return;
+
+            if (MessageBox.Show($"Delete part \"{this.textPartNumber.Text.ToUpper()}\"?", "Delete part?", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+            Response response = new PartRemove(SelectedPart.Number).PerformRequestAsync().Result;
+            if (!response.IsSuccess)
+            {
+                MessageBox.Show($"Failed to delete part\n{response.RawMessage}");
+                return;
+            }
+            ClearDetails();
+        }
+
         private void textPartNumberSearch(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -160,36 +211,7 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
-            if (SelectedPart.Number is null)
-                return;
-
-            SelectedPart.Number = SelectedPart.Number.ToUpper();
-            SelectedPart.Make = boxMakes.Text;
-            SelectedPart.Description = textDescription.Text;
-            SelectedPart.Bin = textBin.Text;
-            SelectedPart.Predecessor = textPredecessor.Text;
-            SelectedPart.Successor = textSuccessor.Text;
-
-            Response response;
-            if (NewPart)
-            {
-                response = new PartAdd(SelectedPart).PerformRequestAsync().Result;
-                if (!response.IsSuccess)
-                {
-                    MessageBox.Show($"Failed to save part\n{response.RawMessage}");
-                    return;
-                }
-            }
-            else
-            {
-                response = new PartSet(SelectedPart).PerformRequestAsync().Result;
-                if (!response.IsSuccess)
-                {
-                    MessageBox.Show($"Failed to save part\n{response.RawMessage}");
-                    return;
-                }
-            }
-            ClearDetails();
+            Save();
         }
 
         private void refreshToolStripButton_Click(object sender, EventArgs e)
@@ -201,21 +223,12 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void deleteToolStripButton_Click(object sender, EventArgs e)
         {
-            if (SelectedPart.Number is null)
-                return;
-
-            Response response = new PartRemove(SelectedPart.Number).PerformRequestAsync().Result;
-            if (!response.IsSuccess)
-            {
-                MessageBox.Show($"Failed to delete part\n{response.RawMessage}");
-                return;
-            }
-            ClearDetails();
+            Delete();
         }
 
         private void textPartNumber_Leave(object sender, EventArgs e)
         {
-            SearchPart();
+            SearchForPart(textPartNumber.Text);
         }
     }
 }

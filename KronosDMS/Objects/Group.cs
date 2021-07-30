@@ -2,7 +2,7 @@
 
 namespace KronosDMS.Objects
 {
-    public class Group
+    public struct Group
     {
         public int Level;
         public List<string> Permissions;

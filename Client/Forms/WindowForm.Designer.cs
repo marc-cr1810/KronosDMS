@@ -37,9 +37,14 @@ namespace KronosDMS_Client.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "Window";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form1";
+            this.Activated += new System.EventHandler(this.Window_Activated);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Window_FormClosed);
             this.SizeChanged += new System.EventHandler(this.Window_SizeChanged);
+            this.Enter += new System.EventHandler(this.Window_Activated);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Window_MouseClick);
+            this.Validated += new System.EventHandler(this.Window_Activated);
             this.ResumeLayout(false);
 
         }

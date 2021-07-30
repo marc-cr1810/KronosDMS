@@ -39,6 +39,7 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void PartsList_ItemEdited(ListViewItem item, int index)
         {
+            int itemIndex = item.Index;
             if (index == 0)
             {
                 string partNumber = item.SubItems[index].Text;
@@ -59,7 +60,7 @@ namespace KronosDMS_Client.Forms.Parts
                 item.SubItems[2].Text = part.Make;
                 item.SubItems[3].Text = part.Description;
 
-                SelectedRecall.Parts[index] = new PartQuantityPair(part.Number, SelectedRecall.Parts[index].Quantity);
+                SelectedRecall.Parts[itemIndex] = new PartQuantityPair(part.Number, SelectedRecall.Parts[itemIndex].Quantity);
             }
             else if (index == 1)
             {
@@ -69,10 +70,10 @@ namespace KronosDMS_Client.Forms.Parts
                     if (qty < 1)
                     {
                         ListParts.Items.Remove(item);
-                        SelectedRecall.Parts.RemoveAt(index);
+                        SelectedRecall.Parts.RemoveAt(itemIndex);
                         return;
                     }
-                    SelectedRecall.Parts[index] = new PartQuantityPair(SelectedRecall.Parts[index].Number, qty);
+                    SelectedRecall.Parts[itemIndex] = new PartQuantityPair(SelectedRecall.Parts[itemIndex].Number, qty);
                 }
                 catch
                 {
@@ -85,7 +86,7 @@ namespace KronosDMS_Client.Forms.Parts
         {
             if (recall.Number == null)
                 return;
-
+            this.NewRecall = false;
 
             if (recall.Parts == null)
                 recall.Parts = new List<PartQuantityPair>();
@@ -143,11 +144,11 @@ namespace KronosDMS_Client.Forms.Parts
             {
                 if (MessageBox.Show($"Create new recall \"{this.textRecallNumber.Text.ToUpper()}\"?", "Create new recall?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    this.Text = $"Recall | {this.textRecallNumber.Text.ToUpper()} - Creating new recall";
                     this.textRecallNumber.Text = this.textRecallNumber.Text.ToUpper();
-                    this.NewRecall = true;
                     SelectedRecall.Number = this.textRecallNumber.Text;
                     FillDetails(SelectedRecall);
+                    this.Text = $"Recall | {this.textRecallNumber.Text.ToUpper()} - Creating new recall";
+                    this.NewRecall = true;
                     return;
                 }
                 else
@@ -204,12 +205,6 @@ namespace KronosDMS_Client.Forms.Parts
             ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
         }
 
-        private void ListParts_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-                contextMenu.Show();
-        }
-
         private void ButtonPartAdd_Click(object sender, EventArgs e)
         {
             PartsSearchResponse response = new PartsSearch(textPartNumber.Text).PerformRequestAsync().Result;
@@ -225,6 +220,9 @@ namespace KronosDMS_Client.Forms.Parts
             {
                 part = response.Parts.ElementAt(0).Value;
             }
+
+            if (part.Number is null)
+                return;
 
             SelectedRecall.Parts.Add(new PartQuantityPair(part.Number, 1));
             ListViewItem partItem = ListParts.Items.Add(part.Number);
@@ -278,6 +276,9 @@ namespace KronosDMS_Client.Forms.Parts
         private void deleteToolStripButton_Click(object sender, EventArgs e)
         {
             if (SelectedRecall.Number is null)
+                return;
+
+            if (MessageBox.Show($"Delete recall \"{this.textRecallNumber.Text.ToUpper()}\"?", "Delete recall?", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
 
             Response response = new RecallRemove(SelectedRecall.Number).PerformRequestAsync().Result;

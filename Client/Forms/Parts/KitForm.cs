@@ -134,42 +134,49 @@ namespace KronosDMS_Client.Forms.Parts
             ListParts.Items.Clear();
         }
 
+        private void SearchForKit(string number)
+        {
+            KitsSearchForm form = new KitsSearchForm(number);
+            Client.MainWindow.OpenFormDialog(form);
+            FillDetails(form.Result);
+            form.Dispose();
+            return;
+        }
+
         private void SearchKit()
         {
             if (this.textKitNumber.Text == SelectedKit.Number)
                 return;
             if (this.textKitNumber.Text != "")
             {
-                KitsSearchForm form = new KitsSearchForm(this.textKitNumber.Text);
-                Client.MainWindow.OpenFormDialog(form);
-                FillDetails(form.Result);
-                form.Dispose();
-                return;
-            }
+                KitsSearchResponse response = new KitsSearch(this.textKitNumber.Text.ToUpper()).PerformRequestAsync().Result;
 
-            KitsSearchResponse response = new KitsSearch(this.textKitNumber.Text.ToUpper()).PerformRequestAsync().Result;
-            if (response.Kits.Count != 1)
-            {
-                if (MessageBox.Show($"Create new kit?", "Create new kit?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (response.Kits.Count != 1)
                 {
-                    this.Text = $"Kit | Creating new kit";
-                    this.NewKit = true;
-                    SelectedKit.Number = this.textKitNumber.Text;
+                    KitsSearchForm form = new KitsSearchForm(this.textKitNumber.Text);
+                    Client.MainWindow.OpenFormDialog(form);
+                    FillDetails(form.Result);
+                    form.Dispose();
                     return;
                 }
+                else if (MessageBox.Show($"Create new kit?", "Create new kit?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    SelectedKit.Number = this.textKitNumber.Text;
+                    FillDetails(SelectedKit);
+                    this.Text = $"Kit | Creating new kit";
+                    this.NewKit = true;
+                    return;
+                }
+                else FillDetails(response.Kits.ElementAt(0).Value);
             }
-            else FillDetails(response.Kits.ElementAt(0).Value);
         }
 
         private void buttonKitSearch_Click(object sender, EventArgs e)
         {
-            KitsSearchForm form = new KitsSearchForm();
-            Client.MainWindow.OpenFormDialog(form);
-            FillDetails(form.Result);
-            form.Dispose();
+            SearchForKit(textKitNumber.Text);
         }
 
-        private void buttonKitSearch_Leave(object sender, EventArgs e)
+        private void textKitNumber_Leave(object sender, EventArgs e)
         {
             SearchKit();
         }
@@ -205,12 +212,6 @@ namespace KronosDMS_Client.Forms.Parts
             ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
         }
 
-        private void ListParts_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-                contextMenu.Show();
-        }
-
         private void ButtonPartAdd_Click(object sender, EventArgs e)
         {
             PartsSearchResponse response = new PartsSearch(textPartNumber.Text).PerformRequestAsync().Result;
@@ -227,6 +228,9 @@ namespace KronosDMS_Client.Forms.Parts
                 part = response.Parts.ElementAt(0).Value;
             }
 
+            if (part.Number is null)
+                return;
+            
             SelectedKit.Parts.Add(new PartQuantityPair(part.Number, 1));
             ListViewItem partItem = ListParts.Items.Add(part.Number);
             partItem.Name = part.Number;
@@ -278,6 +282,9 @@ namespace KronosDMS_Client.Forms.Parts
         private void deleteToolStripButton_Click(object sender, EventArgs e)
         {
             if (SelectedKit.Number is null)
+                return;
+
+            if (MessageBox.Show($"Delete kit \"{this.textKitNumber.Text.ToUpper()}\"?", "Delete kit?", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
 
             Response response = new KitRemove(SelectedKit.Number).PerformRequestAsync().Result;

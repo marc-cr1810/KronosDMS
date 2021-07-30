@@ -73,6 +73,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textRecallNumber
             // 
+            this.textRecallNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textRecallNumber.Location = new System.Drawing.Point(101, 70);
             this.textRecallNumber.Name = "textRecallNumber";
             this.textRecallNumber.Size = new System.Drawing.Size(146, 23);

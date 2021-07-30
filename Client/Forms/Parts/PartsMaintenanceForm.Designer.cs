@@ -107,6 +107,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textPartNumber
             // 
+            this.textPartNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textPartNumber.Location = new System.Drawing.Point(93, 28);
             this.textPartNumber.Name = "textPartNumber";
             this.textPartNumber.Size = new System.Drawing.Size(146, 23);
@@ -148,6 +149,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textBin
             // 
+            this.textBin.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textBin.Enabled = false;
             this.textBin.Location = new System.Drawing.Point(87, 74);
             this.textBin.Name = "textBin";
@@ -176,6 +178,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textSuccessor
             // 
+            this.textSuccessor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textSuccessor.Enabled = false;
             this.textSuccessor.Location = new System.Drawing.Point(87, 132);
             this.textSuccessor.Name = "textSuccessor";
@@ -214,6 +217,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textPredecessor
             // 
+            this.textPredecessor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textPredecessor.Enabled = false;
             this.textPredecessor.Location = new System.Drawing.Point(87, 103);
             this.textPredecessor.Name = "textPredecessor";

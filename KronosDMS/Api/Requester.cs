@@ -108,7 +108,7 @@ namespace KronosDMS.Api
                 Requester.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
 
                 httpResponse = await Requester.Client.GetAsync(endpoint.Address, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-                rawMessage = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                rawMessage = await httpResponse.Content.ReadAsStringAsync();
                 httpResponse.EnsureSuccessStatusCode();
             }
             catch (Exception ex)

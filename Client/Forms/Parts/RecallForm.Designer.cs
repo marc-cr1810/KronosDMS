@@ -29,7 +29,6 @@ namespace KronosDMS_Client.Forms.Parts
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.textRecallNumber = new System.Windows.Forms.TextBox();
             this.labelRecallNumber = new System.Windows.Forms.Label();
             this.buttonRecallSearch = new System.Windows.Forms.Button();
@@ -40,7 +39,6 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelModel = new System.Windows.Forms.Label();
             this.boxMakes = new System.Windows.Forms.ComboBox();
             this.labelMake = new System.Windows.Forms.Label();
-            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ListParts = new KronosDMS_Client.UserControls.KListView();
             this.columnPartNumber = new System.Windows.Forms.ColumnHeader();
             this.columnQuantity = new System.Windows.Forms.ColumnHeader();
@@ -60,6 +58,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textRecallNumber
             // 
+            this.textRecallNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textRecallNumber.Location = new System.Drawing.Point(103, 28);
             this.textRecallNumber.Name = "textRecallNumber";
             this.textRecallNumber.Size = new System.Drawing.Size(152, 23);
@@ -159,11 +158,6 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelMake.TabIndex = 17;
             this.labelMake.Text = "Make";
             // 
-            // contextMenu
-            // 
-            this.contextMenu.Name = "contextMenuStrip1";
-            this.contextMenu.Size = new System.Drawing.Size(61, 4);
-            // 
             // ListParts
             // 
             this.ListParts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -209,6 +203,7 @@ namespace KronosDMS_Client.Forms.Parts
             // textPartNumber
             // 
             this.textPartNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.textPartNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textPartNumber.Location = new System.Drawing.Point(93, 451);
             this.textPartNumber.Name = "textPartNumber";
             this.textPartNumber.Size = new System.Drawing.Size(264, 23);
@@ -324,7 +319,6 @@ namespace KronosDMS_Client.Forms.Parts
         private System.Windows.Forms.Label labelMake;
         private System.Windows.Forms.TextBox textDescription;
         private System.Windows.Forms.Label labelDescription;
-        private System.Windows.Forms.ContextMenuStrip contextMenu;
         private UserControls.KListView ListParts;
         private System.Windows.Forms.ColumnHeader columnPartNumber;
         private System.Windows.Forms.ColumnHeader columnQuantity;

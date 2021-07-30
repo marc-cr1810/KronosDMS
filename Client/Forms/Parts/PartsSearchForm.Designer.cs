@@ -71,6 +71,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             // textPartNumber
             // 
+            this.textPartNumber.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textPartNumber.Location = new System.Drawing.Point(93, 40);
             this.textPartNumber.Name = "textPartNumber";
             this.textPartNumber.Size = new System.Drawing.Size(146, 23);
