@@ -35,6 +35,31 @@ namespace KronosDMS.Api.Endpoints
         }
     }
 
+    public class MakeRemove : IEndpoint<Response>
+    {
+        public string ID { get; set; }
+
+        public MakeRemove(string id)
+        {
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/makes/delete");
+            this.ID = id;
+        }
+
+        public override async Task<Response> PerformRequestAsync()
+        {
+            this.Arguments.Add($"id={HttpUtility.UrlEncode(this.ID)}");
+
+            this.Response = Task.Run(() => Requester.Get(this)).Result;
+
+            if (this.Response.IsSuccess)
+            {
+                return new Response(this.Response);
+            }
+            else
+                return new Response(Error.GetError(this.Response));
+        }
+    }
+
     public class MakeSet : IEndpoint<Response>
     {
         public Make Make { get; set; }

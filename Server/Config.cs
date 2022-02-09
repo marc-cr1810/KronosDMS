@@ -13,6 +13,7 @@ namespace KronosDMS_Server
     {
         public int Port { get; set; } = 8080;
         public string DefaultGroup { get; set; } = "Default";
+        public int MaxSearchResults { get; set; } = 100;
         
         public void Save()
         {

@@ -126,7 +126,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.ListParts.Location = new System.Drawing.Point(10, 128);
             this.ListParts.MultiSelect = false;
             this.ListParts.Name = "ListParts";
-            this.ListParts.Size = new System.Drawing.Size(546, 159);
+            this.ListParts.Size = new System.Drawing.Size(546, 279);
             this.ListParts.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListParts.TabIndex = 14;
             this.ListParts.UseCompatibleStateImageBehavior = false;
@@ -176,7 +176,7 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 299);
+            this.ClientSize = new System.Drawing.Size(568, 419);
             this.Controls.Add(this.boxModel);
             this.Controls.Add(this.labelModel);
             this.Controls.Add(this.ListParts);

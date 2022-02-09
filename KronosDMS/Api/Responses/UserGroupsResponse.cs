@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace KronosDMS.Api.Responses
 {
-    public class UserGroupsGetResponse : Response
+    public class UserGroupsSearchResponse : Response
     {
-        internal UserGroupsGetResponse(Response response) : base(response)
+        internal UserGroupsSearchResponse(Response response) : base(response)
         {
             Groups = new Dictionary<string, Group>();
         }

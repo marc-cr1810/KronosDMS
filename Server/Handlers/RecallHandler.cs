@@ -124,5 +124,42 @@ namespace KronosDMS_Server.Handlers
                 }
             }
         };
+
+        public static Route LockState = new Route()
+        {
+            Name = "Set Recall Lock State Handler",
+            UrlRegex = @"^/api/v1/recalls/setlock$",
+            Method = "GET",
+            Callable = (HttpRequest request) =>
+            {
+                string id = Routes.GetArgValue(request, "id");
+                bool locked = Routes.GetArgValue(request, "locked") == "1";
+
+                if (locked && !Routes.HasPermission(request, "recalls.lock"))
+                    return PermissionHandler.UnauthorizedResponse;
+                else if (!locked && !Routes.HasPermission(request, "recalls.unlock"))
+                    return PermissionHandler.UnauthorizedResponse;
+
+
+                if (Server.Recalls.SetLockState(id, locked))
+                {
+                    return new HttpResponse()
+                    {
+                        ContentAsUTF8 = "{}",
+                        ReasonPhrase = "OK",
+                        StatusCode = "200"
+                    };
+                }
+                else
+                {
+                    return new HttpResponse()
+                    {
+                        ContentAsUTF8 = "Recall does not exist",
+                        ReasonPhrase = "NotModified",
+                        StatusCode = "304"
+                    };
+                }
+            }
+        };
     }
 }

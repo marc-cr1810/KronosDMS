@@ -15,7 +15,7 @@ namespace KronosDMS_Server.Handlers
                 if (!Routes.HasPermission(request, "server.reload"))
                     return PermissionHandler.UnauthorizedResponse;
 
-                KConsole.WriteColored(System.ConsoleColor.DarkCyan, "[KromosDMS Server] Reloading server... ");
+                KConsole.WriteColored(System.ConsoleColor.DarkCyan, "[KronosDMS Server] Reloading server... ");
                 Server.Load();
                 KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
 

@@ -224,6 +224,7 @@ namespace KronosDMS_Client.Forms.Server
             this.Controls.Add(this.textUserID);
             this.Controls.Add(this.labelUserID);
             this.Controls.Add(this.Tools);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "UserAccountsForm";
             this.Text = "User Accounts";
             this.Tools.ResumeLayout(false);

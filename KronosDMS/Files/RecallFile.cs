@@ -9,7 +9,7 @@ namespace KronosDMS.Files
     {
         public Dictionary<string, Recall> Recalls { get; set; } = new Dictionary<string, Recall>();
 
-        private readonly int MAX_RESULTS = 100;
+        public int MAX_RESULTS = 100;
 
         public RecallFile()
         {
@@ -46,8 +46,14 @@ namespace KronosDMS.Files
 
         public bool Remove(string id)
         {
+            // Check if the recall does not exist
             if (!Recalls.ContainsKey(id))
                 return false;
+
+            // Check if the recall is locked
+            if (Recalls[id].Locked)
+                return false;
+
             Recalls.Remove(id);
             Write();
             return true;
@@ -66,7 +72,22 @@ namespace KronosDMS.Files
             if (!Recalls.ContainsKey(recall.Number))
                 return false;
 
+            // Check if the recall is locked
+            if (Recalls[recall.Number].Locked)
+                return false;
+
             Recalls[recall.Number] = recall;
+            Write();
+            return true;
+        }
+
+        public bool SetLockState(string id, bool locked)
+        {
+            if (!Recalls.ContainsKey(id))
+                return false;
+            Recall r = Recalls[id];
+            r.Locked = locked;
+            Recalls[id] = r;
             Write();
             return true;
         }

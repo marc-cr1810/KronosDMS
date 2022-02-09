@@ -35,7 +35,16 @@ namespace KronosDMS_Client
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenuSave = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.FileMenuImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileMenuImportCSV = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileMenuExport = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileMenuExportCSV = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.FileMenuWindowMinimize = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileMenuWindowMaximize = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileMenuWindowClose = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.FileMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.PartsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.serviceKitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,12 +59,13 @@ namespace KronosDMS_Client
             this.accountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetupMenuAccountChangePassword = new System.Windows.Forms.ToolStripMenuItem();
             this.SetupMenuAccountRelogin = new System.Windows.Forms.ToolStripMenuItem();
+            this.vehiclesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SetupMenuMakesMaintenance = new System.Windows.Forms.ToolStripMenuItem();
             this.serverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetupUserAccounts = new System.Windows.Forms.ToolStripMenuItem();
             this.SetupUserGroups = new System.Windows.Forms.ToolStripMenuItem();
             this.SetupMenuServerReload = new System.Windows.Forms.ToolStripMenuItem();
-            this.WindowView = new System.Windows.Forms.Panel();
             this.PingServerTimer = new System.Windows.Forms.Timer(this.components);
             this.Menu.SuspendLayout();
             this.SuspendLayout();
@@ -64,7 +74,7 @@ namespace KronosDMS_Client
             // 
             this.OpenedWindowsPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.OpenedWindowsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.OpenedWindowsPanel.Location = new System.Drawing.Point(0, 549);
+            this.OpenedWindowsPanel.Location = new System.Drawing.Point(0, 618);
             this.OpenedWindowsPanel.Name = "OpenedWindowsPanel";
             this.OpenedWindowsPanel.Size = new System.Drawing.Size(952, 38);
             this.OpenedWindowsPanel.TabIndex = 0;
@@ -87,17 +97,25 @@ namespace KronosDMS_Client
             this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenuSave,
             this.FileMenuDelete,
+            this.toolStripSeparator3,
+            this.FileMenuImport,
+            this.FileMenuExport,
             this.toolStripSeparator1,
+            this.FileMenuWindowMinimize,
+            this.FileMenuWindowMaximize,
+            this.FileMenuWindowClose,
+            this.toolStripSeparator2,
             this.FileMenuExit});
             this.FileMenu.Name = "FileMenu";
             this.FileMenu.Size = new System.Drawing.Size(37, 20);
             this.FileMenu.Text = "File";
+            this.FileMenu.DropDownOpening += new System.EventHandler(this.FileMenu_DropDownOpening);
             // 
             // FileMenuSave
             // 
             this.FileMenuSave.Enabled = false;
             this.FileMenuSave.Name = "FileMenuSave";
-            this.FileMenuSave.Size = new System.Drawing.Size(107, 22);
+            this.FileMenuSave.Size = new System.Drawing.Size(180, 22);
             this.FileMenuSave.Text = "Save";
             this.FileMenuSave.Click += new System.EventHandler(this.FileMenuSave_Click);
             // 
@@ -105,19 +123,85 @@ namespace KronosDMS_Client
             // 
             this.FileMenuDelete.Enabled = false;
             this.FileMenuDelete.Name = "FileMenuDelete";
-            this.FileMenuDelete.Size = new System.Drawing.Size(107, 22);
+            this.FileMenuDelete.Size = new System.Drawing.Size(180, 22);
             this.FileMenuDelete.Text = "Delete";
             this.FileMenuDelete.Click += new System.EventHandler(this.FileMenuDelete_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // FileMenuImport
+            // 
+            this.FileMenuImport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FileMenuImportCSV});
+            this.FileMenuImport.Enabled = false;
+            this.FileMenuImport.Name = "FileMenuImport";
+            this.FileMenuImport.Size = new System.Drawing.Size(180, 22);
+            this.FileMenuImport.Text = "Import";
+            // 
+            // FileMenuImportCSV
+            // 
+            this.FileMenuImportCSV.Name = "FileMenuImportCSV";
+            this.FileMenuImportCSV.Size = new System.Drawing.Size(126, 22);
+            this.FileMenuImportCSV.Text = "From CSV";
+            this.FileMenuImportCSV.Click += new System.EventHandler(this.FileMenuImportCSV_Click);
+            // 
+            // FileMenuExport
+            // 
+            this.FileMenuExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FileMenuExportCSV});
+            this.FileMenuExport.Enabled = false;
+            this.FileMenuExport.Name = "FileMenuExport";
+            this.FileMenuExport.Size = new System.Drawing.Size(180, 22);
+            this.FileMenuExport.Text = "Export";
+            // 
+            // FileMenuExportCSV
+            // 
+            this.FileMenuExportCSV.Name = "FileMenuExportCSV";
+            this.FileMenuExportCSV.Size = new System.Drawing.Size(110, 22);
+            this.FileMenuExportCSV.Text = "To CSV";
+            this.FileMenuExportCSV.Click += new System.EventHandler(this.FileMenuExportCSV_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(104, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // FileMenuWindowMinimize
+            // 
+            this.FileMenuWindowMinimize.Enabled = false;
+            this.FileMenuWindowMinimize.Name = "FileMenuWindowMinimize";
+            this.FileMenuWindowMinimize.Size = new System.Drawing.Size(180, 22);
+            this.FileMenuWindowMinimize.Text = "Minimize";
+            this.FileMenuWindowMinimize.Click += new System.EventHandler(this.FileMenuWindowMinimize_Click);
+            // 
+            // FileMenuWindowMaximize
+            // 
+            this.FileMenuWindowMaximize.Enabled = false;
+            this.FileMenuWindowMaximize.Name = "FileMenuWindowMaximize";
+            this.FileMenuWindowMaximize.Size = new System.Drawing.Size(180, 22);
+            this.FileMenuWindowMaximize.Text = "Maximize";
+            this.FileMenuWindowMaximize.Click += new System.EventHandler(this.FileMenuWindowMaximize_Click);
+            // 
+            // FileMenuWindowClose
+            // 
+            this.FileMenuWindowClose.Enabled = false;
+            this.FileMenuWindowClose.Name = "FileMenuWindowClose";
+            this.FileMenuWindowClose.Size = new System.Drawing.Size(180, 22);
+            this.FileMenuWindowClose.Text = "Close";
+            this.FileMenuWindowClose.Click += new System.EventHandler(this.FileMenuWindowClose_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // FileMenuExit
             // 
             this.FileMenuExit.Name = "FileMenuExit";
-            this.FileMenuExit.Size = new System.Drawing.Size(107, 22);
+            this.FileMenuExit.Size = new System.Drawing.Size(180, 22);
             this.FileMenuExit.Text = "Exit";
             this.FileMenuExit.Click += new System.EventHandler(this.FileMenuExit_Click);
             // 
@@ -196,6 +280,7 @@ namespace KronosDMS_Client
             // 
             this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.accountToolStripMenuItem,
+            this.vehiclesToolStripMenuItem,
             this.serverToolStripMenuItem});
             this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
             this.setupToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -224,6 +309,21 @@ namespace KronosDMS_Client
             this.SetupMenuAccountRelogin.Size = new System.Drawing.Size(168, 22);
             this.SetupMenuAccountRelogin.Text = "Relogin";
             this.SetupMenuAccountRelogin.Click += new System.EventHandler(this.SetupMenuAccountRelogin_Click);
+            // 
+            // vehiclesToolStripMenuItem
+            // 
+            this.vehiclesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SetupMenuMakesMaintenance});
+            this.vehiclesToolStripMenuItem.Name = "vehiclesToolStripMenuItem";
+            this.vehiclesToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.vehiclesToolStripMenuItem.Text = "Vehicles";
+            // 
+            // SetupMenuMakesMaintenance
+            // 
+            this.SetupMenuMakesMaintenance.Name = "SetupMenuMakesMaintenance";
+            this.SetupMenuMakesMaintenance.Size = new System.Drawing.Size(180, 22);
+            this.SetupMenuMakesMaintenance.Text = "Makes Maintenance";
+            this.SetupMenuMakesMaintenance.Click += new System.EventHandler(this.SetupMenuMakesMaintenance_Click);
             // 
             // serverToolStripMenuItem
             // 
@@ -264,14 +364,6 @@ namespace KronosDMS_Client
             this.SetupMenuServerReload.Text = "Reload";
             this.SetupMenuServerReload.Click += new System.EventHandler(this.SetupMenuServerReload_Click);
             // 
-            // WindowView
-            // 
-            this.WindowView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.WindowView.Location = new System.Drawing.Point(0, 24);
-            this.WindowView.Name = "WindowView";
-            this.WindowView.Size = new System.Drawing.Size(952, 525);
-            this.WindowView.TabIndex = 2;
-            // 
             // PingServerTimer
             // 
             this.PingServerTimer.Enabled = true;
@@ -283,13 +375,17 @@ namespace KronosDMS_Client
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
-            this.ClientSize = new System.Drawing.Size(952, 587);
-            this.Controls.Add(this.WindowView);
+            this.ClientSize = new System.Drawing.Size(952, 656);
             this.Controls.Add(this.OpenedWindowsPanel);
             this.Controls.Add(this.Menu);
             this.DoubleBuffered = true;
+            this.IsMdiContainer = true;
+            this.MainMenuStrip = this.Menu;
             this.Name = "MainWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.Menu.ResumeLayout(false);
             this.Menu.PerformLayout();
             this.ResumeLayout(false);
@@ -304,7 +400,6 @@ namespace KronosDMS_Client
         private System.Windows.Forms.ToolStripMenuItem FileMenu;
         private System.Windows.Forms.ToolStripMenuItem FileMenuExit;
         private System.Windows.Forms.ToolStripMenuItem PartsMenu;
-        private System.Windows.Forms.Panel WindowView;
         private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serviceKitsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem PartsMenuKitsGeneral;
@@ -326,6 +421,17 @@ namespace KronosDMS_Client
         private System.Windows.Forms.ToolStripMenuItem SetupMenuAccountChangePassword;
         private System.Windows.Forms.ToolStripMenuItem SetupMenuAccountRelogin;
         private System.Windows.Forms.Timer PingServerTimer;
+        private System.Windows.Forms.ToolStripMenuItem vehiclesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SetupMenuMakesMaintenance;
+        private System.Windows.Forms.ToolStripMenuItem FileMenuWindowClose;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem FileMenuWindowMinimize;
+        private System.Windows.Forms.ToolStripMenuItem FileMenuWindowMaximize;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem FileMenuImport;
+        private System.Windows.Forms.ToolStripMenuItem FileMenuImportCSV;
+        private System.Windows.Forms.ToolStripMenuItem FileMenuExport;
+        private System.Windows.Forms.ToolStripMenuItem FileMenuExportCSV;
     }
 }
 

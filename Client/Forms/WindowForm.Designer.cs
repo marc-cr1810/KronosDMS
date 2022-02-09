@@ -39,12 +39,8 @@ namespace KronosDMS_Client.Forms
             this.Name = "Window";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Form1";
-            this.Activated += new System.EventHandler(this.Window_Activated);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Window_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Window_FormClosing);
             this.SizeChanged += new System.EventHandler(this.Window_SizeChanged);
-            this.Enter += new System.EventHandler(this.Window_Activated);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Window_MouseClick);
-            this.Validated += new System.EventHandler(this.Window_Activated);
             this.ResumeLayout(false);
 
         }

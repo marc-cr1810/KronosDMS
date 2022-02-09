@@ -9,7 +9,7 @@ namespace KronosDMS.Files
     {
         public Dictionary<int, UserAccount> Accounts;
 
-        private readonly int MAX_RESULTS = 100;
+        public int MAX_RESULTS = 100;
 
         public UserAccountsFile()
         {

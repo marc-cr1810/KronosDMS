@@ -12,7 +12,7 @@ namespace KronosDMS.Objects
         public string Description { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
-
+        public bool Locked { get; set; }
         public List<PartQuantityPair> Parts { get; set; }
 
         public Kit(string name, string description, string Make, string model, List<PartQuantityPair> parts)
@@ -21,6 +21,7 @@ namespace KronosDMS.Objects
             this.Description = description;
             this.Make = Make;
             this.Model = model;
+            this.Locked = false;
 
             Parts = parts;
         }

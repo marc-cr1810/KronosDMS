@@ -9,7 +9,7 @@ namespace KronosDMS.Files
     {
         public Dictionary<string, Make> Makes { get; set; } = new Dictionary<string, Make>();
 
-        private readonly int MAX_RESULTS = 100;
+        public int MAX_RESULTS = 100;
 
         public MakeFile()
         {
@@ -37,7 +37,7 @@ namespace KronosDMS.Files
             return true;
         }
 
-        public void Add(string name, List<string> models)
+        public void Add(string name, Dictionary<string, Model> models)
         {
             Make Make = new Make(name, models);
             Makes.Add(name, Make);
@@ -58,6 +58,15 @@ namespace KronosDMS.Files
                 return false;
 
             Makes[make.Name] = make;
+            Write();
+            return true;
+        }
+
+        public bool Remove(string id)
+        {
+            if (!Makes.ContainsKey(id))
+                return false;
+            Makes.Remove(id);
             Write();
             return true;
         }

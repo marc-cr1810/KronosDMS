@@ -127,9 +127,14 @@ namespace KronosDMS.Objects
                     user.ClientToken = credentials.ClientToken;
                     user.AccessToken = Guid.NewGuid().ToString();
                     File.Accounts[a.Key] = user;
-                    //user.PasswordHash = null;
+                    user.PasswordHash = null;
 
                     AccessTokenAccounts.Add(user.AccessToken, user.ID);
+
+                    Console.WriteLine("[{0}] User Account {1} \"{2} {3}\" logged in", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                        user.Username,
+                        user.FirstName,
+                        user.LastName);
 
                     return JsonConvert.SerializeObject(user);
                 }
@@ -158,6 +163,11 @@ namespace KronosDMS.Objects
                     user.AccessToken = null;
                     File.Accounts[a.Key] = user;
                     File.Write();
+
+                    Console.WriteLine("[{0}] User Account {1} \"{2} {3}\" logged out", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                        user.Username,
+                        user.FirstName,
+                        user.LastName);
 
                     return "{}";
                 }

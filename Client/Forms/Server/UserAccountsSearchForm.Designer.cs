@@ -125,7 +125,7 @@ namespace KronosDMS_Client.Forms.Server
             this.ListUserAccounts.Location = new System.Drawing.Point(11, 128);
             this.ListUserAccounts.MultiSelect = false;
             this.ListUserAccounts.Name = "ListUserAccounts";
-            this.ListUserAccounts.Size = new System.Drawing.Size(366, 159);
+            this.ListUserAccounts.Size = new System.Drawing.Size(366, 209);
             this.ListUserAccounts.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ListUserAccounts.TabIndex = 44;
             this.ListUserAccounts.UseCompatibleStateImageBehavior = false;
@@ -162,7 +162,7 @@ namespace KronosDMS_Client.Forms.Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(389, 299);
+            this.ClientSize = new System.Drawing.Size(389, 349);
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.ListUserAccounts);
             this.Controls.Add(this.textLastname);

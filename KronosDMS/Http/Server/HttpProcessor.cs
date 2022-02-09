@@ -45,7 +45,11 @@ namespace KronosDMS.Http.Server
             
             // just print requests that return non success codes
             if (response.StatusCode != "200")
-                Console.WriteLine("{0} {1}", response.StatusCode, request.Url);
+                Console.WriteLine("[{0}] {1} {2} {3} \"{4}\"", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), 
+                    response.StatusCode, 
+                    request.Url, 
+                    response.ReasonPhrase,
+                    Encoding.UTF8.GetString(response.Content));
 
             // build a default response for errors
             if (response.Content == null)

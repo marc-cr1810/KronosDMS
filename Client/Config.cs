@@ -7,6 +7,7 @@ namespace KronosDMS_Client
     {
         public string IPAddress { get; set; } = "127.0.0.1:8080";
         public string Theme { get; set; } = "Dark";
+        public bool StartMaximized { get; set; } = true;
 
         public void Save()
         {

@@ -76,6 +76,7 @@ namespace KronosDMS_Client
             this.textPassword.PasswordChar = '•';
             this.textPassword.Size = new System.Drawing.Size(131, 23);
             this.textPassword.TabIndex = 3;
+            this.textPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textPassword_KeyDown);
             // 
             // labelInvalid
             // 

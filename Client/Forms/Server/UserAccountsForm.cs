@@ -1,4 +1,5 @@
-﻿using KronosDMS.Api.Endpoints;
+﻿using KronosDMS;
+using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
 using KronosDMS.Objects;
 using System;
@@ -36,8 +37,9 @@ namespace KronosDMS_Client.Forms.Server
             SelectedAccount = account;
 
             this.Text = $"User Accounts | {account.Username} \"{account.FirstName} {account.LastName}\" - Editing";
+            this.NewUserAccount = false;
 
-            UserGroupsGetResponse groups = new UserGroupsGet("").PerformRequestAsync().Result;
+            UserGroupsSearchResponse groups = new UserGroupsSearch("").PerformRequestAsync().Result;
             foreach (KeyValuePair<string, Group> group in groups.Groups)
                 boxGroups.Items.Add(group.Key);
 
@@ -98,13 +100,13 @@ namespace KronosDMS_Client.Forms.Server
             UserAccountsSearchResponse response = new UserAccountsSearch(this.textUsername.Text, "", "").PerformRequestAsync().Result;
             if (response.UserAccounts.Count != 1)
             {
-                if (MessageBox.Show($"Create new user account \"{this.textUsername.Text}\"?", "Create new part account?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show($"Create new user account \"{this.textUsername.Text}\"?", "Create new user account?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    this.Text = $"User Accounts | {this.textUsername.Text.ToUpper()} - Creating new user account";
                     this.textUsername.Text = this.textUsername.Text;
-                    this.NewUserAccount = true;
                     SelectedAccount.Username = this.textUsername.Text;
                     FillDetails(SelectedAccount);
+                    this.Text = $"User Accounts | {this.textUsername.Text.ToUpper()} - Creating new user account";
+                    this.NewUserAccount = true;
                     return;
                 }
                 else
@@ -164,13 +166,7 @@ namespace KronosDMS_Client.Forms.Server
             Response response;
             if (NewUserAccount)
             {
-                byte[] password256 = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(SelectedAccount.Username));
-                StringBuilder pwBuilder = new StringBuilder();
-                for (int i = 0; i < password256.Length; i++)
-                {
-                    pwBuilder.Append(password256[i].ToString("x2"));
-                }
-                SelectedAccount.PasswordHash = pwBuilder.ToString();
+                SelectedAccount.PasswordHash = Utils.SHA256Hash(SelectedAccount.Username);
 
                 response = new UserAccountAdd(SelectedAccount).PerformRequestAsync().Result;
                 if (!response.IsSuccess)
@@ -179,12 +175,14 @@ namespace KronosDMS_Client.Forms.Server
                     return;
                 }
             }
-
-            response = new UserAccountsSet(SelectedAccount).PerformRequestAsync().Result;
-            if (!response.IsSuccess)
+            else
             {
-                MessageBox.Show($"Failed to save user account\n{response.RawMessage}");
-                return;
+                response = new UserAccountsSet(SelectedAccount).PerformRequestAsync().Result;
+                if (!response.IsSuccess)
+                {
+                    MessageBox.Show($"Failed to save user account\n{response.RawMessage}");
+                    return;
+                }
             }
             ClearDetails();
         }
@@ -210,12 +208,14 @@ namespace KronosDMS_Client.Forms.Server
 
         private void textUserID_Leave(object sender, EventArgs e)
         {
-            SearchUserID();
+            if (textUserID.Text != "")
+                SearchUserID();
         }
 
         private void textUsername_Leave(object sender, EventArgs e)
         {
-            SearchUsername();
+            if (textUserID.Text != "")
+                SearchUsername();
         }
     }
 }

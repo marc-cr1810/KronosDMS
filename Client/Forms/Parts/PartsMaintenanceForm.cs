@@ -10,10 +10,12 @@ namespace KronosDMS_Client.Forms.Parts
 {
     public partial class PartsMaintenanceForm : Window
     {
+        private bool Dialog = false;
         private bool NewPart = false;
-        Part SelectedPart = new Part();
+        public Part SelectedPart = new Part();
+        public bool Saved = false;
 
-        public PartsMaintenanceForm(Part part = new Part())
+        public PartsMaintenanceForm(Part part = new Part(), bool newPart = false, bool dialog = false)
         {
             InitializeComponent();
 
@@ -29,12 +31,16 @@ namespace KronosDMS_Client.Forms.Parts
 
             if (part.Number is not null)
                 FillDetails(part);
+            this.NewPart = newPart;
+            this.Dialog = dialog;
         }
 
         private void FillDetails(Part part)
         {
             if (part.Number == null)
                 return;
+
+            part.Number = part.Number.Replace(" ", "").ToUpper();
 
             SelectedPart = part;
 
@@ -94,13 +100,14 @@ namespace KronosDMS_Client.Forms.Parts
             PartsSearchResponse response = new PartsSearch(this.textPartNumber.Text.ToUpper()).PerformRequestAsync().Result;
             if (response.Parts.Count != 1)
             {
-                if (MessageBox.Show($"Create new part \"{this.textPartNumber.Text.ToUpper()}\"?", "Create new part?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                string number = this.textPartNumber.Text.Replace(" ", "").ToUpper();
+                if (MessageBox.Show($"Create new part \"{number}\"?", "Create new part?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    this.Text = $"Parts Maintenance | {this.textPartNumber.Text.ToUpper()} - Creating new part";
-                    this.textPartNumber.Text = this.textPartNumber.Text.ToUpper();
-                    this.NewPart = true;
-                    SelectedPart.Number = this.textPartNumber.Text;
+                    this.textPartNumber.Text = number;
+                    SelectedPart.Number = number;
                     FillDetails(SelectedPart);
+                    this.Text = $"Parts Maintenance | {number} - Creating new part";
+                    this.NewPart = true;
                     return;
                 }
                 else
@@ -154,6 +161,12 @@ namespace KronosDMS_Client.Forms.Parts
                     return;
                 }
             }
+            if (Dialog)
+            {
+                Saved = true;
+                this.Close();
+                return;
+            }
             ClearDetails();
         }
 
@@ -178,13 +191,21 @@ namespace KronosDMS_Client.Forms.Parts
         {
             if (e.KeyCode == Keys.Enter)
             {
-                SearchPart();
+                if (textPartNumber.Text != SelectedPart.Number)
+                    SearchPart();
             }
         }
 
         private void buttonPartSearch_Click(object sender, EventArgs e)
         {
-            FillDetails(SearchForPart(textPartNumber.Text));
+            if (textPartNumber.Text != SelectedPart.Number)
+                FillDetails(SearchForPart(textPartNumber.Text));
+        }
+
+        private void textPartNumber_Leave(object sender, EventArgs e)
+        {
+            if (textPartNumber.Text != SelectedPart.Number && textPartNumber.Text != "")
+                SearchForPart(textPartNumber.Text);
         }
 
         private void buttonPredecessorSearch_Click(object sender, EventArgs e)
@@ -216,19 +237,16 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void refreshToolStripButton_Click(object sender, EventArgs e)
         {
-            if (SelectedPart.Number is null)
+            if (SelectedPart.Number is null || Dialog)
                 return;
             ClearDetails();
         }
 
         private void deleteToolStripButton_Click(object sender, EventArgs e)
         {
+            if (Dialog)
+                return;
             Delete();
-        }
-
-        private void textPartNumber_Leave(object sender, EventArgs e)
-        {
-            SearchForPart(textPartNumber.Text);
         }
     }
 }

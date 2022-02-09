@@ -40,6 +40,12 @@ namespace KronosDMS_Client.Forms.Parts
         {
             PartsSearchResponse response = new PartsSearch(this.boxMakes.Text, this.textPartNumber.Text, this.textDescription.Text).PerformRequestAsync().Result;
 
+            if (!response.IsSuccess)
+            {
+                MessageBox.Show($"Failed to search for parts\n{response.RawMessage}", "Failed");
+                return;
+            }
+
             ListParts.Items.Clear();
 
             foreach (KeyValuePair<string, Part> part in response.Parts)

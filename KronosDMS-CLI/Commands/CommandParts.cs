@@ -55,7 +55,7 @@ namespace KronosDMS_CLI.Commands
                         }
 
                         PartsSearchResponse response = new PartsSearch(make, number, description).PerformRequestAsync().Result;
-                        foreach (KeyValuePair<string, Part> part in response.Parts)
+                        foreach (KeyValuePair<string, Group> part in response.Parts)
                         {
                             KConsole.WriteColoredLine(ConsoleColor.White, $"{part.Value.Make}: {part.Value.Number} \"{part.Value.Description}\"");
                         }
@@ -80,7 +80,7 @@ namespace KronosDMS_CLI.Commands
                         if (description == "")
                             break;
 
-                        Part part = new Part() { Make = make, Number = number, Description = description };
+                        Group part = new Group() { Make = make, Number = number, Description = description };
                         Response response = new PartAdd(part).PerformRequestAsync().Result;
                         if (!response.IsSuccess)
                             KConsole.WriteColoredLine(ConsoleColor.Red, "Failed to add part!");
@@ -102,7 +102,7 @@ namespace KronosDMS_CLI.Commands
                         PartsSearchResponse response = new PartsSearch("", number, "").PerformRequestAsync().Result;
                         if (response.Parts.Count != 1)
                             break;
-                        Part part = response.Parts.ElementAt(0).Value;
+                        Group part = response.Parts.ElementAt(0).Value;
                         HandleSelectionCommands(part);
                     }
                     break;
@@ -112,7 +112,7 @@ namespace KronosDMS_CLI.Commands
             }
         }
 
-        private static void HandleSelectionCommands(Part part)
+        private static void HandleSelectionCommands(Group part)
         {
             while (true)
             {

@@ -9,7 +9,7 @@ namespace KronosDMS.Files
     {
         public Dictionary<string, Part> Parts { get; set; } = new Dictionary<string, Part>();
 
-        private readonly int MAX_RESULTS = 100;
+        public int MAX_RESULTS = 100;
 
         public PartsFile()
         {
@@ -36,6 +36,8 @@ namespace KronosDMS.Files
 
         public bool Add(Part part)
         {
+            part.Number = part.Number.Replace(" ", "").ToUpper();
+
             // Check if the part already exists
             if (Parts.ContainsKey(part.Number))
                 return false;

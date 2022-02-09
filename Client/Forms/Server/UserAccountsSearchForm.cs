@@ -33,6 +33,12 @@ namespace KronosDMS_Client.Forms.Server
         {
             UserAccountsSearchResponse response = new UserAccountsSearch(this.textUsername.Text, this.textFirstname.Text, this.textLastname.Text).PerformRequestAsync().Result;
 
+            if (!response.IsSuccess)
+            {
+                MessageBox.Show($"Failed to search for user accounts\n{response.RawMessage}", "Failed");
+                return;
+            }
+
             ListUserAccounts.Items.Clear();
 
             foreach (KeyValuePair<int, UserAccount> account in response.UserAccounts)

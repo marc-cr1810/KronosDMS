@@ -1,4 +1,5 @@
-﻿using KronosDMS.Api.Endpoints;
+﻿using KronosDMS;
+using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
 using KronosDMS.Objects;
 using System;
@@ -30,8 +31,6 @@ namespace KronosDMS_Client.Forms.Parts
 
             this.ListParts.SetReadonly(false, false, true, true);
             this.ListParts.ItemEdited += PartsList_ItemEdited;
-
-            SelectedRecall.Parts = new List<PartQuantityPair>();
 
             if (recall.Number is not null)
                 FillDetails(recall);
@@ -93,7 +92,10 @@ namespace KronosDMS_Client.Forms.Parts
 
             SelectedRecall = recall;
 
-            this.Text = $"Recall | {recall.Number} \"{recall.Description}\" - Editing";
+            if (SelectedRecall.Parts is null)
+                SelectedRecall.Parts = new List<PartQuantityPair>();
+
+            this.Text = $"Recall | {recall.Number} \"{recall.Description}\"{(SelectedRecall.Locked ? "" : "- Editing")}";
 
             MakesSearchResponse makes = new MakesSearch("").PerformRequestAsync().Result;
             foreach (KeyValuePair<string, Make> make in makes.Makes)
@@ -103,6 +105,17 @@ namespace KronosDMS_Client.Forms.Parts
             boxMakes.Text = recall.Make;
             boxModel.Text = recall.Model;
             textDescription.Text = recall.Description;
+
+            if (SelectedRecall.Locked)
+            {
+                LockUnlockButton.Image = Properties.Resources.locked_icon;
+                this.ListParts.SetReadonly(true, true, true, true);
+            }
+            else
+            {
+                LockUnlockButton.Image = Properties.Resources.unlocked_icon;
+                this.ListParts.SetReadonly(false, false, true, true);
+            }
 
             ListParts.Items.Clear();
             foreach (PartQuantityPair part in recall.Parts)
@@ -129,6 +142,8 @@ namespace KronosDMS_Client.Forms.Parts
             textDescription.Text = "";
             this.boxMakes.Items.Clear();
             this.boxModel.Items.Clear();
+
+            LockUnlockButton.Image = Properties.Resources.unlocked_icon;
 
             this.Text = $"Recall";
 
@@ -162,51 +177,14 @@ namespace KronosDMS_Client.Forms.Parts
             else FillDetails(response.Recalls.ElementAt(0).Value);
         }
 
-        private void buttonRecallSearch_Click(object sender, EventArgs e)
+        private void AddPart()
         {
-            RecallsSearchForm form = new RecallsSearchForm();
-            Client.MainWindow.OpenFormDialog(form);
-            FillDetails(form.Result);
-            form.Dispose();
-        }
-
-        private void buttonRecallSearch_Leave(object sender, EventArgs e)
-        {
-            SearchRecall();
-        }
-
-        private void textRecallNumber_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
+            if (SelectedRecall.Locked && !NewRecall)
             {
-                SearchRecall();
-            }
-        }
-
-        private void boxMakes_TextUpdate(object sender, EventArgs e)
-        {
-            this.boxModel.Items.Clear();
-
-            if (this.boxMakes.Text == "")
+                MessageBox.Show($"Cannot add part to recall.\nThe recall is locked.", "Failed");
                 return;
-
-            MakesSearchResponse response = new MakesSearch(this.boxMakes.Text).PerformRequestAsync().Result;
-            if (response.Makes.Count > 0)
-            {
-                foreach (string model in response.Makes[this.boxMakes.Text].Models)
-                {
-                    this.boxModel.Items.Add(model);
-                }
             }
-        }
 
-        private void ListParts_Resize(object sender, EventArgs e)
-        {
-            ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
-        }
-
-        private void ButtonPartAdd_Click(object sender, EventArgs e)
-        {
             PartsSearchResponse response = new PartsSearch(textPartNumber.Text).PerformRequestAsync().Result;
             Part part;
             if (response.Parts.Count != 1)
@@ -234,10 +212,20 @@ namespace KronosDMS_Client.Forms.Parts
             textPartNumber.Text = "";
         }
 
-        private void saveToolStripButton_Click(object sender, EventArgs e)
+        //
+        // OVERRIDES
+        //
+
+        public override void Save()
         {
             if (SelectedRecall.Number is null)
                 return;
+
+            if (SelectedRecall.Locked && !NewRecall)
+            {
+                MessageBox.Show($"Cannot save recall.\nThe recall is locked.", "Failed");
+                return;
+            }
 
             SelectedRecall.Number = SelectedRecall.Number.ToUpper();
             SelectedRecall.Make = this.boxMakes.Text;
@@ -265,6 +253,146 @@ namespace KronosDMS_Client.Forms.Parts
             }
             ClearDetails();
         }
+        public override void Delete()
+        {
+            if (SelectedRecall.Number is null)
+                return;
+
+            if (SelectedRecall.Locked && !NewRecall)
+            {
+                MessageBox.Show($"Cannot delete recall.\nThe recall is locked.", "Failed");
+                return;
+            }
+
+            if (MessageBox.Show($"Delete recall \"{this.textRecallNumber.Text.ToUpper()}\"?", "Delete recall?", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+
+            if (NewRecall)
+                ClearDetails();
+
+            Response response = new RecallRemove(SelectedRecall.Number).PerformRequestAsync().Result;
+            if (!response.IsSuccess)
+            {
+                MessageBox.Show($"Failed to delete recall\n{response.RawMessage}");
+                return;
+            }
+            ClearDetails();
+        }
+
+        public override void ImportCSV()
+        {
+            if (SelectedRecall.Number is null)
+                return;
+
+            if (SelectedRecall.Locked && !NewRecall)
+            {
+                MessageBox.Show($"Cannot import parts.\nThe recall is locked.", "Failed");
+                return;
+            }
+
+            DialogResult result = ImportFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string file = ImportFileDialog.FileName;
+                GetFormatResponse r = new GetFormat("csv", "titan").PerformRequestAsync().Result;
+
+                if (!r.IsSuccess)
+                {
+                    MessageBox.Show($"Failed to get CSV format.\n{r.RawMessage}", "Failed");
+                    return;
+                }
+
+                KeyValuePair<Part, int>[] parts = r.Format.GetRecallPartsList(file);
+
+                foreach (KeyValuePair<Part, int> part in parts)
+                {
+                    PartsSearchResponse response = new PartsSearch(part.Key.Number).PerformRequestAsync().Result;
+                    Part p;
+                    if (response.Parts.Count != 1)
+                    {
+                        PartsMaintenanceForm pmf = new PartsMaintenanceForm(part.Key, true, true);
+                        Client.MainWindow.OpenFormDialog(pmf);
+                        if (!pmf.Saved)
+                            continue;
+                        p = pmf.SelectedPart;
+                    }
+                    else
+                        p = response.Parts.ElementAt(0).Value;
+
+                    ListViewItem partItem = ListParts.Items.Add(p.Number);
+                    partItem.Name = p.Number;
+                    partItem.SubItems.Add(part.Value.ToString());
+                    partItem.SubItems.Add(p.Make);
+                    partItem.SubItems.Add(p.Description);
+
+                    SelectedRecall.Parts.Add(new PartQuantityPair(p.Number, part.Value));
+                };
+            }
+        }
+
+        private void buttonRecallSearch_Click(object sender, EventArgs e)
+        {
+            RecallsSearchForm form = new RecallsSearchForm();
+            Client.MainWindow.OpenFormDialog(form);
+            FillDetails(form.Result);
+            form.Dispose();
+        }
+
+        private void buttonRecallSearch_Leave(object sender, EventArgs e)
+        {
+            if (textRecallNumber.Text != "")
+                SearchRecall();
+        }
+
+        private void textRecallNumber_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SearchRecall();
+            }
+        }
+
+        private void boxMakes_TextUpdate(object sender, EventArgs e)
+        {
+            this.boxModel.Items.Clear();
+
+            if (this.boxMakes.Text == "")
+                return;
+
+            MakesSearchResponse response = new MakesSearch(this.boxMakes.Text).PerformRequestAsync().Result;
+            if (response.Makes.Count > 0)
+            {
+                foreach (KeyValuePair<string, Model> model in response.Makes[this.boxMakes.Text].Models)
+                {
+                    this.boxModel.Items.Add(model.Key);
+                }
+            }
+        }
+
+        private void ListParts_Resize(object sender, EventArgs e)
+        {
+            ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
+        }
+
+        private void textPartNumber_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddPart();
+                e.Handled = true;
+            }
+        }
+
+        private void ButtonPartAdd_Click(object sender, EventArgs e)
+        {
+            AddPart();
+        }
+
+        private void saveToolStripButton_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
 
         private void refreshToolStripButton_Click(object sender, EventArgs e)
         {
@@ -275,19 +403,106 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void deleteToolStripButton_Click(object sender, EventArgs e)
         {
+            Delete();
+        }
+
+        private void LockUnlockButton_Click(object sender, EventArgs e)
+        {
             if (SelectedRecall.Number is null)
                 return;
 
-            if (MessageBox.Show($"Delete recall \"{this.textRecallNumber.Text.ToUpper()}\"?", "Delete recall?", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show($"Are you sure you want to {(SelectedRecall.Locked ? "unlock" : "lock")} this recall?", $"{(SelectedRecall.Locked ? "Unlock" : "Lock")} recall?", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
 
-            Response response = new RecallRemove(SelectedRecall.Number).PerformRequestAsync().Result;
-            if (!response.IsSuccess)
+            if (!NewRecall)
             {
-                MessageBox.Show($"Failed to delete recall\n{response.RawMessage}");
+                Response r = new RecallSetLockState(SelectedRecall.Number, !SelectedRecall.Locked).PerformRequestAsync().Result;
+
+                if (!r.IsSuccess)
+                {
+                    MessageBox.Show($"Failed to {(SelectedRecall.Locked ? "unlock" : "lock")} recall.\n{r.RawMessage}", "Failed");
+                    return;
+                }
+            }
+
+            SelectedRecall.Locked = !SelectedRecall.Locked;
+
+            if (SelectedRecall.Locked)
+            {
+                LockUnlockButton.Image = Properties.Resources.locked_icon;
+                this.ListParts.SetReadonly(true, true, true, true);
+            }
+            else
+            {
+                LockUnlockButton.Image = Properties.Resources.unlocked_icon;
+                this.ListParts.SetReadonly(false, false, true, true);
+            }
+
+            if (!NewRecall)
+                this.Text = $"Recall | {SelectedRecall.Number} \"{SelectedRecall.Description}\"{(SelectedRecall.Locked ? "" : "- Editing")}";
+        }
+
+        private void ListParts_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control)
+            {
+                if (e.KeyCode == Keys.C)
+                {
+                    if (ListParts.SelectedItems.Count > 0)
+                        Clipboard.SetText(ListParts.SelectedItems[0].SubItems[0].Text);
+                }
+            }
+        }
+
+        //
+        //      PartsListMenu stuff
+        //
+
+        private void PartsListMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (SelectedRecall.Parts is not null)
+            {
+                if (SelectedRecall.Parts.Count > 0 && ListParts.SelectedItems.Count == 1)
+                {
+                    PartsListMenuCopy.Enabled = true;
+                    PartsListMenuDelete.Enabled = true;
+                }
+                PartsListMenuImportCSV.Enabled = true;
+                PartsListMenuExportCSV.Enabled = true;
                 return;
             }
-            ClearDetails();
+            PartsListMenuCopy.Enabled = false;
+            PartsListMenuDelete.Enabled = false;
+            PartsListMenuImportCSV.Enabled = false;
+            PartsListMenuExportCSV.Enabled = false;
+        }
+
+        private void PartsListMenuCopy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(ListParts.SelectedItems[0].SubItems[0].Text);
+        }
+
+        private void PastListMenuDelete_Click(object sender, EventArgs e)
+        {
+            if (SelectedRecall.Locked && !NewRecall)
+            {
+                MessageBox.Show($"Cannot delete part.\nThe recall is locked.", "Failed");
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to delete part " + ListParts.SelectedItems[0].SubItems[0].Text + " from this recall?", "Delete", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                int index = ListParts.Items.IndexOf(ListParts.SelectedItems[0]);
+
+                ListParts.Items.RemoveAt(index);
+                SelectedRecall.Parts.RemoveAt(index);
+            }
+        }
+
+        private void PartsListMenuImportCSV_Click(object sender, EventArgs e)
+        {
+            ImportCSV();
         }
     }
 }

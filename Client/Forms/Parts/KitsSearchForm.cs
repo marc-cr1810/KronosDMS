@@ -40,6 +40,12 @@ namespace KronosDMS_Client.Forms.Parts
         {
             KitsSearchResponse response = new KitsSearch(this.boxMakes.Text, this.boxModel.Text, this.textKitNumber.Text, this.textDescription.Text).PerformRequestAsync().Result;
 
+            if (!response.IsSuccess)
+            {
+                MessageBox.Show($"Failed to search for kits\n{response.RawMessage}", "Failed");
+                return;
+            }
+
             ListParts.Items.Clear();
 
             foreach (KeyValuePair<string, Kit> kit in response.Kits)
@@ -65,9 +71,9 @@ namespace KronosDMS_Client.Forms.Parts
             MakesSearchResponse response = new MakesSearch(this.boxMakes.Text).PerformRequestAsync().Result;
             if (response.Makes.Count > 0)
             {
-                foreach (string model in response.Makes[this.boxMakes.Text].Models)
+                foreach (KeyValuePair<string, Model> model in response.Makes[this.boxMakes.Text].Models)
                 {
-                    this.boxModel.Items.Add(model);
+                    this.boxModel.Items.Add(model.Key);
                 }
             }
         }

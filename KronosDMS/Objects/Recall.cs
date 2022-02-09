@@ -2,18 +2,6 @@
 
 namespace KronosDMS.Objects
 {
-    public struct PartQuantityPair
-    {
-        public string Number { get; set; }
-        public int Quantity { get; set; }
-
-        public PartQuantityPair(string number, int quantity)
-        {
-            this.Number = number;
-            this.Quantity = quantity;
-        }
-    }
-
     public struct Recall
     {
         public string Number { get; set; }
@@ -21,6 +9,7 @@ namespace KronosDMS.Objects
         public string Make { get; set; }
         public string Model { get; set; }
 
+        public bool Locked { get; set; }
         public List<PartQuantityPair> Parts { get; set; }
 
         public Recall(string name, string description, string Make, string model, List<PartQuantityPair> parts)
@@ -29,6 +18,7 @@ namespace KronosDMS.Objects
             this.Description = description;
             this.Make = Make;
             this.Model = model;
+            this.Locked = false;
 
             Parts = parts;
         }

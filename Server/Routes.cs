@@ -15,6 +15,10 @@ namespace KronosDMS_Server
             return new List<Route>() {
                 ServerHandler.Reload,
 
+                ClientHandler.Update,
+                ClientHandler.UpdaterDownload,
+                ClientHandler.Themes,
+
                 UserAccountsHandler.Login,
                 UserAccountsHandler.Logout,
                 UserAccountsHandler.Validate,
@@ -25,6 +29,9 @@ namespace KronosDMS_Server
                 UserAccountsHandler.Remove,
 
                 GroupsHandler.Get,
+                GroupsHandler.Add,
+                GroupsHandler.Remove,
+                GroupsHandler.Set,
 
                 MakeHandler.Get,
                 MakeHandler.Set,
@@ -39,11 +46,15 @@ namespace KronosDMS_Server
                 RecallHandler.Set,
                 RecallHandler.Add,
                 RecallHandler.Remove,
+                RecallHandler.LockState,
 
                 KitHandler.Get,
                 KitHandler.Set,
                 KitHandler.Add,
                 KitHandler.Remove,
+                KitHandler.LockState,
+
+                FormatsHandler.GetCSV,
 
                 new Route {
                     Name = "Ping Handler",
@@ -60,34 +71,31 @@ namespace KronosDMS_Server
                 },
 
                 new Route {
-                    Name = "Client Update Handler",
-                    UrlRegex = @"^/api/v1/client/update$",
+                    Name = "Installer Downloader Handler",
+                    UrlRegex = @"^/installer",
                     Method = "GET",
                     Callable = (HttpRequest request) => {
-
-                        bool download = Routes.GetArgValue(request, "download") == "1";
-
-                        if (download)
+                        if (File.Exists("data/client/installer.zip"))
                         {
-                            if (File.Exists("data/update/client.zip"))
-                            {
-                                var response = new HttpResponse();
-                                response.StatusCode = "200";
-                                response.ReasonPhrase = "Ok";
-                                response.Headers["Content-Type"] = QuickMimeTypeMapper.GetMimeType(".zip");
-                                response.Content = File.ReadAllBytes("data/update/client.zip");
+                            var response = new HttpResponse();
+                            response.StatusCode = "200";
+                            response.ReasonPhrase = "Ok";
+                            response.Headers["Content-Type"] = QuickMimeTypeMapper.GetMimeType(".zip");
+                            response.Content = File.ReadAllBytes("data/client/installer.zip");
 
-                                return response;
-                            }
+                            return response;
                         }
-                        return new HttpResponse()
+                        else
                         {
-                            ContentAsUTF8 = Server.UpdateConfig.ToJSON(),
-                            ReasonPhrase = "OK",
-                            StatusCode = "200"
-                        };
-        }
-    },
+                            return new HttpResponse()
+                            {
+                                ContentAsUTF8 = "Bad Request",
+                                ReasonPhrase = "BadRequest",
+                                StatusCode = "400"
+                            };
+                        }
+                    }
+                }
             };
         }
 
@@ -100,8 +108,12 @@ namespace KronosDMS_Server
 
         public static bool HasPermission(HttpRequest request, string permission)
         {
-            if (!PermissionHandler.Has(GetUserFromKey(request), permission))
+            UserAccount user = GetUserFromKey(request);
+            if (!PermissionHandler.Has(user, permission))
+            {
+                KConsole.WriteColoredLine(System.ConsoleColor.DarkRed, $"[KronosDMS Auth] User Account \"{user.Username}\" lacks permission {permission}");
                 return false;
+            }
             return true;
         }
 

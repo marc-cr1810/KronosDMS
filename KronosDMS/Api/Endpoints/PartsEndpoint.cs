@@ -25,10 +25,7 @@ namespace KronosDMS.Api.Endpoints
 
             if (this.Response.IsSuccess)
             {
-                return new Response(this.Response)
-                {
-
-                };
+                return new Response(this.Response);
             }
             else
                 return new Response(Error.GetError(this.Response));
@@ -77,10 +74,7 @@ namespace KronosDMS.Api.Endpoints
 
             if (this.Response.IsSuccess)
             {
-                return new Response(this.Response)
-                {
-
-                };
+                return new Response(this.Response);
             }
             else
                 return new Response(Error.GetError(this.Response));

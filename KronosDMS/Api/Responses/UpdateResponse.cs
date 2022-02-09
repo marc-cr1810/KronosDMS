@@ -6,7 +6,6 @@
         {
         }
 
-        public string Version { get; internal set; }
-        public bool Force { get; internal set; }
+        public UpdateInfo UpdateInfo { get; set; }
     }
 }

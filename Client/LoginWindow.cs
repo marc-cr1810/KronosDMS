@@ -1,4 +1,5 @@
-﻿using KronosDMS.Api;
+﻿using KronosDMS;
+using KronosDMS.Api;
 using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
 using System;
@@ -12,7 +13,7 @@ namespace KronosDMS_Client
         {
             InitializeComponent();
 
-            this.Text = $"{this.Text} v{Application.ProductVersion}";
+            this.Text = $"KronosDMS v{Application.ProductVersion} | Login";
 
             this.BackColor = Client.ActiveTheme.Colors.Foreground;
             this.label1.ForeColor = Client.ActiveTheme.Colors.Text.Default;
@@ -23,7 +24,7 @@ namespace KronosDMS_Client
             this.textIPAddress.Text = Client.Config.IPAddress;
         }
 
-        private void buttonLogin_Click(object sender, EventArgs e)
+        public void Login()
         {
             Requester.BaseAPIAddr = $"http://{textIPAddress.Text}";
 
@@ -43,6 +44,7 @@ namespace KronosDMS_Client
             {
                 if (response.IsSuccess)
                 {
+                    Client.Credentials = new UserCredentials() { Username = textUsername.Text, PasswordHash = Utils.SHA256Hash(textPassword.Text) };
                     Client.ActiveAccount = response.Account;
                     Requester.AccessToken = response.Account.AccessToken;
                     Client.Config.IPAddress = this.textIPAddress.Text;
@@ -55,6 +57,20 @@ namespace KronosDMS_Client
                 }
             }
             catch { }
+        }
+
+        private void buttonLogin_Click(object sender, EventArgs e)
+        {
+            Login();
+        }
+
+        private void textPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Login();
+                e.Handled = true;
+            }
         }
 
         private void buttonAdvanced_Click(object sender, EventArgs e)

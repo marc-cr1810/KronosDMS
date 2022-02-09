@@ -10,7 +10,7 @@ namespace KronosDMS.Files
     {
         public Dictionary<string, Kit> Kits { get; set; } = new Dictionary<string, Kit>();
 
-        private readonly int MAX_RESULTS = 100;
+        public int MAX_RESULTS = 100;
 
         public KitFile()
         {
@@ -54,8 +54,14 @@ namespace KronosDMS.Files
 
         public bool Remove(string id)
         {
+            // Check if the kit does not exist
             if (!Kits.ContainsKey(id))
                 return false;
+
+            // Check if the kit is locked
+            if (Kits[id].Locked)
+                return false;
+
             Kits.Remove(id);
             Write();
             return true;
@@ -63,18 +69,33 @@ namespace KronosDMS.Files
 
         public bool Set(string json)
         {
-            Kit Kit;
+            Kit kit;
             try
             {
-                Kit = JsonConvert.DeserializeObject<Kit>(json);
+                kit = JsonConvert.DeserializeObject<Kit>(json);
             }
             catch { return false; }
 
-            // Check if the Kit does not exist
-            if (!Kits.ContainsKey(Kit.Number))
+            // Check if the kit does not exist
+            if (!Kits.ContainsKey(kit.Number))
                 return false;
 
-            Kits[Kit.Number] = Kit;
+            // Check if the kit is locked
+            if (Kits[kit.Number].Locked)
+                return false;
+
+            Kits[kit.Number] = kit;
+            Write();
+            return true;
+        }
+
+        public bool SetLockState(string id, bool locked)
+        {
+            if (!Kits.ContainsKey(id))
+                return false;
+            Kit k = Kits[id];
+            k.Locked = locked;
+            Kits[id] = k;
             Write();
             return true;
         }

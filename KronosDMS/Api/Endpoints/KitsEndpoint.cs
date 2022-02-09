@@ -84,6 +84,34 @@ namespace KronosDMS.Api.Endpoints
         }
     }
 
+    public class KitSetLockState : IEndpoint<Response>
+    {
+        public string ID { get; set; }
+        public bool Locked { get; set; }
+
+        public KitSetLockState(string id, bool locked)
+        {
+            this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/kits/setlock");
+            this.ID = id;
+            this.Locked = locked;
+        }
+
+        public override async Task<Response> PerformRequestAsync()
+        {
+            this.Arguments.Add($"id={HttpUtility.UrlEncode(this.ID)}");
+            this.Arguments.Add($"locked={HttpUtility.UrlEncode(this.Locked ? "1" : "0")}");
+
+            this.Response = Task.Run(() => Requester.Get(this)).Result;
+
+            if (this.Response.IsSuccess)
+            {
+                return new Response(this.Response);
+            }
+            else
+                return new Response(Error.GetError(this.Response));
+        }
+    }
+
     public class KitsSearch : IEndpoint<KitsSearchResponse>
     {
         public string Make { get; set; }

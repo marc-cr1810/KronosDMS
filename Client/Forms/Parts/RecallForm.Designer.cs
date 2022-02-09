@@ -29,6 +29,8 @@ namespace KronosDMS_Client.Forms.Parts
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecallForm));
             this.textRecallNumber = new System.Windows.Forms.TextBox();
             this.labelRecallNumber = new System.Windows.Forms.Label();
             this.buttonRecallSearch = new System.Windows.Forms.Button();
@@ -44,6 +46,14 @@ namespace KronosDMS_Client.Forms.Parts
             this.columnQuantity = new System.Windows.Forms.ColumnHeader();
             this.columnMake = new System.Windows.Forms.ColumnHeader();
             this.columnDescription = new System.Windows.Forms.ColumnHeader();
+            this.PartsListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.PartsListMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.PartsListMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.PartsListMenuImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.PartsListMenuImportCSV = new System.Windows.Forms.ToolStripMenuItem();
+            this.PartsListMenuExport = new System.Windows.Forms.ToolStripMenuItem();
+            this.PartsListMenuExportCSV = new System.Windows.Forms.ToolStripMenuItem();
             this.textPartNumber = new System.Windows.Forms.TextBox();
             this.labelPartNumber = new System.Windows.Forms.Label();
             this.ButtonPartAdd = new System.Windows.Forms.Button();
@@ -52,7 +62,10 @@ namespace KronosDMS_Client.Forms.Parts
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.refreshToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.deleteToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.ImportFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.LockUnlockButton = new System.Windows.Forms.ToolStripButton();
             this.groupDetails.SuspendLayout();
+            this.PartsListMenu.SuspendLayout();
             this.Tools.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -168,6 +181,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.columnQuantity,
             this.columnMake,
             this.columnDescription});
+            this.ListParts.ContextMenuStrip = this.PartsListMenu;
             this.ListParts.FullRowSelect = true;
             this.ListParts.GridLines = true;
             this.ListParts.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -179,6 +193,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.ListParts.TabIndex = 16;
             this.ListParts.UseCompatibleStateImageBehavior = false;
             this.ListParts.View = System.Windows.Forms.View.Details;
+            this.ListParts.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListParts_KeyUp);
             // 
             // columnPartNumber
             // 
@@ -200,6 +215,66 @@ namespace KronosDMS_Client.Forms.Parts
             this.columnDescription.Text = "Description";
             this.columnDescription.Width = 300;
             // 
+            // PartsListMenu
+            // 
+            this.PartsListMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.PartsListMenuCopy,
+            this.PartsListMenuDelete,
+            this.toolStripSeparator2,
+            this.PartsListMenuImport,
+            this.PartsListMenuExport});
+            this.PartsListMenu.Name = "PartsListMenu";
+            this.PartsListMenu.Size = new System.Drawing.Size(112, 98);
+            this.PartsListMenu.Opening += new System.ComponentModel.CancelEventHandler(this.PartsListMenu_Opening);
+            // 
+            // PartsListMenuCopy
+            // 
+            this.PartsListMenuCopy.Name = "PartsListMenuCopy";
+            this.PartsListMenuCopy.Size = new System.Drawing.Size(111, 22);
+            this.PartsListMenuCopy.Text = "Copy";
+            this.PartsListMenuCopy.Click += new System.EventHandler(this.PartsListMenuCopy_Click);
+            // 
+            // PartsListMenuDelete
+            // 
+            this.PartsListMenuDelete.Name = "PartsListMenuDelete";
+            this.PartsListMenuDelete.Size = new System.Drawing.Size(111, 22);
+            this.PartsListMenuDelete.Text = "Delete";
+            this.PartsListMenuDelete.Click += new System.EventHandler(this.PastListMenuDelete_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(108, 6);
+            // 
+            // PartsListMenuImport
+            // 
+            this.PartsListMenuImport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.PartsListMenuImportCSV});
+            this.PartsListMenuImport.Name = "PartsListMenuImport";
+            this.PartsListMenuImport.Size = new System.Drawing.Size(111, 22);
+            this.PartsListMenuImport.Text = "Import";
+            // 
+            // PartsListMenuImportCSV
+            // 
+            this.PartsListMenuImportCSV.Name = "PartsListMenuImportCSV";
+            this.PartsListMenuImportCSV.Size = new System.Drawing.Size(126, 22);
+            this.PartsListMenuImportCSV.Text = "From CSV";
+            this.PartsListMenuImportCSV.Click += new System.EventHandler(this.PartsListMenuImportCSV_Click);
+            // 
+            // PartsListMenuExport
+            // 
+            this.PartsListMenuExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.PartsListMenuExportCSV});
+            this.PartsListMenuExport.Name = "PartsListMenuExport";
+            this.PartsListMenuExport.Size = new System.Drawing.Size(111, 22);
+            this.PartsListMenuExport.Text = "Export ";
+            // 
+            // PartsListMenuExportCSV
+            // 
+            this.PartsListMenuExportCSV.Name = "PartsListMenuExportCSV";
+            this.PartsListMenuExportCSV.Size = new System.Drawing.Size(110, 22);
+            this.PartsListMenuExportCSV.Text = "To CSV";
+            // 
             // textPartNumber
             // 
             this.textPartNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -208,6 +283,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.textPartNumber.Name = "textPartNumber";
             this.textPartNumber.Size = new System.Drawing.Size(264, 23);
             this.textPartNumber.TabIndex = 24;
+            this.textPartNumber.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textPartNumber_KeyDown);
             // 
             // labelPartNumber
             // 
@@ -237,7 +313,8 @@ namespace KronosDMS_Client.Forms.Parts
             this.saveToolStripButton,
             this.toolStripSeparator1,
             this.refreshToolStripButton,
-            this.deleteToolStripButton});
+            this.deleteToolStripButton,
+            this.LockUnlockButton});
             this.Tools.Location = new System.Drawing.Point(0, 0);
             this.Tools.Name = "Tools";
             this.Tools.Size = new System.Drawing.Size(616, 25);
@@ -266,7 +343,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.refreshToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.refreshToolStripButton.Name = "refreshToolStripButton";
             this.refreshToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.refreshToolStripButton.Text = "toolStripButton1";
+            this.refreshToolStripButton.Text = "Refresh";
             this.refreshToolStripButton.ToolTipText = "Refresh";
             this.refreshToolStripButton.Click += new System.EventHandler(this.refreshToolStripButton_Click);
             // 
@@ -277,9 +354,26 @@ namespace KronosDMS_Client.Forms.Parts
             this.deleteToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.deleteToolStripButton.Name = "deleteToolStripButton";
             this.deleteToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.deleteToolStripButton.Text = "toolStripButton2";
+            this.deleteToolStripButton.Text = "Delete";
             this.deleteToolStripButton.ToolTipText = "Delete";
             this.deleteToolStripButton.Click += new System.EventHandler(this.deleteToolStripButton_Click);
+            // 
+            // ImportFileDialog
+            // 
+            this.ImportFileDialog.DefaultExt = "csv";
+            this.ImportFileDialog.Filter = "CSV Files|*.csv";
+            this.ImportFileDialog.InitialDirectory = "C:/Users/";
+            this.ImportFileDialog.Title = "Import CSV File";
+            // 
+            // LockUnlockButton
+            // 
+            this.LockUnlockButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.LockUnlockButton.Image = ((System.Drawing.Image)(resources.GetObject("LockUnlockButton.Image")));
+            this.LockUnlockButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LockUnlockButton.Name = "LockUnlockButton";
+            this.LockUnlockButton.Size = new System.Drawing.Size(23, 22);
+            this.LockUnlockButton.Text = "Lock";
+            this.LockUnlockButton.Click += new System.EventHandler(this.LockUnlockButton_Click);
             // 
             // RecallForm
             // 
@@ -300,6 +394,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.Text = "Recall";
             this.groupDetails.ResumeLayout(false);
             this.groupDetails.PerformLayout();
+            this.PartsListMenu.ResumeLayout(false);
             this.Tools.ResumeLayout(false);
             this.Tools.PerformLayout();
             this.ResumeLayout(false);
@@ -332,5 +427,15 @@ namespace KronosDMS_Client.Forms.Parts
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton refreshToolStripButton;
         private System.Windows.Forms.ToolStripButton deleteToolStripButton;
+        private System.Windows.Forms.ContextMenuStrip PartsListMenu;
+        private System.Windows.Forms.ToolStripMenuItem PartsListMenuCopy;
+        private System.Windows.Forms.ToolStripMenuItem PartsListMenuDelete;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem PartsListMenuImport;
+        private System.Windows.Forms.ToolStripMenuItem PartsListMenuImportCSV;
+        private System.Windows.Forms.ToolStripMenuItem PartsListMenuExport;
+        private System.Windows.Forms.ToolStripMenuItem PartsListMenuExportCSV;
+        private System.Windows.Forms.OpenFileDialog ImportFileDialog;
+        private System.Windows.Forms.ToolStripButton LockUnlockButton;
     }
 }
