@@ -1,4 +1,5 @@
 ﻿using KronosDMS.Http.Server.Models;
+using KronosDMS.Objects;
 using KronosDMS.Security;
 
 namespace KronosDMS_Server.Handlers
@@ -15,6 +16,8 @@ namespace KronosDMS_Server.Handlers
                 if (!Routes.HasPermission(request, "server.reload"))
                     return PermissionHandler.UnauthorizedResponse;
 
+                UserAccount user = Routes.GetUserFromKey(request);
+                KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"[KronosDMS Auth] User \"{user.Username}\" reloaded the server");
                 KConsole.WriteColored(System.ConsoleColor.DarkCyan, "[KronosDMS Server] Reloading server... ");
                 Server.Load();
                 KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
