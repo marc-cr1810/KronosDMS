@@ -95,7 +95,7 @@ namespace KronosDMS_Client.Forms.Parts
             if (SelectedRecall.Parts is null)
                 SelectedRecall.Parts = new List<PartQuantityPair>();
 
-            this.Text = $"Recall | {recall.Number} \"{recall.Description}\"{(SelectedRecall.Locked ? "" : "- Editing")}";
+            this.Text = $"Recall | {recall.Number} \"{recall.Description}\"{(SelectedRecall.Locked ? "" : " - Editing")}";
 
             MakesSearchResponse makes = new MakesSearch("").PerformRequestAsync().Result;
             foreach (KeyValuePair<string, Make> make in makes.Makes)
@@ -105,6 +105,12 @@ namespace KronosDMS_Client.Forms.Parts
             boxMakes.Text = recall.Make;
             boxModel.Text = recall.Model;
             textDescription.Text = recall.Description;
+            textNote.Text = recall.AttentionNote;
+
+            if (recall.AttentionNote != null && recall.AttentionNote != "")
+            {
+                MessageBox.Show(recall.AttentionNote, "Attention");
+            }
 
             if (SelectedRecall.Locked)
             {
@@ -140,6 +146,7 @@ namespace KronosDMS_Client.Forms.Parts
             boxMakes.Text = "";
             boxModel.Text = "";
             textDescription.Text = "";
+            textNote.Text = "";
             this.boxMakes.Items.Clear();
             this.boxModel.Items.Clear();
 
@@ -231,6 +238,7 @@ namespace KronosDMS_Client.Forms.Parts
             SelectedRecall.Make = this.boxMakes.Text;
             SelectedRecall.Model = this.boxModel.Text;
             SelectedRecall.Description = this.textDescription.Text;
+            SelectedRecall.AttentionNote = this.textNote.Text;
 
             Response response;
             if (NewRecall)

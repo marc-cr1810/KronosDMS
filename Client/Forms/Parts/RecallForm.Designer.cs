@@ -62,8 +62,10 @@ namespace KronosDMS_Client.Forms.Parts
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.refreshToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.deleteToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.ImportFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.LockUnlockButton = new System.Windows.Forms.ToolStripButton();
+            this.ImportFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.textNote = new System.Windows.Forms.TextBox();
+            this.labelNote = new System.Windows.Forms.Label();
             this.groupDetails.SuspendLayout();
             this.PartsListMenu.SuspendLayout();
             this.Tools.SuspendLayout();
@@ -102,6 +104,8 @@ namespace KronosDMS_Client.Forms.Parts
             // 
             this.groupDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupDetails.Controls.Add(this.textNote);
+            this.groupDetails.Controls.Add(this.labelNote);
             this.groupDetails.Controls.Add(this.textDescription);
             this.groupDetails.Controls.Add(this.labelDescription);
             this.groupDetails.Controls.Add(this.boxModel);
@@ -358,13 +362,6 @@ namespace KronosDMS_Client.Forms.Parts
             this.deleteToolStripButton.ToolTipText = "Delete";
             this.deleteToolStripButton.Click += new System.EventHandler(this.deleteToolStripButton_Click);
             // 
-            // ImportFileDialog
-            // 
-            this.ImportFileDialog.DefaultExt = "csv";
-            this.ImportFileDialog.Filter = "CSV Files|*.csv";
-            this.ImportFileDialog.InitialDirectory = "C:/Users/";
-            this.ImportFileDialog.Title = "Import CSV File";
-            // 
             // LockUnlockButton
             // 
             this.LockUnlockButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -374,6 +371,31 @@ namespace KronosDMS_Client.Forms.Parts
             this.LockUnlockButton.Size = new System.Drawing.Size(23, 22);
             this.LockUnlockButton.Text = "Lock";
             this.LockUnlockButton.Click += new System.EventHandler(this.LockUnlockButton_Click);
+            // 
+            // ImportFileDialog
+            // 
+            this.ImportFileDialog.DefaultExt = "csv";
+            this.ImportFileDialog.Filter = "CSV Files|*.csv";
+            this.ImportFileDialog.InitialDirectory = "C:/Users/";
+            this.ImportFileDialog.Title = "Import CSV File";
+            // 
+            // textNote
+            // 
+            this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textNote.Location = new System.Drawing.Point(288, 45);
+            this.textNote.Name = "textNote";
+            this.textNote.Size = new System.Drawing.Size(298, 23);
+            this.textNote.TabIndex = 24;
+            // 
+            // labelNote
+            // 
+            this.labelNote.AutoSize = true;
+            this.labelNote.Location = new System.Drawing.Point(249, 48);
+            this.labelNote.Name = "labelNote";
+            this.labelNote.Size = new System.Drawing.Size(33, 15);
+            this.labelNote.TabIndex = 23;
+            this.labelNote.Text = "Note";
             // 
             // RecallForm
             // 
@@ -437,5 +459,7 @@ namespace KronosDMS_Client.Forms.Parts
         private System.Windows.Forms.ToolStripMenuItem PartsListMenuExportCSV;
         private System.Windows.Forms.OpenFileDialog ImportFileDialog;
         private System.Windows.Forms.ToolStripButton LockUnlockButton;
+        private System.Windows.Forms.TextBox textNote;
+        private System.Windows.Forms.Label labelNote;
     }
 }

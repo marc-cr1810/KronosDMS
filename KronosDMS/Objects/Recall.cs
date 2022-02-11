@@ -8,7 +8,7 @@ namespace KronosDMS.Objects
         public string Description { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
-
+        public string AttentionNote { get; set; }
         public bool Locked { get; set; }
         public List<PartQuantityPair> Parts { get; set; }
 
@@ -18,6 +18,7 @@ namespace KronosDMS.Objects
             this.Description = description;
             this.Make = Make;
             this.Model = model;
+            this.AttentionNote = "";
             this.Locked = false;
 
             Parts = parts;

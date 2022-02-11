@@ -39,14 +39,17 @@ namespace KronosDMS_Client.Forms.Server
             if (this.NewMake != true)
                 this.Text = $"Makes Maintenance | {make.Name} - Editing";
 
-            foreach (KeyValuePair<string, Model> model in SelectedMake.Models)
+            if (SelectedMake.Models != null)
             {
-                ListViewItem modelItem = ListModels.Items.Add(model.Key);
-                modelItem.Name = model.Key;
-                if (model.Value.SubModels is not null)
-                    modelItem.SubItems.Add(model.Value.SubModels.Count.ToString());
-                else
-                    modelItem.SubItems.Add("0");
+                foreach (KeyValuePair<string, Model> model in SelectedMake.Models)
+                {
+                    ListViewItem modelItem = ListModels.Items.Add(model.Key);
+                    modelItem.Name = model.Key;
+                    if (model.Value.SubModels is not null)
+                        modelItem.SubItems.Add(model.Value.SubModels.Count.ToString());
+                    else
+                        modelItem.SubItems.Add("0");
+                }
             }
 
             textMakeID.Text = make.Name;
