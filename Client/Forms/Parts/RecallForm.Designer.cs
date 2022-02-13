@@ -35,6 +35,8 @@ namespace KronosDMS_Client.Forms.Parts
             this.labelRecallNumber = new System.Windows.Forms.Label();
             this.buttonRecallSearch = new System.Windows.Forms.Button();
             this.groupDetails = new System.Windows.Forms.GroupBox();
+            this.textNote = new System.Windows.Forms.TextBox();
+            this.labelNote = new System.Windows.Forms.Label();
             this.textDescription = new System.Windows.Forms.TextBox();
             this.labelDescription = new System.Windows.Forms.Label();
             this.boxModel = new System.Windows.Forms.ComboBox();
@@ -46,6 +48,7 @@ namespace KronosDMS_Client.Forms.Parts
             this.columnQuantity = new System.Windows.Forms.ColumnHeader();
             this.columnMake = new System.Windows.Forms.ColumnHeader();
             this.columnDescription = new System.Windows.Forms.ColumnHeader();
+            this.columnNote = new System.Windows.Forms.ColumnHeader();
             this.PartsListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.PartsListMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.PartsListMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,8 +67,8 @@ namespace KronosDMS_Client.Forms.Parts
             this.deleteToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.LockUnlockButton = new System.Windows.Forms.ToolStripButton();
             this.ImportFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.textNote = new System.Windows.Forms.TextBox();
-            this.labelNote = new System.Windows.Forms.Label();
+            this.boxOptions = new System.Windows.Forms.ComboBox();
+            this.buttonAddOption = new System.Windows.Forms.Button();
             this.groupDetails.SuspendLayout();
             this.PartsListMenu.SuspendLayout();
             this.Tools.SuspendLayout();
@@ -118,6 +121,24 @@ namespace KronosDMS_Client.Forms.Parts
             this.groupDetails.TabIndex = 14;
             this.groupDetails.TabStop = false;
             this.groupDetails.Text = "Details";
+            // 
+            // textNote
+            // 
+            this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textNote.Location = new System.Drawing.Point(288, 45);
+            this.textNote.Name = "textNote";
+            this.textNote.Size = new System.Drawing.Size(298, 23);
+            this.textNote.TabIndex = 24;
+            // 
+            // labelNote
+            // 
+            this.labelNote.AutoSize = true;
+            this.labelNote.Location = new System.Drawing.Point(249, 48);
+            this.labelNote.Name = "labelNote";
+            this.labelNote.Size = new System.Drawing.Size(33, 15);
+            this.labelNote.TabIndex = 23;
+            this.labelNote.Text = "Note";
             // 
             // textDescription
             // 
@@ -184,7 +205,8 @@ namespace KronosDMS_Client.Forms.Parts
             this.columnPartNumber,
             this.columnQuantity,
             this.columnMake,
-            this.columnDescription});
+            this.columnDescription,
+            this.columnNote});
             this.ListParts.ContextMenuStrip = this.PartsListMenu;
             this.ListParts.FullRowSelect = true;
             this.ListParts.GridLines = true;
@@ -217,7 +239,12 @@ namespace KronosDMS_Client.Forms.Parts
             // columnDescription
             // 
             this.columnDescription.Text = "Description";
-            this.columnDescription.Width = 300;
+            this.columnDescription.Width = 150;
+            // 
+            // columnNote
+            // 
+            this.columnNote.Text = "Note";
+            this.columnNote.Width = 150;
             // 
             // PartsListMenu
             // 
@@ -379,29 +406,37 @@ namespace KronosDMS_Client.Forms.Parts
             this.ImportFileDialog.InitialDirectory = "C:/Users/";
             this.ImportFileDialog.Title = "Import CSV File";
             // 
-            // textNote
+            // boxOptions
             // 
-            this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.boxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textNote.Location = new System.Drawing.Point(288, 45);
-            this.textNote.Name = "textNote";
-            this.textNote.Size = new System.Drawing.Size(298, 23);
-            this.textNote.TabIndex = 24;
+            this.boxOptions.FormattingEnabled = true;
+            this.boxOptions.Location = new System.Drawing.Point(310, 30);
+            this.boxOptions.MaximumSize = new System.Drawing.Size(320, 0);
+            this.boxOptions.Name = "boxOptions";
+            this.boxOptions.Size = new System.Drawing.Size(150, 23);
+            this.boxOptions.TabIndex = 27;
+            this.boxOptions.SelectedIndexChanged += new System.EventHandler(this.boxOptions_SelectedIndexChanged);
+            this.boxOptions.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.boxOptions_KeyPress);
+            this.boxOptions.Leave += new System.EventHandler(this.boxOptions_Leave);
             // 
-            // labelNote
+            // buttonAddOption
             // 
-            this.labelNote.AutoSize = true;
-            this.labelNote.Location = new System.Drawing.Point(249, 48);
-            this.labelNote.Name = "labelNote";
-            this.labelNote.Size = new System.Drawing.Size(33, 15);
-            this.labelNote.TabIndex = 23;
-            this.labelNote.Text = "Note";
+            this.buttonAddOption.Location = new System.Drawing.Point(288, 30);
+            this.buttonAddOption.Name = "buttonAddOption";
+            this.buttonAddOption.Size = new System.Drawing.Size(22, 23);
+            this.buttonAddOption.TabIndex = 28;
+            this.buttonAddOption.Text = "+";
+            this.buttonAddOption.UseVisualStyleBackColor = true;
+            this.buttonAddOption.Click += new System.EventHandler(this.buttonAddOption_Click);
             // 
             // RecallForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(616, 489);
+            this.Controls.Add(this.buttonAddOption);
+            this.Controls.Add(this.boxOptions);
             this.Controls.Add(this.Tools);
             this.Controls.Add(this.ButtonPartAdd);
             this.Controls.Add(this.textPartNumber);
@@ -461,5 +496,8 @@ namespace KronosDMS_Client.Forms.Parts
         private System.Windows.Forms.ToolStripButton LockUnlockButton;
         private System.Windows.Forms.TextBox textNote;
         private System.Windows.Forms.Label labelNote;
+        private System.Windows.Forms.ColumnHeader columnNote;
+        private System.Windows.Forms.ComboBox boxOptions;
+        private System.Windows.Forms.Button buttonAddOption;
     }
 }

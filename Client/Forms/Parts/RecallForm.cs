@@ -13,12 +13,13 @@ namespace KronosDMS_Client.Forms.Parts
     {
         private bool NewRecall = false;
         private Recall SelectedRecall = new Recall();
+        private int SelectedOption = 0;
 
         public RecallForm(Recall recall = new Recall())
         {
             InitializeComponent();
 
-            ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
+            //ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
 
             this.labelMake.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.labelModel.ForeColor = Client.ActiveTheme.Colors.Text.Default;
@@ -29,7 +30,7 @@ namespace KronosDMS_Client.Forms.Parts
 
             this.Tools.BackColor = Client.ActiveTheme.Colors.Foreground;
 
-            this.ListParts.SetReadonly(false, false, true, true);
+            this.ListParts.SetReadonly(false, false, true, true, false);
             this.ListParts.ItemEdited += PartsList_ItemEdited;
 
             if (recall.Number is not null)
@@ -59,7 +60,7 @@ namespace KronosDMS_Client.Forms.Parts
                 item.SubItems[2].Text = part.Make;
                 item.SubItems[3].Text = part.Description;
 
-                SelectedRecall.Parts[itemIndex] = new PartQuantityPair(part.Number, SelectedRecall.Parts[itemIndex].Quantity);
+                SelectedRecall.Options[SelectedOption].Parts[itemIndex] = new PartQuantityPairNote(part.Number, SelectedRecall.Options[SelectedOption].Parts[itemIndex].Quantity, SelectedRecall.Options[SelectedOption].Parts[itemIndex].Note);
             }
             else if (index == 1)
             {
@@ -69,14 +70,26 @@ namespace KronosDMS_Client.Forms.Parts
                     if (qty < 1)
                     {
                         ListParts.Items.Remove(item);
-                        SelectedRecall.Parts.RemoveAt(itemIndex);
+                        SelectedRecall.Options[SelectedOption].Parts.RemoveAt(itemIndex);
                         return;
                     }
-                    SelectedRecall.Parts[itemIndex] = new PartQuantityPair(SelectedRecall.Parts[itemIndex].Number, qty);
+                    SelectedRecall.Options[SelectedOption].Parts[itemIndex] = new PartQuantityPairNote(SelectedRecall.Options[SelectedOption].Parts[itemIndex].Number, qty, SelectedRecall.Options[SelectedOption].Parts[itemIndex].Note);
                 }
                 catch
                 {
                     item.SubItems[index].Text = "1";
+                }
+            }
+            else if (index == 4)
+            {
+                try
+                {
+                    string note = item.SubItems[index].Text;
+                    SelectedRecall.Options[SelectedOption].Parts[itemIndex] = new PartQuantityPairNote(SelectedRecall.Options[SelectedOption].Parts[itemIndex].Number, SelectedRecall.Options[SelectedOption].Parts[itemIndex].Quantity, note);
+                }
+                catch
+                {
+                    item.SubItems[index].Text = "";
                 }
             }
         }
@@ -87,13 +100,16 @@ namespace KronosDMS_Client.Forms.Parts
                 return;
             this.NewRecall = false;
 
-            if (recall.Parts == null)
-                recall.Parts = new List<PartQuantityPair>();
+            if (recall.Options == null)
+            {
+                recall.Options = new List<PartsOption>();
+                recall.Options.Add(new PartsOption("Default", new List<PartQuantityPairNote>()));
+            }
 
             SelectedRecall = recall;
 
-            if (SelectedRecall.Parts is null)
-                SelectedRecall.Parts = new List<PartQuantityPair>();
+            if (SelectedRecall.Options is null)
+                SelectedRecall.Options = new List<PartsOption>();
 
             this.Text = $"Recall | {recall.Number} \"{recall.Description}\"{(SelectedRecall.Locked ? "" : " - Editing")}";
 
@@ -101,30 +117,33 @@ namespace KronosDMS_Client.Forms.Parts
             foreach (KeyValuePair<string, Make> make in makes.Makes)
                 boxMakes.Items.Add(make.Value.Name);
 
+            boxOptions.Items.Clear();
+            foreach (PartsOption option in recall.Options)
+                boxOptions.Items.Add(option.Name);
+            boxOptions.SelectedIndex = SelectedOption = 0;
+
             textRecallNumber.Text = recall.Number;
             boxMakes.Text = recall.Make;
             boxModel.Text = recall.Model;
             textDescription.Text = recall.Description;
             textNote.Text = recall.AttentionNote;
 
+            ChangeLockState();
+
+            FillPartsList(recall.Options[SelectedOption]);
+
             if (recall.AttentionNote != null && recall.AttentionNote != "")
             {
                 MessageBox.Show(recall.AttentionNote, "Attention");
             }
 
-            if (SelectedRecall.Locked)
-            {
-                LockUnlockButton.Image = Properties.Resources.locked_icon;
-                this.ListParts.SetReadonly(true, true, true, true);
-            }
-            else
-            {
-                LockUnlockButton.Image = Properties.Resources.unlocked_icon;
-                this.ListParts.SetReadonly(false, false, true, true);
-            }
+            //ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
+        }
 
+        private void FillPartsList(PartsOption option)
+        {
             ListParts.Items.Clear();
-            foreach (PartQuantityPair part in recall.Parts)
+            foreach (PartQuantityPairNote part in option.Parts)
             {
                 PartsSearchResponse response = new PartsSearch("", part.Number, "").PerformRequestAsync().Result;
                 Part p = response.Parts.ElementAt(0).Value;
@@ -133,9 +152,8 @@ namespace KronosDMS_Client.Forms.Parts
                 partItem.SubItems.Add(part.Quantity.ToString());
                 partItem.SubItems.Add(p.Make);
                 partItem.SubItems.Add(p.Description);
+                partItem.SubItems.Add(part.Note);
             };
-
-            ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
         }
 
         private void ClearDetails()
@@ -150,11 +168,43 @@ namespace KronosDMS_Client.Forms.Parts
             this.boxMakes.Items.Clear();
             this.boxModel.Items.Clear();
 
+            boxOptions.Text = "";
+            boxOptions.DropDownStyle = ComboBoxStyle.DropDown;
+            boxOptions.Items.Clear();
+
             LockUnlockButton.Image = Properties.Resources.unlocked_icon;
 
             this.Text = $"Recall";
 
             ListParts.Items.Clear();
+        }
+
+        private void ChangeLockState()
+        {
+            if (SelectedRecall.Locked)
+            {
+                LockUnlockButton.Image = Properties.Resources.locked_icon;
+                this.boxOptions.DropDownStyle = ComboBoxStyle.DropDownList;
+                this.ListParts.SetReadonly(true, true, true, true, true);
+                this.textDescription.Enabled = false;
+                this.textNote.Enabled = false;
+                this.boxMakes.DropDownStyle = ComboBoxStyle.Simple;
+                this.boxMakes.Enabled = false;
+                this.boxModel.DropDownStyle = ComboBoxStyle.Simple;
+                this.boxModel.Enabled = false;
+            }
+            else
+            {
+                LockUnlockButton.Image = Properties.Resources.unlocked_icon;
+                this.boxOptions.DropDownStyle = ComboBoxStyle.DropDown;
+                this.ListParts.SetReadonly(false, false, true, true, false);
+                this.textDescription.Enabled = true;
+                this.textNote.Enabled = true;
+                this.boxMakes.DropDownStyle = ComboBoxStyle.DropDownList;
+                this.boxMakes.Enabled = true;
+                this.boxModel.DropDownStyle = ComboBoxStyle.DropDownList;
+                this.boxModel.Enabled = true;
+            }
         }
 
         private void SearchRecall()
@@ -209,12 +259,13 @@ namespace KronosDMS_Client.Forms.Parts
             if (part.Number is null)
                 return;
 
-            SelectedRecall.Parts.Add(new PartQuantityPair(part.Number, 1));
+            SelectedRecall.Options[SelectedOption].Parts.Add(new PartQuantityPairNote(part.Number, 1, ""));
             ListViewItem partItem = ListParts.Items.Add(part.Number);
             partItem.Name = part.Number;
             partItem.SubItems.Add("1");
             partItem.SubItems.Add(part.Make);
             partItem.SubItems.Add(part.Description);
+            partItem.SubItems.Add("");
 
             textPartNumber.Text = "";
         }
@@ -261,6 +312,7 @@ namespace KronosDMS_Client.Forms.Parts
             }
             ClearDetails();
         }
+
         public override void Delete()
         {
             if (SelectedRecall.Number is null)
@@ -334,7 +386,7 @@ namespace KronosDMS_Client.Forms.Parts
                     partItem.SubItems.Add(p.Make);
                     partItem.SubItems.Add(p.Description);
 
-                    SelectedRecall.Parts.Add(new PartQuantityPair(p.Number, part.Value));
+                    SelectedRecall.Options[SelectedOption].Parts.Add(new PartQuantityPairNote(p.Number, part.Value, ""));
                 };
             }
         }
@@ -380,7 +432,7 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void ListParts_Resize(object sender, EventArgs e)
         {
-            ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
+            //ListParts.Columns[3].Width = ListParts.Width - ListParts.Columns[0].Width - ListParts.Columns[1].Width - ListParts.Columns[2].Width - 5;
         }
 
         private void textPartNumber_KeyDown(object sender, KeyEventArgs e)
@@ -435,16 +487,7 @@ namespace KronosDMS_Client.Forms.Parts
 
             SelectedRecall.Locked = !SelectedRecall.Locked;
 
-            if (SelectedRecall.Locked)
-            {
-                LockUnlockButton.Image = Properties.Resources.locked_icon;
-                this.ListParts.SetReadonly(true, true, true, true);
-            }
-            else
-            {
-                LockUnlockButton.Image = Properties.Resources.unlocked_icon;
-                this.ListParts.SetReadonly(false, false, true, true);
-            }
+            ChangeLockState();
 
             if (!NewRecall)
                 this.Text = $"Recall | {SelectedRecall.Number} \"{SelectedRecall.Description}\"{(SelectedRecall.Locked ? "" : "- Editing")}";
@@ -468,9 +511,9 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void PartsListMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (SelectedRecall.Parts is not null)
+            if (SelectedRecall.Options[SelectedOption].Parts is not null)
             {
-                if (SelectedRecall.Parts.Count > 0 && ListParts.SelectedItems.Count == 1)
+                if (SelectedRecall.Options[SelectedOption].Parts.Count > 0 && ListParts.SelectedItems.Count == 1)
                 {
                     PartsListMenuCopy.Enabled = true;
                     PartsListMenuDelete.Enabled = true;
@@ -504,13 +547,93 @@ namespace KronosDMS_Client.Forms.Parts
                 int index = ListParts.Items.IndexOf(ListParts.SelectedItems[0]);
 
                 ListParts.Items.RemoveAt(index);
-                SelectedRecall.Parts.RemoveAt(index);
+                SelectedRecall.Options[SelectedOption].Parts.RemoveAt(index);
             }
         }
 
         private void PartsListMenuImportCSV_Click(object sender, EventArgs e)
         {
             ImportCSV();
+        }
+
+        private void buttonAddOption_Click(object sender, EventArgs e)
+        {
+            if (SelectedRecall.Number == null)
+                return;
+
+            if (SelectedRecall.Locked)
+            {
+                MessageBox.Show($"Cannot add option.\nThe recall is locked.", "Failed");
+                return;
+            }
+
+            SelectedRecall.Options.Add(new PartsOption("New Option", new List<PartQuantityPairNote>()));
+            boxOptions.Items.Add("New Option");
+            boxOptions.SelectedIndex = SelectedOption = boxOptions.Items.Count - 1;
+        }
+
+        private void boxOptions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SelectedRecall.Number == null)
+                return;
+
+            FillPartsList(SelectedRecall.Options[SelectedOption = boxOptions.SelectedIndex]);
+        }
+
+        private void boxOptions_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ((char)Keys.Enter))
+            {
+                if (SelectedRecall.Options == null)
+                    return;
+
+                PartsOption option = SelectedRecall.Options[SelectedOption];
+                if (option.Name == null || option.Name == boxOptions.Text)
+                    return;
+
+                if (boxOptions.Text == "")
+                {
+                    if (SelectedRecall.Options.Count > 1)
+                    {
+                        SelectedRecall.Options.RemoveAt(SelectedOption);
+                        boxOptions.Items.RemoveAt(SelectedOption);
+                        boxOptions.SelectedIndex = SelectedOption = 0;
+                        return;
+                    }
+                    boxOptions.Text = "Default";
+                }
+
+                option.Name = boxOptions.Text;
+                SelectedRecall.Options[SelectedOption] = option;
+                boxOptions.Items[SelectedOption] = boxOptions.Text;
+            }
+        }
+
+        private void boxOptions_Leave(object sender, EventArgs e)
+        {
+
+            if (SelectedRecall.Options == null)
+                return;
+
+            PartsOption option = SelectedRecall.Options[SelectedOption];
+            if (option.Name == null || option.Name == boxOptions.Text)
+                return;
+
+            if (boxOptions.Text == "")
+            {
+                if (SelectedRecall.Options.Count > 1)
+                {
+                    SelectedRecall.Options.RemoveAt(SelectedOption);
+                    boxOptions.Items.RemoveAt(SelectedOption);
+                    boxOptions.SelectedIndex = SelectedOption = 0;
+                    return;
+                }
+                boxOptions.Text = "Default";
+            }
+
+            option.Name = boxOptions.Text;
+            SelectedRecall.Options[SelectedOption] = option;
+            boxOptions.Items[SelectedOption] = boxOptions.Text;
         }
     }
 }

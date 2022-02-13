@@ -48,7 +48,7 @@ namespace KronosDMS_Client.UserControls
         public void SetReadonly(params bool[] columns)
         {
             ReadonlyColumns = new bool[this.Columns.Count];
-            for (int i = 0; i < Columns.Count; i++)
+            for (int i = 0; i < columns.Length; i++)
             {
                 ReadonlyColumns[i] = columns[i];
             }

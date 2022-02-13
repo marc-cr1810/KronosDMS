@@ -39,7 +39,7 @@ namespace KronosDMS.Files
 
         public void Add(string make, string model, string number, string description)
         {
-            Recall recall = new Recall(number, description, make, model, new List<PartQuantityPair>());
+            Recall recall = new Recall(number, description, make, model, new List<PartQuantityPairNote>());
             Recalls.Add(number, recall);
             Write();
         }

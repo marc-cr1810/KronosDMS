@@ -1,4 +1,5 @@
 ﻿using KronosDMS.Objects;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -15,7 +16,31 @@ namespace KronosDMS
             this.Quantity = quantity;
         }
     }
+    public struct PartQuantityPairNote
+    {
+        public string Number { get; set; }
+        public int Quantity { get; set; }
+        public string Note { get; set; }
 
+        public PartQuantityPairNote(string number, int quantity, string note)
+        {
+            this.Number = number;
+            this.Quantity = quantity;
+            this.Note = note;
+        }
+    }
+
+    public struct PartsOption
+    {
+        public string Name { get; set; }
+        public List<PartQuantityPairNote> Parts { get; set; }
+
+        public PartsOption(string name, List<PartQuantityPairNote> parts)
+        {
+            Name = name;
+            Parts = parts;
+        }
+    }
     public struct UpdateInfo
     {
         public struct ClientVerInfo
