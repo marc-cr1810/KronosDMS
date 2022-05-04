@@ -42,14 +42,26 @@ namespace KronosDMS.Http.Server
 
             // route and handle the request...
             HttpResponse response = RouteRequest(inputStream, outputStream, request);
-            
+
             // just print requests that return non success codes
             if (response.StatusCode != "200")
-                Console.WriteLine("[{0}] {1} {2} {3} \"{4}\"", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), 
-                    response.StatusCode, 
-                    request.Url, 
-                    response.ReasonPhrase,
-                    Encoding.UTF8.GetString(response.Content));
+            {
+                try
+                {
+                    Console.WriteLine("[{0}] {1} {2} {3} \"{4}\"", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                        response.StatusCode,
+                        request.Url,
+                        response.ReasonPhrase,
+                        Encoding.UTF8.GetString(response.Content));
+                } catch (Exception ex)
+                {
+                    Console.WriteLine("[{0}] {1} {2} {3}", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                        response.StatusCode,
+                        request.Url,
+                        response.ReasonPhrase);
+                }
+            }
+
 
             // build a default response for errors
             if (response.Content == null)

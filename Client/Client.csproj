@@ -5,7 +5,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>KronosDMS_Client</RootNamespace>
-    <Version>0.9.97</Version>
+    <Version>0.9.99</Version>
   </PropertyGroup>
 
   <ItemGroup>

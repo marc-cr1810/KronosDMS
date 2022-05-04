@@ -23,6 +23,7 @@ namespace KronosDMS_Server
         public static RecallFile Recalls { get; set; }
         public static KitFile Kits { get; set; }
         public static CSVFormatsFile CSVFormats { get; set; }
+        public static ROCheckedFile ROChecked { get; set; }
 
         public static void Main(string[] args)
         {
@@ -76,6 +77,7 @@ namespace KronosDMS_Server
             Recalls = new RecallFile();
             Kits = new KitFile();
             CSVFormats = new CSVFormatsFile();
+            ROChecked = new ROCheckedFile();
 
             PermissionHandler.GroupsFile = new GroupsFile();
             PermissionHandler.SetDefaultGroup(Config.DefaultGroup);
@@ -84,6 +86,8 @@ namespace KronosDMS_Server
             Parts.MAX_RESULTS = Config.MaxSearchResults;
             Recalls.MAX_RESULTS = Config.MaxSearchResults;
             Kits.MAX_RESULTS = Config.MaxSearchResults;
+            CSVFormats.MAX_RESULTS = Config.MaxSearchResults;
+            ROChecked.MAX_RESULTS = Config.MaxSearchResults;
             PermissionHandler.GroupsFile.MAX_RESULTS = Config.MaxSearchResults;
         }
     }

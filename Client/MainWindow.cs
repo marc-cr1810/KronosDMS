@@ -172,6 +172,11 @@ namespace KronosDMS_Client
             OpenForm(new Forms.Parts.KitsSearchForm("", false));
         }
 
+        private void ROsChecked_Click(object sender, EventArgs e)
+        {
+            OpenForm(new Forms.Parts.ROCheckedForm());
+        }
+
         private void FileMenuSave_Click(object sender, EventArgs e)
         {
             if (this.ActiveMdiChild is null)

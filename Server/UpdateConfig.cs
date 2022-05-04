@@ -22,12 +22,16 @@ namespace KronosDMS_Server
 
         public UpdateConfig()
         {
+            if (!File.Exists("data/client/update/version.json"))
+                Save();
             this.UpdateInfo = JsonConvert.DeserializeObject<UpdateInfo>(File.ReadAllText(@"data/client/update/version.json"));
         }
 
         public void Save()
         {
             string output = JsonConvert.SerializeObject(UpdateInfo, Formatting.Indented);
+            if (!Directory.Exists("data/client/update/"))
+                Directory.CreateDirectory("data/client/update/");
             File.WriteAllText(@"data/client/update/version.json", output);
         }
 

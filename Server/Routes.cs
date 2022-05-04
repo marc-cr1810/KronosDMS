@@ -54,6 +54,9 @@ namespace KronosDMS_Server
                 KitHandler.Remove,
                 KitHandler.LockState,
 
+                ROCheckedHandler.Get,
+                ROCheckedHandler.Add,
+
                 FormatsHandler.GetCSV,
 
                 new Route {

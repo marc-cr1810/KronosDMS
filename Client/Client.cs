@@ -56,6 +56,8 @@ namespace KronosDMS_Client
 
             // Run main app window
             Application.Run(MainWindow = new MainWindow());
+
+            Response logout = new AccountLogout(Credentials.Username, Credentials.PasswordHash).PerformRequestAsync().Result;
         }
 
         public static void Login(string[] args)
@@ -77,7 +79,8 @@ namespace KronosDMS_Client
                 {
                     if (response.IsSuccess)
                     {
-                        ActiveAccount = response.Account;
+                        ActiveAccount = response.Account; 
+                        Client.Credentials = new UserCredentials() { Username = args[0], PasswordHash = args[1] };
                         Requester.AccessToken = response.Account.AccessToken;
                     }
                     else
@@ -170,7 +173,7 @@ namespace KronosDMS_Client
 
         public static void Exit()
         {
-            Response logout = new AccountLogout(ActiveAccount.Username, ActiveAccount.PasswordHash).PerformRequestAsync().Result;
+            Response logout = new AccountLogout(Credentials.Username, Credentials.PasswordHash).PerformRequestAsync().Result;
             Application.Exit();
         }
     }
