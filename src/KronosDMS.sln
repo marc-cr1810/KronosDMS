@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{6591FEE2-A52B-4D98-9604-F77AC3CA424A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KronosDMS", "KronosDMS\KronosDMS.csproj", "{DDF3848C-0136-437B-AE7B-DF2CFEDA2B44}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KronosDMS-CLI", "KronosDMS-CLI\KronosDMS-CLI.csproj", "{81FD4837-EA49-4757-93ED-0D2E599FEAF3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{13DD7592-9537-4088-8951-C660E72F32FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientUpdater", "ClientUpdater\ClientUpdater.csproj", "{0B04436A-ACEE-49EF-B071-B53740AD3AEA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientInstaller", "ClientInstaller\ClientInstaller.csproj", "{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImGui.NET", "..\deps\ImGui.NET\src\ImGui.NET\ImGui.NET.csproj", "{5E188423-7488-4289-830E-2DF569230676}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6591FEE2-A52B-4D98-9604-F77AC3CA424A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6591FEE2-A52B-4D98-9604-F77AC3CA424A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6591FEE2-A52B-4D98-9604-F77AC3CA424A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6591FEE2-A52B-4D98-9604-F77AC3CA424A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDF3848C-0136-437B-AE7B-DF2CFEDA2B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDF3848C-0136-437B-AE7B-DF2CFEDA2B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDF3848C-0136-437B-AE7B-DF2CFEDA2B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDF3848C-0136-437B-AE7B-DF2CFEDA2B44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FD4837-EA49-4757-93ED-0D2E599FEAF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FD4837-EA49-4757-93ED-0D2E599FEAF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FD4837-EA49-4757-93ED-0D2E599FEAF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FD4837-EA49-4757-93ED-0D2E599FEAF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13DD7592-9537-4088-8951-C660E72F32FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13DD7592-9537-4088-8951-C660E72F32FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13DD7592-9537-4088-8951-C660E72F32FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13DD7592-9537-4088-8951-C660E72F32FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B04436A-ACEE-49EF-B071-B53740AD3AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B04436A-ACEE-49EF-B071-B53740AD3AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B04436A-ACEE-49EF-B071-B53740AD3AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B04436A-ACEE-49EF-B071-B53740AD3AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E188423-7488-4289-830E-2DF569230676}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E188423-7488-4289-830E-2DF569230676}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E188423-7488-4289-830E-2DF569230676}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E188423-7488-4289-830E-2DF569230676}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D3833CE1-02E2-4224-A03C-D4369F664C09}
+	EndGlobalSection
+EndGlobal
