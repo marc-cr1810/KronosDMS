@@ -17,7 +17,7 @@ namespace KronosDMS_Client.Render.Windows
 
         protected override void Draw()
         {
-            ImGui.BeginChild("ConsoleOutput", Vector2.Zero, true);
+            ImGui.BeginChild("ConsoleOutput", Vector2.Zero, true, ImGuiWindowFlags.HorizontalScrollbar);
             for (int i = 0; i < Logger.Count(); i++)
             {
                 LoggerItem logItem = Logger.Get(i);
@@ -30,12 +30,16 @@ namespace KronosDMS_Client.Render.Windows
                     case LogLevel.FATAL: color = Theme.ColorToVec4(Client.ActiveTheme.Colors.Console.Fatal); break;
                 }
                 ImGui.PushStyleColor(ImGuiCol.Text, color);
-                if (ImGui.TreeNode(logItem.ToString()))
+                if (logItem.Details != "")
                 {
-                    if (logItem.Details != "")
+                    if (ImGui.TreeNode(logItem.ToString()))
+                    {
                         ImGui.TextUnformatted(logItem.Details);
-                    ImGui.TreePop();
+                        ImGui.TreePop();
+                    }
                 }
+                else
+                    ImGui.BulletText(logItem.ToString());
                 ImGui.PopStyleColor();
             }
             ImGui.EndChild();

@@ -2,6 +2,7 @@ using KronosDMS.Api;
 using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
 using KronosDMS.Objects;
+using KronosDMS_Client.Render;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -25,6 +26,7 @@ namespace KronosDMS_Client
         public static UserAccount ActiveAccount;
         public static Theme ActiveTheme;
 
+        public static DateTime LastPing;
         public static bool Disconnected = true;
         public static MainWindow MainWindow { get; private set; }
 
@@ -35,6 +37,7 @@ namespace KronosDMS_Client
         public static void Main(string[] args)
         {
             Logger.Init();
+            WindowManager.Init();
 
             Config = Config.LoadConfig();
 
@@ -65,6 +68,60 @@ namespace KronosDMS_Client
             MainWindow.Show();
 
             Response logout = new AccountLogout(Credentials.Username, Credentials.PasswordHash).PerformRequestAsync().Result;
+        }
+
+        // Update the client application runtime
+        public static void Update()
+        {
+            TimeSpan ts = DateTime.Now - LastPing;
+            if (ts.TotalSeconds >= 15)
+            {
+                PingResponse ping = new Ping().PerformRequestAsync().Result;
+                LastPing = DateTime.Now;
+                if (!ping.Success)
+                {
+                    Disconnected = true;
+                    Logger.Log("Failed to connect to the server", LogLevel.ERROR, $"IP Address: {Config.IPAddress}");
+                    MainWindow.SetStatusTitle("Disconnected");
+                    WindowManager.ShowServerDisconnectionMsg = true;
+                    return;
+                }
+
+                if (Disconnected)
+                    Logger.Log("Connected to server", LogLevel.OK, $"IP Address: {Config.IPAddress}");
+
+                try
+                {
+                    Response validateAccount = new AccountValidate().PerformRequestAsync().Result;
+                    if (!validateAccount.IsSuccess)
+                    {
+                        AccountLoginResponse response = new AccountLogin(Client.Credentials.Username, Client.Credentials.PasswordHash, true).PerformRequestAsync().Result;
+
+                        try
+                        {
+                            if (response.IsSuccess)
+                            {
+                                Client.Disconnected = false;
+                                Client.ActiveAccount = response.Account;
+                                Requester.AccessToken = response.Account.AccessToken;
+                                Logger.Log($"Logged into the server", LogLevel.OK, $"Username: {Credentials.Username}\nPassword Hash: {Credentials.PasswordHash.Substring(0, 4)}****");
+                                MainWindow.SetStatusTitle();
+                            }
+                        }
+                        catch
+                        {
+                            Client.Disconnected = true;
+                        }
+                    }
+                }
+                catch
+                {
+                    Logger.Log("Failed to validate account login!", LogLevel.ERROR, $"Username: {Credentials.Username}\nPassword Hash: {Credentials.PasswordHash.Substring(0, 4)}****");
+                }
+                Disconnected = false;
+            }
+
+            WindowManager.Update();
         }
 
         public static void Login(string[] args)

@@ -180,18 +180,28 @@ namespace KronosDMS.Api
                 };
             }
 
+            if (httpResponse != null)
+            {
+                return new Response()
+                {
+                    Code = httpResponse.StatusCode,
+                    RawMessage = rawMessage,
+                    IsSuccess = httpResponse.IsSuccessStatusCode && (
+                                httpResponse.StatusCode == HttpStatusCode.Accepted ||
+                                httpResponse.StatusCode == HttpStatusCode.Continue ||
+                                httpResponse.StatusCode == HttpStatusCode.Created ||
+                                httpResponse.StatusCode == HttpStatusCode.Found ||
+                                httpResponse.StatusCode == HttpStatusCode.OK ||
+                                httpResponse.StatusCode == HttpStatusCode.PartialContent) &&
+                                error == null,
+                    Error = error
+                };
+            }
             return new Response()
             {
-                Code = httpResponse.StatusCode,
+                Code = HttpStatusCode.ServiceUnavailable,
                 RawMessage = rawMessage,
-                IsSuccess = httpResponse.IsSuccessStatusCode && (
-                            httpResponse.StatusCode == HttpStatusCode.Accepted ||
-                            httpResponse.StatusCode == HttpStatusCode.Continue ||
-                            httpResponse.StatusCode == HttpStatusCode.Created ||
-                            httpResponse.StatusCode == HttpStatusCode.Found ||
-                            httpResponse.StatusCode == HttpStatusCode.OK ||
-                            httpResponse.StatusCode == HttpStatusCode.PartialContent) &&
-                            error == null,
+                IsSuccess = false,
                 Error = error
             };
         }

@@ -15,25 +15,24 @@ namespace KronosDMS_Client
 {
     public class MainWindow
     {
-        private static Sdl2Window _window;
-        private static GraphicsDevice _gd;
-        private static CommandList _cl;
-        private static ImGuiController _controller;
+        private bool InitializedImGUI = false;
+
+        private Sdl2Window _window;
+        private GraphicsDevice _gd;
+        private CommandList _cl;
+        private ImGuiController _controller;
 
         // UI state test stuff
-        private static Vector3 _clearColor = new Vector3(0.45f, 0.55f, 0.6f);
-        private static bool _showImGuiDemoWindow = true;
+        private Vector3 _clearColor = new Vector3(0.45f, 0.55f, 0.6f);
 
         static void SetThing(out float i, float val) { i = val; }
 
         // Acutal variables
         private WindowCreateInfo WindowCreationInfo { get; set; }
         private GraphicsDeviceOptions GDOptions { get; set; }
-        private List<Window> Windows { get; set; }
 
         public MainWindow(string title = "KronosDMS Client", int width = 1280, int height = 720)
         {
-            Windows = new List<Window>();
             WindowState windowState = Client.Config.StartMaximized ? WindowState.Maximized : WindowState.Normal;
 
             WindowCreationInfo = new WindowCreateInfo(50, 50, width, height, windowState, title);
@@ -65,9 +64,12 @@ namespace KronosDMS_Client
 
             _cl = _gd.ResourceFactory.CreateCommandList();
             _controller = new ImGuiController(_gd, _window, _gd.MainSwapchain.Framebuffer.OutputDescription, _window.Width, _window.Height);
+            InitializedImGUI = true;
             Random random = new Random();
 
-            SetStatusTitle($"Currently logged in as {Client.ActiveAccount.FirstName} {Client.ActiveAccount.LastName} ({Client.ActiveAccount.Username})");
+            SetStatusTitle();
+
+            Client.ActiveTheme.Load(); // Load active theme after ImGui init
 
             Logger.Log("Starting application");
             // Main application loop
@@ -156,17 +158,17 @@ namespace KronosDMS_Client
                     if (ImGui.BeginMenu("Service Kits"))
                     {
                         if (ImGui.MenuItem("Recalls"))
-                            Windows.Add(new RecallForm());
+                            WindowManager.Open(new RecallForm());
                         ImGui.EndMenu();
                     }
                     if (ImGui.BeginMenu("Queries"))
                     {
                         if (ImGui.MenuItem("Parts Search"))
-                            Windows.Add(new PartsSearchForm());
+                            WindowManager.Open(new PartsSearchForm());
                         if (ImGui.MenuItem("Recalls Search"))
-                            Windows.Add(new RecallsSearchForm());
+                            WindowManager.Open(new RecallsSearchForm());
                         if (ImGui.MenuItem("Kits Search"))
-                            Windows.Add(new KitsSearchForm());
+                            WindowManager.Open(new KitsSearchForm());
                         ImGui.EndMenu();
                     }
                     ImGui.EndMenu();
@@ -179,54 +181,38 @@ namespace KronosDMS_Client
 
                 if (ImGui.BeginMenu("Tools"))
                 {
+                    if (ImGui.MenuItem("Config"))
+                        WindowManager.Open(new ConfigWindow());
                     if (ImGui.MenuItem("Console"))
-                        Windows.Add(new ConsoleWindow());
+                        WindowManager.Open(new ConsoleWindow());
                     if (ImGui.MenuItem("Render Debug"))
-                        Windows.Add(new Debug());
+                        WindowManager.ShowMetricsWindow = true;
                     ImGui.EndMenu();
                 }
                 ImGui.EndMenuBar();
             }
 
-            for (int i = 0; i < Windows.Count; i++)
-            {
-                Window window = Windows[i];
-                if (window != null)
-                {
-                    if (!window.Open)
-                    {
-                        Windows.RemoveAt(i);
-                        i--;
-                    }
-                    window.Show();
-                }
-            }
-
-            // Show the ImGui demo window. Most of the sample code is in ImGui.ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-            if (_showImGuiDemoWindow)
-            {
-                // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway.
-                // Here we just want to make the demo initial state a bit more friendly!
-                ImGui.SetNextWindowPos(new Vector2(650, 20), ImGuiCond.FirstUseEver);
-                ImGui.ShowDemoWindow(ref _showImGuiDemoWindow);
-            }
+            Client.Update();
+            WindowManager.Render();
 
             SetThing(out io.DeltaTime, 2f);
 
             ImGui.End();
         }
 
-        public void SetStatusTitle(string status)
+        public void SetStatusTitle(string status = "$DEFAULT_VAL")
         {
             if (status is null || status.Length == 0)
                 _window.Title = $"KronosDMS v{Application.ProductVersion}";
+            else if (status == "$DEFAULT_VAL")
+                _window.Title = $"Currently logged in as {Client.ActiveAccount.FirstName} {Client.ActiveAccount.LastName} ({Client.ActiveAccount.Username})";
             else
                 _window.Title = $"KronosDMS v{Application.ProductVersion} | {status}";
         }
 
-        public int GetWindowCount()
+        public bool ImGuiInitialized()
         {
-            return Windows.Count;
+            return InitializedImGUI;
         }
 
         public void Close()

@@ -7,9 +7,10 @@ namespace KronosDMS_Client
     public class Config
     {
         public string IPAddress { get; set; } = "127.0.0.1:8080";
+        public int PingServerInterval = 15;
         public string Theme { get; set; } = "Dark";
         public bool StartMaximized { get; set; } = true;
-        public string GraphicsBackend { get; set; } = "PlatformDefault";
+        public string GraphicsBackend { get; set; } = "Platform Default";
 
         public void Save()
         {
@@ -21,6 +22,7 @@ namespace KronosDMS_Client
         {
             switch (this.GraphicsBackend)
             {
+                case "Platform Default": return Veldrid.StartupUtilities.VeldridStartup.GetPlatformDefaultBackend();
                 case "PlatformDefault": return Veldrid.StartupUtilities.VeldridStartup.GetPlatformDefaultBackend();
                 case "DirectX3D11": return Veldrid.GraphicsBackend.Direct3D11;
                 case "OpenGL": return Veldrid.GraphicsBackend.OpenGL;

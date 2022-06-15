@@ -22,6 +22,11 @@ namespace KronosDMS_Client.Render
             ID = NextID++;
             Title = title;
             Size = new Vector2(width, height);
+
+            OnLoad();
+            Log($"Loaded ImGui window \"{title}\"", LogLevel.INFO, $"Window ID: {title}#{ID}\n" +
+                $"Window width: {width}\n" +
+                $"Window height: {height}");
         }
 
         public void Show()
@@ -34,6 +39,20 @@ namespace KronosDMS_Client.Render
             }
         }
 
+        public void Close()
+        {
+            OnClose();
+            Log($"Closed ImGui window \"{Title}\"", LogLevel.INFO, $"Window ID: {Title}##{ID}");
+        }
+
+        protected void Log(string msg, LogLevel level = LogLevel.INFO, string details = "")
+        {
+            string source = $"Window\\\"{Title}#{ID}\"";
+            Logger.Log(msg, level, details, source);
+        }
+
         protected virtual void Draw() { }
+        protected virtual void OnLoad() { }
+        protected virtual void OnClose() { }
     }
 }

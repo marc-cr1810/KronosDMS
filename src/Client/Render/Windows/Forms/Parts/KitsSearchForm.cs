@@ -13,8 +13,8 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
 {
     public class KitsSearchForm : Window
     {
-        private Textbox KitNumber;
-        private Textbox KitDescription;
+        private TextBox KitNumber;
+        private TextBox KitDescription;
 
         private ComboBox MakesComboBox;
         private ComboBox ModelsComboBox;
@@ -30,22 +30,18 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
                 makes.Add(make.Value.Name);
             }
 
-            KitNumber = new Textbox("Kit Number");
-            KitDescription = new Textbox("Description");
-            MakesComboBox = new ComboBox(makes.ToArray(), "makes_combobox");
-            ModelsComboBox = new ComboBox(new string[] { "" }, "models_combobox");
+            KitNumber = new TextBox("Kit Number");
+            KitNumber.CharacterCasing = CharacterCasing.Upper;
+            KitDescription = new TextBox("Description");
+            MakesComboBox = new ComboBox(makes.ToArray(), "Make");
             MakesComboBox.SelectionChanged = UpdateModels;
+            ModelsComboBox = new ComboBox(new string[] { "" }, "Model");
             KitsListView = new ListView(new string[] { "Kit Number", "Make", "Model", "Description" }, "kits_list");
         }
 
         protected override void Draw()
         {
-            ImGui.AlignTextToFramePadding();
-            ImGui.Text("Make"); ImGui.SameLine();
             MakesComboBox.Draw();
-
-            ImGui.AlignTextToFramePadding();
-            ImGui.Text("Model"); ImGui.SameLine();
             ModelsComboBox.Draw();
 
             KitNumber.Draw();
@@ -66,7 +62,7 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
 
             if (!response.IsSuccess)
             {
-                Logger.Log($"Failed to search for kits\n{response.RawMessage}", LogLevel.ERROR);
+                Log($"Failed to search for kits\n{response.RawMessage}", LogLevel.ERROR);
                 return;
             }
 

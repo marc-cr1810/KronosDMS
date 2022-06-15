@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ImGuiNET;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -39,14 +40,72 @@ namespace KronosDMS_Client
 
             public ButtonColors Button;
 
+            public Dictionary<string, Vector4> ImGuiColors;
         }
 
         public string Name;
         public ThemeColors Colors;
 
+        public void Load()
+        {
+            bool edited = false;
+            ImGuiStylePtr style = ImGui.GetStyle();
+
+            if (Colors.ImGuiColors == null)
+                Colors.ImGuiColors = new Dictionary<string, Vector4>();
+
+            for (int i = 0; i < style.Colors.Count; i++)
+            {
+                string name = ImGui.GetStyleColorName((ImGuiCol)i);
+                if (Colors.ImGuiColors.ContainsKey(name))
+                {
+                    style.Colors[i] = Colors.ImGuiColors[name];
+                }
+                else
+                {
+                    Colors.ImGuiColors.Add(name, style.Colors[i]);
+                    edited = true;
+                }
+            }
+            if (edited)
+                Save();
+        }
+
         public void Save()
         {
+            ImGuiStylePtr style = ImGui.GetStyle();
+
+            if (Colors.ImGuiColors == null)
+                Colors.ImGuiColors = new Dictionary<string, Vector4>();
+            for (int i = 0; i < style.Colors.Count; i++)
+            {
+                string name = ImGui.GetStyleColorName((ImGuiCol)i);
+                if (Colors.ImGuiColors.ContainsKey(name))
+                {
+                    Colors.ImGuiColors[name] = style.Colors[i];
+                }
+                else
+                {
+                    Colors.ImGuiColors.Add(name, style.Colors[i]);
+                }
+            }
             ThemeManager.SaveTheme(this);
+        }
+
+        public void SetImGuiStyle()
+        {
+            if (Colors.ImGuiColors == null)
+                return;
+
+            ImGuiStylePtr style = ImGui.GetStyle();
+            for (int i = 0; i < style.Colors.Count; i++)
+            {
+                string name = ImGui.GetStyleColorName((ImGuiCol)i);
+                if (Colors.ImGuiColors.ContainsKey(name))
+                {
+                    style.Colors[i] = Colors.ImGuiColors[name];
+                }
+            }
         }
 
         public static Vector4 ColorToVec4(Color color)
@@ -69,8 +128,20 @@ namespace KronosDMS_Client
             try
             {
                 loadedTheme = JsonConvert.DeserializeObject<Theme>(File.ReadAllText($"themes/{theme}.json"));
+                if (loadedTheme.Name == null)
+                {
+                    Logger.Log($"Failed to load theme \"{theme}\"", LogLevel.ERROR, "Name of theme is NULL.\nPlease check the theme file to se if it has a name.");
+                }
+                if (Client.MainWindow != null)
+                {
+                    if (Client.MainWindow.ImGuiInitialized())
+                        loadedTheme.Load();
+                }
             }
-            catch { }
+            catch {
+                Logger.Log("Failed to load theme", LogLevel.ERROR);
+                return Client.ActiveTheme;
+            }
             return loadedTheme;
         }
 

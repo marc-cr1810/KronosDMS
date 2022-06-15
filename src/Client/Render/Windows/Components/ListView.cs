@@ -15,6 +15,8 @@ namespace KronosDMS_Client.Render.Windows.Components
         public List<ListViewItem> Items { get; set; }
         public int SelectedIndex = -1;
 
+        public Action<ListViewItem> DoubleClick;
+
         public ListView(string[] columns, string name = "ListView")
         {
             Items = new List<ListViewItem>();
@@ -49,10 +51,6 @@ namespace KronosDMS_Client.Render.Windows.Components
                 }
                 ImGui.TableSetupScrollFreeze(1, 1);
 
-                //ImGui.TableSetupColumn("ID", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.NoHide, 0.0f, 0);
-                //ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 0.0f, 1);
-                //ImGui.TableSetupColumn("Action", ImGuiTableColumnFlags.WidthStretch, 0.0f, 2);
-
                 ImGui.TableHeadersRow();
 
                 for (int row_n = 0; row_n < Items.Count(); row_n++)
@@ -63,8 +61,18 @@ namespace KronosDMS_Client.Render.Windows.Components
                     ImGui.PushID(item.Index);
                     ImGui.TableNextRow(ImGuiTableRowFlags.None, 0.0f);
 
+                    ImGuiSelectableFlags selectableFlags = ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap | ImGuiSelectableFlags.AllowDoubleClick;
+
                     ImGui.TableSetColumnIndex(0);
-                    ImGui.Selectable(item.Text, selected, ImGuiSelectableFlags.SpanAllColumns | ImGuiSelectableFlags.AllowItemOverlap, Vector2.Zero);
+                    if (ImGui.Selectable(item.Text, selected, selectableFlags, Vector2.Zero))
+                    {
+                        SelectedIndex = item.Index;
+                        if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+                        {
+                            if (DoubleClick != null)
+                                DoubleClick(item);
+                        }
+                    }
 
                     for (int i = 1; i < Columns.Count; i++)
                     {

@@ -13,8 +13,8 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
 {
     public class PartsSearchForm : Window
     {
-        private Textbox PartNumber;
-        private Textbox PartDescription;
+        private TextBox PartNumber;
+        private TextBox PartDescription;
 
         private ComboBox MakesComboBox;
         private ListView PartsListView;
@@ -29,16 +29,15 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
                 makes.Add(make.Value.Name);
             }
 
-            PartNumber = new Textbox("Part Number");
-            PartDescription = new Textbox("Description");
-            MakesComboBox = new ComboBox(makes.ToArray(), "makes_combobox");
+            PartNumber = new TextBox("Part Number");
+            PartNumber.CharacterCasing = CharacterCasing.Upper;
+            PartDescription = new TextBox("Description");
+            MakesComboBox = new ComboBox(makes.ToArray(), "Make");
             PartsListView = new ListView(new string[] { "Part Number", "Make", "Description"}, "parts_list");
         }
 
         protected override void Draw()
         {
-            ImGui.AlignTextToFramePadding();
-            ImGui.Text("Make"); ImGui.SameLine();
             MakesComboBox.Draw();
 
             PartNumber.Draw();
@@ -59,7 +58,7 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
 
             if (!response.IsSuccess)
             {
-                Logger.Log($"Failed to search for parts\n{response.RawMessage}", LogLevel.ERROR);
+                Log($"Failed to search for parts\n{response.RawMessage}", LogLevel.ERROR);
                 return;
             }
 

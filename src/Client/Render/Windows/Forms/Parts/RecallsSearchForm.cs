@@ -13,8 +13,8 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
 {
     public class RecallsSearchForm : Window
     {
-        private Textbox RecallNumber;
-        private Textbox RecallDescription;
+        private TextBox RecallNumber;
+        private TextBox RecallDescription;
 
         private ComboBox MakesComboBox;
         private ComboBox ModelsComboBox;
@@ -30,26 +30,25 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
                 makes.Add(make.Value.Name);
             }
 
-            RecallNumber = new Textbox("Recall Number");
-            RecallDescription = new Textbox("Description");
-            MakesComboBox = new ComboBox(makes.ToArray(), "makes_combobox");
-            ModelsComboBox = new ComboBox(new string[] { "" }, "models_combobox");
+            RecallNumber = new TextBox("Recall Number");
+            RecallNumber.CharacterCasing = CharacterCasing.Upper;
+            RecallDescription = new TextBox("Description");
+            MakesComboBox = new ComboBox(makes.ToArray(), "Make");
             MakesComboBox.SelectionChanged = UpdateModels;
+            ModelsComboBox = new ComboBox(new string[] { "" }, "Model");
             RecallsListView = new ListView(new string[] { "Recall Number", "Make", "Model", "Description" }, "recalls_list");
+            RecallsListView.DoubleClick += OpenRecallForm;
         }
 
         protected override void Draw()
         {
-            ImGui.AlignTextToFramePadding();
-            ImGui.Text("Make"); ImGui.SameLine();
             MakesComboBox.Draw();
-
-            ImGui.AlignTextToFramePadding();
-            ImGui.Text("Model"); ImGui.SameLine();
             ModelsComboBox.Draw();
 
-            RecallNumber.Draw();
-            RecallDescription.Draw();
+            if (RecallNumber.Draw())
+                Search();
+            if (RecallDescription.Draw())
+                Search();
 
             ImGui.SameLine();
             if (ImGui.Button("Search"))
@@ -66,7 +65,7 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
 
             if (!response.IsSuccess)
             {
-                Logger.Log($"Failed to search for recalls\n{response.RawMessage}", LogLevel.ERROR);
+                Log($"Failed to search for recalls\n{response.RawMessage}", LogLevel.ERROR);
                 return;
             }
 
@@ -96,6 +95,22 @@ namespace KronosDMS_Client.Render.Windows.Forms.Parts
                     ModelsComboBox.Items.Add(model.Key);
                 }
             }
+        }
+
+        private void OpenRecallForm(ListViewItem item)
+        {
+            string id = item.Text;
+            string number = item.Text;
+            string make = item.SubItems[0].Text;
+            string model = item.SubItems[1].Text;
+            string description = item.SubItems[2].Text;
+
+            RecallsSearchResponse response = new RecallsSearch(make, model, number, description).PerformRequestAsync().Result;
+            Recall result = response.Recalls[id];
+
+            Log($"Opening recall form for recall number \"{item.Text}\"");
+            WindowManager.Open(new RecallForm(result));
+            WindowManager.Close(this);
         }
     }
 }

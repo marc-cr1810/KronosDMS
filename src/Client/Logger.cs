@@ -22,13 +22,14 @@ namespace KronosDMS_Client
             Log("Initialized logger", LogLevel.OK);
         }
 
-        public static void Log(string message, LogLevel level = LogLevel.INFO, string Details = "")
+        public static void Log(string message, LogLevel level = LogLevel.INFO, string Details = "", string source = "")
         {
             LoggerItem item = new LoggerItem();
             item.Message = message;
             item.Timestamp = DateTime.Now;
             item.Level = level;
             item.Details = Details;
+            item.Source = source;
 
             LogList.Add(item);
             Console.WriteLine(item.ToString());
@@ -72,13 +73,14 @@ namespace KronosDMS_Client
         public DateTime Timestamp;
         public string Message;
         public string Details;
-
+        public string Source;
         public override string ToString()
         {
             string time = $"[{Timestamp.ToString("yyyy/MM/dd HH:mm:ss")}]";
             string level = $"[{((Level == LogLevel.INFO) ? "INFO" : (Level == LogLevel.OK) ? "OK" : (Level == LogLevel.WARN) ? "WARN" : (Level == LogLevel.ERROR) ? "ERROR" : "FATAL")}]";
+            string source = (Source.Length > 0) ? $" [{Source}]" : "";
 
-            return $"{time} {level}: {Message}";
+            return $"{time} {level}{source}: {Message}";
         }
     }
 }
