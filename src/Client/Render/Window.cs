@@ -11,6 +11,7 @@ namespace KronosDMS_Client.Render
     public class Window
     {
         public static uint NextID = 0;
+        private string Name { get; set; }
         public uint ID { get; private set; }
         public string Title { get; set; }
         public bool Open = true;
@@ -19,12 +20,14 @@ namespace KronosDMS_Client.Render
 
         public Window(string title = "Window", int width = 640, int height = 468)
         {
+            Name = title.Replace(" ", "_");
             ID = NextID++;
             Title = title;
             Size = new Vector2(width, height);
 
             OnLoad();
-            Log($"Loaded ImGui window \"{title}\"", LogLevel.INFO, $"Window ID: {title}#{ID}\n" +
+            Log($"Loaded ImGui window \"{Name}\"", LogLevel.INFO, $"Window ID: {Name}#{ID}\n" +
+                $"Window title: {title}\n" +
                 $"Window width: {width}\n" +
                 $"Window height: {height}");
         }
@@ -42,12 +45,13 @@ namespace KronosDMS_Client.Render
         public void Close()
         {
             OnClose();
-            Log($"Closed ImGui window \"{Title}\"", LogLevel.INFO, $"Window ID: {Title}##{ID}");
+            Log($"Closed ImGui window \"{Name}\"", LogLevel.INFO, $"Window ID: {Name}##{ID}\n" +
+                $"Window title: {Title}");
         }
 
         protected void Log(string msg, LogLevel level = LogLevel.INFO, string details = "")
         {
-            string source = $"Window\\\"{Title}#{ID}\"";
+            string source = $"Window\\\"{Name}#{ID}\"";
             Logger.Log(msg, level, details, source);
         }
 

@@ -45,7 +45,6 @@ namespace KronosDMS_Client.Render.Windows.Components
             if (Password)
                 flags |= ImGuiInputTextFlags.Password;
 
-
             if (displayName)
             {
                 ImGui.AlignTextToFramePadding();

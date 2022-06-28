@@ -17,7 +17,8 @@ namespace KronosDMS_Client.Render.Windows
         private ComboBox GraphicsBackend;
         private HelpMarker GBHint;
 
-        private ColorEdit WindowBG;
+        private ComboBox ThemeFont;
+        private HelpMarker FontSizeHint;
 
         public ConfigWindow() : base("Config", 640, 528)
         {
@@ -42,8 +43,10 @@ namespace KronosDMS_Client.Render.Windows
                 " - DirectX3D11 is only for Windows platforms\n" +
                 " - Metal is only for MacOS platforms");
 
-            ImGuiStylePtr style = ImGui.GetStyle();
-            WindowBG = new ColorEdit("Window Background", ImGuiCol.WindowBg);
+            ThemeFont = new ComboBox(FontManager.GetFontNames(), "Font");
+            ThemeFont.SetItem(Client.ActiveTheme.Settings.Font);
+            ThemeFont.SelectionChanged = FontChanged;
+            FontSizeHint = new HelpMarker("Have to restart the application for changes to apply.");
         }
 
         protected override void Draw()
@@ -68,16 +71,24 @@ namespace KronosDMS_Client.Render.Windows
                     {
                         Client.ActiveTheme.Save();
                     }
+                    ImGui.Spacing();
 
-                    uint id = ImGui.GetID("config_theme_values");
                     if (ImGui.BeginTabBar("config_theme_values_tab"))
                     {
+                        ImGui.Spacing();
+                        ImGuiStylePtr style = ImGui.GetStyle();
+
+                        if (ImGui.BeginTabItem("Font"))
+                        {
+                            ThemeFont.Draw();
+                            ImGui.EndTabItem();
+                        }
+
                         if (ImGui.BeginTabItem("Colors"))
                         {
                             ImGui.Text("ImGui Colors");
                             ImGui.Separator();
-                            ImGui.BeginChild(id, new Vector2(0.0f, 350));
-                            ImGuiStylePtr style = ImGui.GetStyle();
+                            ImGui.BeginChild("config_theme_values", new Vector2(0.0f, 350));
                             for (int i = 0; i < style.Colors.Count; i++)
                             {
                                 string name = ImGui.GetStyleColorName((ImGuiCol)i);
@@ -86,6 +97,21 @@ namespace KronosDMS_Client.Render.Windows
                             ImGui.EndChild();
                             ImGui.Separator();
                             ImGui.EndTabItem();
+                        }
+
+                        if (ImGui.BeginTabItem("Rendering"))
+                        {
+                            ImGui.Text("Borders:");
+                            { bool border = (style.WindowBorderSize > 0.0f); if (ImGui.Checkbox("Window Border", ref border)) { style.WindowBorderSize = border ? 1.0f : 0.0f; } }
+                            { bool border = (style.FrameBorderSize > 0.0f); if (ImGui.Checkbox("Frame Border", ref border)) { style.FrameBorderSize = border ? 1.0f : 0.0f; } }
+                            { bool border = (style.PopupBorderSize > 0.0f); if (ImGui.Checkbox("Popup Border", ref border)) { style.PopupBorderSize = border ? 1.0f : 0.0f; } }
+                            ImGui.Spacing();
+
+                            ImGui.Text("Anti-Aliasing:");
+                            ImGui.Checkbox("Anti-Aliased Lines", ref style.AntiAliasedLines);
+                            ImGui.Checkbox("Anti-Aliased Lines Use Tex", ref style.AntiAliasedLinesUseTex);
+                            ImGui.Checkbox("Anti-Aliased Fill", ref style.AntiAliasedFill);
+                            ImGui.Spacing();
                         }
                         ImGui.EndTabBar();
                     }
@@ -113,10 +139,17 @@ namespace KronosDMS_Client.Render.Windows
             Client.Config.Save();
         }
 
+        private void FontChanged()
+        {
+            ThemeFont.SetItem(FontManager.SetThemeFont(ThemeFont.Text, ref Client.ActiveTheme), false);
+            Client.Config.Save();
+        }
+
         protected override void OnClose()
         {
             // Set the ImGui style settings to be what the active theme's settings are
             Client.ActiveTheme.SetImGuiStyle();
+            Client.ActiveTheme.SetImGuiColors();
         }
     }
 }

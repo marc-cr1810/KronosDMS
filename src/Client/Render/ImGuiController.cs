@@ -124,6 +124,7 @@ namespace KronosDMS_Client.Render
             io.BackendFlags |= ImGuiBackendFlags.RendererHasViewports;
 
             io.Fonts.AddFontDefault();
+            FontManager.LoadFontsToImGui(); // Load fonts into ImGui
 
             CreateDeviceResources(gd, outputDescription);
             SetKeyMappings();
@@ -259,9 +260,7 @@ namespace KronosDMS_Client.Render
             _projMatrixBuffer = factory.CreateBuffer(new BufferDescription(64, BufferUsage.UniformBuffer | BufferUsage.Dynamic));
             _projMatrixBuffer.Name = "ImGui.NET Projection Buffer";
 
-
-            string backendType = (factory.BackendType == GraphicsBackend.Direct3D11) ? "DirectX3D11" : (factory.BackendType == GraphicsBackend.OpenGL) ? "OpenGL" : (factory.BackendType == GraphicsBackend.Vulkan) ? "Vulkan" : "Metal";
-            Logger.Log($"Loading {backendType} shaders");
+            Logger.Log($"Loading {factory.BackendType} shaders");
             byte[] vertexShaderBytes = LoadEmbeddedShaderCode(gd.ResourceFactory, "imgui-vertex", ShaderStages.Vertex);
             byte[] fragmentShaderBytes = LoadEmbeddedShaderCode(gd.ResourceFactory, "imgui-frag", ShaderStages.Fragment);
             _vertexShader = factory.CreateShader(new ShaderDescription(ShaderStages.Vertex, vertexShaderBytes, gd.BackendType == GraphicsBackend.Metal ? "VS" : "main"));
@@ -422,6 +421,10 @@ namespace KronosDMS_Client.Render
             io.Fonts.GetTexDataAsRGBA32(out pixels, out width, out height, out bytesPerPixel);
             // Store our identifier
             io.Fonts.SetTexID(_fontAtlasID);
+
+            // Clear old font texture & related data if they exists.	
+            _fontTextureResourceSet?.Dispose();
+            _fontTexture?.Dispose();
 
             _fontTexture = gd.ResourceFactory.CreateTexture(TextureDescription.Texture2D(
                 (uint)width,

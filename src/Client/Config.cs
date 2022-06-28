@@ -11,6 +11,7 @@ namespace KronosDMS_Client
         public string Theme { get; set; } = "Dark";
         public bool StartMaximized { get; set; } = true;
         public string GraphicsBackend { get; set; } = "Platform Default";
+        public float FontSize { get; set; } = 15f;
 
         public void Save()
         {

@@ -37,6 +37,7 @@ namespace KronosDMS_Client
         public static void Main(string[] args)
         {
             Logger.Init();
+            FontManager.Init();
             WindowManager.Init();
 
             Config = Config.LoadConfig();
@@ -65,7 +66,14 @@ namespace KronosDMS_Client
             // Run main app window
             Logger.Log("Launching main client window");
             MainWindow = new MainWindow();
-            MainWindow.Show();
+            if (!MainWindow.Show())
+            {
+                LoggerItem log = Logger.Get(Logger.Count() - 1);
+                if (log.Level == LogLevel.FATAL)
+                {
+                    MessageBox.Show(log.Message + "\n" + log.Details, "FATAL ERROR");
+                }
+            }
 
             Response logout = new AccountLogout(Credentials.Username, Credentials.PasswordHash).PerformRequestAsync().Result;
         }

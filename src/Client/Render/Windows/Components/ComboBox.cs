@@ -50,21 +50,21 @@ namespace KronosDMS_Client.Render.Windows.Components
             }
         }
 
-        public void SetItem(int i)
+        public void SetItem(int i, bool callback = true)
         {
             SelectedIndex = i;
             Text = Items[i];
-            if (SelectionChanged != null)
+            if (SelectionChanged != null && callback)
                 SelectionChanged();
         }
 
-        public void SetItem(string s)
+        public void SetItem(string s, bool callback = true)
         {
             for (int i = 0; i < Items.Count; i++)
             {
                 if (Items[i] == s)
                 {
-                    SetItem(i);
+                    SetItem(i, callback);
                     break;
                 }
             }

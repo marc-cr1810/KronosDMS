@@ -22,13 +22,13 @@ namespace KronosDMS_Client
             Log("Initialized logger", LogLevel.OK);
         }
 
-        public static void Log(string message, LogLevel level = LogLevel.INFO, string Details = "", string source = "")
+        public static void Log(string message, LogLevel level = LogLevel.INFO, string details = "", string source = "")
         {
             LoggerItem item = new LoggerItem();
             item.Message = message;
             item.Timestamp = DateTime.Now;
             item.Level = level;
-            item.Details = Details;
+            item.Details = details;
             item.Source = source;
 
             LogList.Add(item);
@@ -37,7 +37,7 @@ namespace KronosDMS_Client
             string logFile = $"{LogPath}/{DateTime.Now.ToString("yyyy-MM-dd")}.log";
 
             string fileText = "";
-            fileText += $"{item.ToString()}\n";
+            fileText += $"{item}\n";
 
             foreach (string line in item.Details.Split("\n", StringSplitOptions.RemoveEmptyEntries))
             {
@@ -45,6 +45,18 @@ namespace KronosDMS_Client
             }
 
             File.AppendAllText(logFile, fileText);
+        }
+
+        public static void LogException(string message, Exception exception, LogLevel level = LogLevel.ERROR, string details = "", string source = "")
+        {
+            if (exception != null)
+            {
+                details += "Description: " + exception.Message + "\n";
+                if (exception.InnerException != null)
+                    details += "---> " + exception.InnerException.Message + "\n";
+                details += exception.StackTrace + "\n";
+            }
+            Log(message, level, details, source);
         }
 
         public static LoggerItem Get(int i)

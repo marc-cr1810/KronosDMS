@@ -38,23 +38,52 @@ namespace KronosDMS_Client
             WindowCreationInfo = new WindowCreateInfo(50, 50, width, height, windowState, title);
             GDOptions = new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true);
 
-            Color background = Client.ActiveTheme.Colors.Background;
-            _clearColor = new Vector3((float)background.R / 255, (float)background.G / 255, (float)background.B / 255);
+            Vector4 background = Client.ActiveTheme.Colors.ImGuiColors["DockingEmptyBg"];
+            _clearColor = new Vector3(background.X, background.Y, background.Z);
         }
 
-        public void Show()
+        public bool Show()
         {
+        CreateWindowAndGD:
             // Create window, GraphicsDevice, and all resources necessary for the demo.
             Logger.Log("Creating window and graphics device", LogLevel.INFO, $"Window width: {WindowCreationInfo.WindowWidth}\n" +
                 $"Window height: {WindowCreationInfo.WindowHeight}\n" +
                 $"Graphics backend setting: \"{Client.Config.GraphicsBackend}\"");
 
-            VeldridStartup.CreateWindowAndGraphicsDevice(
-                WindowCreationInfo,
-                GDOptions,
-                Client.Config.GetGraphicsBackend(),
-                out _window,
-                out _gd);
+            string details = $"Graphics Backend: \"{GetGraphicsBackendVer()}\"\n";
+
+            try
+            {
+                VeldridStartup.CreateWindowAndGraphicsDevice(
+                    WindowCreationInfo,
+                    GDOptions,
+                    Client.Config.GetGraphicsBackend(),
+                    out _window,
+                    out _gd);
+
+                // Check if the DirectX version on Windows is supported (aka DirectX 11 or newer)
+                if (_gd != null)
+                {
+                    if (_gd.BackendType == GraphicsBackend.Direct3D11 && _gd.ApiVersion.Major < 11)
+                    {
+                        Logger.Log("Unsupported DirectX version", LogLevel.ERROR, $"DirectX Version: {_gd.ApiVersion.Major}.{_gd.ApiVersion.Minor}\n" +
+                            "Minimum Required: 11.0\n" +
+                            "Switching from DirectX to OpenGL and saving changes to the config");
+                        Client.Config.GraphicsBackend = "OpenGL";
+                        Client.Config.Save();
+                        _window.Close();
+                        _gd.Dispose();
+                        goto CreateWindowAndGD;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException("Failed to create window and graphics device", ex, LogLevel.FATAL, details);
+                return false;
+            }
+            details = $"Graphics Backend: \"{GetGraphicsBackendVer()}\"\nGraphics Device: \"{_gd.DeviceName}\"";
+            Logger.Log("Successfully created window and setup graphics device", LogLevel.OK, details);
 
             _window.Resized += () =>
             {
@@ -62,7 +91,7 @@ namespace KronosDMS_Client
                 _controller.WindowResized(_window.Width, _window.Height);
             };
 
-            _cl = _gd.ResourceFactory.CreateCommandList();
+            _cl = _gd.ResourceFactory.CreateCommandList();            
             _controller = new ImGuiController(_gd, _window, _gd.MainSwapchain.Framebuffer.OutputDescription, _window.Width, _window.Height);
             InitializedImGUI = true;
             Random random = new Random();
@@ -75,29 +104,52 @@ namespace KronosDMS_Client
             // Main application loop
             while (_window.Exists)
             {
-                InputSnapshot snapshot = _window.PumpEvents();
-                if (!_window.Exists) { break; }
-                _controller.Update(1f / 60f, snapshot); // Feed the input events to our ImGui controller, which passes them through to ImGui.
+                //try
+                //{
+                    InputSnapshot snapshot = _window.PumpEvents();
+                    if (!_window.Exists) { break; }
+                    _controller.Update(1f / 60f, snapshot); // Feed the input events to our ImGui controller, which passes them through to ImGui.
 
-                SubmitUI();
+                    FontManager.PushFont(Client.ActiveTheme.Settings.Font);
 
-                _cl.Begin();
-                _cl.SetFramebuffer(_gd.MainSwapchain.Framebuffer);
-                _cl.ClearColorTarget(0, new RgbaFloat(_clearColor.X, _clearColor.Y, _clearColor.Z, 1f));
-                _controller.Render(_gd, _cl);
-                _cl.End();
-                _gd.SubmitCommands(_cl);
-                _gd.SwapBuffers(_gd.MainSwapchain);
-                _controller.SwapExtraWindows(_gd);
+                    SubmitUI();
+
+                    FontManager.PopFont();
+
+                    _cl.Begin();
+                    _cl.SetFramebuffer(_gd.MainSwapchain.Framebuffer);
+                    _cl.ClearColorTarget(0, new RgbaFloat(_clearColor.X, _clearColor.Y, _clearColor.Z, 1f));
+                    _controller.Render(_gd, _cl);
+                    _cl.End();
+                    _gd.SubmitCommands(_cl);
+                    _gd.SwapBuffers(_gd.MainSwapchain);
+                    _controller.SwapExtraWindows(_gd);
+                //}
+                //catch (Exception ex)
+                //{
+                //    string msg = "An error occured during the application runtime";
+                //    LogLevel level = LogLevel.FATAL;
+                //
+                //    // Handle errors here
+                //
+                //    if (level == LogLevel.FATAL)
+                //        msg = "A fatal error occured during the application runtime";
+                //
+                //    Logger.LogException(msg, ex, level);
+                //
+                //    if (level == LogLevel.FATAL)
+                //        return false;
+                //}
             }
 
             Dispose();
+            return true;
         }
 
         private unsafe void SubmitUI()
         {
             // Dockspace settings
-            bool dockspaceOpen = true; 
+            bool dockspaceOpen = true;
             bool opt_fullscreen_persistant = true;
             bool opt_fullscreen = opt_fullscreen_persistant;
             ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags.None;
@@ -185,8 +237,11 @@ namespace KronosDMS_Client
                         WindowManager.Open(new ConfigWindow());
                     if (ImGui.MenuItem("Console"))
                         WindowManager.Open(new ConsoleWindow());
-                    if (ImGui.MenuItem("Render Debug"))
-                        WindowManager.ShowMetricsWindow = true;
+                    if (_gd.BackendType != GraphicsBackend.OpenGL)
+                    {
+                        if (ImGui.MenuItem("Render Debug"))
+                            WindowManager.ShowMetricsWindow = true;
+                    }
                     ImGui.EndMenu();
                 }
                 ImGui.EndMenuBar();
@@ -215,10 +270,47 @@ namespace KronosDMS_Client
             return InitializedImGUI;
         }
 
+        public string GetGraphicsBackendVer()
+        {
+            if (_gd is null)
+            {
+                GraphicsBackend graphicsBackend = Client.Config.GetGraphicsBackend();
+                switch (graphicsBackend)
+                {
+                    case GraphicsBackend.Direct3D11:
+                        return "DirectX 11";
+                    case GraphicsBackend.OpenGL:
+                    case GraphicsBackend.OpenGLES:
+                        {
+                            int profile = (int)SDL_GLProfile.Core;
+                            int major = 0;
+                            int minor = 0;
+                            unsafe
+                            {
+                                Sdl2Native.SDL_GL_GetAttribute(SDL_GLAttribute.ContextProfileMask, &profile);
+                                Sdl2Native.SDL_GL_GetAttribute(SDL_GLAttribute.ContextMajorVersion, &major);
+                                Sdl2Native.SDL_GL_GetAttribute(SDL_GLAttribute.ContextMinorVersion, &minor);
+                            }
+                            string p = profile == (int)SDL_GLProfile.Core ? "Core" : profile == (int)SDL_GLProfile.Compatibility ? "Compatibility" : "ES";
+                            return $"OpenGL {p} {major}.{minor}";
+                        }
+                    case GraphicsBackend.Vulkan:
+                        return "Vulkan";
+                    case GraphicsBackend.Metal:
+                        return "Metal";
+                }
+            }
+            else
+            {
+                return $"{_gd.BackendType} {_gd.ApiVersion.Major}.{_gd.ApiVersion.Minor}";
+            }
+            return "NULL";
+        }
+
         public void Close()
         {
             if (_window != null)
-            { 
+            {
                 _window.Close();
                 Dispose();
             }

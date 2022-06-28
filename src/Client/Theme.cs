@@ -10,6 +10,23 @@ namespace KronosDMS_Client
 {
     public struct Theme
     {
+        public struct ThemeSettings
+        {
+            public struct RenderSettings
+            {
+                public bool WindowBorder;
+                public bool FrameBorder;
+                public bool PopupBorder;
+
+                public bool AntiAliasedLines;
+                public bool AntiAliasedLinesUseTex;
+                public bool AntiAliasedFill;
+            }
+
+            public string Font;
+            public RenderSettings Render;
+        }
+
         public struct ThemeColors
         {
             public struct TextColors
@@ -44,12 +61,15 @@ namespace KronosDMS_Client
         }
 
         public string Name;
+        public ThemeSettings Settings;
         public ThemeColors Colors;
 
         public void Load()
         {
             bool edited = false;
             ImGuiStylePtr style = ImGui.GetStyle();
+
+            SetImGuiStyle();
 
             if (Colors.ImGuiColors == null)
                 Colors.ImGuiColors = new Dictionary<string, Vector4>();
@@ -67,6 +87,7 @@ namespace KronosDMS_Client
                     edited = true;
                 }
             }
+
             if (edited)
                 Save();
         }
@@ -74,6 +95,13 @@ namespace KronosDMS_Client
         public void Save()
         {
             ImGuiStylePtr style = ImGui.GetStyle();
+
+            Settings.Render.WindowBorder = style.WindowBorderSize > 0.0f ? true : false;
+            Settings.Render.FrameBorder = style.FrameBorderSize > 0.0f ? true : false;
+            Settings.Render.PopupBorder = style.PopupBorderSize > 0.0f ? true : false;
+            Settings.Render.AntiAliasedLines = style.AntiAliasedLines;
+            Settings.Render.AntiAliasedLinesUseTex = style.AntiAliasedLinesUseTex;
+            Settings.Render.AntiAliasedFill = style.AntiAliasedFill;
 
             if (Colors.ImGuiColors == null)
                 Colors.ImGuiColors = new Dictionary<string, Vector4>();
@@ -93,6 +121,19 @@ namespace KronosDMS_Client
         }
 
         public void SetImGuiStyle()
+        {
+            ImGuiStylePtr style = ImGui.GetStyle();
+
+            style.WindowBorderSize = Settings.Render.WindowBorder ? 1.0f : 0.0f;
+            style.FrameBorderSize = Settings.Render.FrameBorder ? 1.0f : 0.0f;
+            style.PopupBorderSize = Settings.Render.PopupBorder ? 1.0f : 0.0f;
+
+            style.AntiAliasedLines = Settings.Render.AntiAliasedLines;
+            style.AntiAliasedLinesUseTex = Settings.Render.AntiAliasedLinesUseTex;
+            style.AntiAliasedFill = Settings.Render.AntiAliasedFill;
+        }
+
+        public void SetImGuiColors()
         {
             if (Colors.ImGuiColors == null)
                 return;
@@ -116,50 +157,6 @@ namespace KronosDMS_Client
             float a = (float)color.A / 255;
 
             return new Vector4(r, g, b, a);
-        }
-    }
-
-    public class ThemeManager
-    {
-        public static Theme LoadTheme(string theme)
-        {
-            Logger.Log($"Loading theme \"{theme}\"");
-            Theme loadedTheme = new Theme();
-            try
-            {
-                loadedTheme = JsonConvert.DeserializeObject<Theme>(File.ReadAllText($"themes/{theme}.json"));
-                if (loadedTheme.Name == null)
-                {
-                    Logger.Log($"Failed to load theme \"{theme}\"", LogLevel.ERROR, "Name of theme is NULL.\nPlease check the theme file to se if it has a name.");
-                }
-                if (Client.MainWindow != null)
-                {
-                    if (Client.MainWindow.ImGuiInitialized())
-                        loadedTheme.Load();
-                }
-            }
-            catch {
-                Logger.Log("Failed to load theme", LogLevel.ERROR);
-                return Client.ActiveTheme;
-            }
-            return loadedTheme;
-        }
-
-        public static void SaveTheme(Theme theme)
-        {
-            File.WriteAllText($"themes/{theme.Name}.json", JsonConvert.SerializeObject(theme, Formatting.Indented));
-        }
-
-        public static string[] GetThemes()
-        {
-            List<string> result = new List<string>();
-
-            DirectoryInfo d = new DirectoryInfo("themes");
-
-            foreach (FileInfo file in d.GetFiles("*.json"))
-                result.Add(file.Name.Split('.')[0]);
-
-            return result.ToArray();
         }
     }
 }
