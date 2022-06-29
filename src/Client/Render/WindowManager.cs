@@ -10,7 +10,7 @@ namespace KronosDMS_Client.Render
 {
     public static class WindowManager
     {
-        public static bool ShowImGuiDemoWindow = true;
+        public static bool ShowImGuiDemoWindow = false;
         public static bool ShowMetricsWindow = false;
         public static bool ShowServerDisconnectionMsg = false;
 

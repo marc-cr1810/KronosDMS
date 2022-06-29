@@ -104,8 +104,8 @@ namespace KronosDMS_Client
             // Main application loop
             while (_window.Exists)
             {
-                //try
-                //{
+                try
+                {
                     InputSnapshot snapshot = _window.PumpEvents();
                     if (!_window.Exists) { break; }
                     _controller.Update(1f / 60f, snapshot); // Feed the input events to our ImGui controller, which passes them through to ImGui.
@@ -124,22 +124,22 @@ namespace KronosDMS_Client
                     _gd.SubmitCommands(_cl);
                     _gd.SwapBuffers(_gd.MainSwapchain);
                     _controller.SwapExtraWindows(_gd);
-                //}
-                //catch (Exception ex)
-                //{
-                //    string msg = "An error occured during the application runtime";
-                //    LogLevel level = LogLevel.FATAL;
-                //
-                //    // Handle errors here
-                //
-                //    if (level == LogLevel.FATAL)
-                //        msg = "A fatal error occured during the application runtime";
-                //
-                //    Logger.LogException(msg, ex, level);
-                //
-                //    if (level == LogLevel.FATAL)
-                //        return false;
-                //}
+                }
+                catch (Exception ex)
+                {
+                    string msg = "An error occured during the application runtime";
+                    LogLevel level = LogLevel.FATAL;
+                
+                    // Handle errors here
+                
+                    if (level == LogLevel.FATAL)
+                        msg = "A fatal error occured during the application runtime";
+                
+                    Logger.LogException(msg, ex, level);
+                
+                    if (level == LogLevel.FATAL)
+                        return false;
+                }
             }
 
             Dispose();
@@ -179,7 +179,7 @@ namespace KronosDMS_Client
             // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
             // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, 0.0f);
-            ImGui.Begin("Editor Dockspace", ref dockspaceOpen, window_flags);
+            ImGui.Begin("Dockspace", ref dockspaceOpen, window_flags);
             ImGui.PopStyleVar();
 
             if (opt_fullscreen)
@@ -257,12 +257,15 @@ namespace KronosDMS_Client
 
         public void SetStatusTitle(string status = "$DEFAULT_VAL")
         {
+            string title = $"KronosDMS v{Application.ProductVersion}";
+            string login = $"Currently logged in as {Client.ActiveAccount.FirstName} {Client.ActiveAccount.LastName} ({Client.ActiveAccount.Username})";
+
             if (status is null || status.Length == 0)
-                _window.Title = $"KronosDMS v{Application.ProductVersion}";
+                _window.Title = title;
             else if (status == "$DEFAULT_VAL")
-                _window.Title = $"Currently logged in as {Client.ActiveAccount.FirstName} {Client.ActiveAccount.LastName} ({Client.ActiveAccount.Username})";
+                _window.Title = $"{title} | {login}";
             else
-                _window.Title = $"KronosDMS v{Application.ProductVersion} | {status}";
+                _window.Title = $"{title} | {status}";
         }
 
         public bool ImGuiInitialized()
