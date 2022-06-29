@@ -28,6 +28,7 @@ namespace KronosDMS_Client
 
         public static DateTime LastPing;
         public static bool Disconnected = true;
+        public static readonly bool AutoUpdate = false;
         public static MainWindow MainWindow { get; private set; }
 
         /// <summary>
@@ -58,7 +59,12 @@ namespace KronosDMS_Client
             }
 
             // Check for updates
-            CheckForUpdates();
+            if (AutoUpdate)
+                CheckForUpdates();
+            else
+                Logger.Log("Skipping update check", LogLevel.WARN, "Client.AutoUpdate is set to false.\n" +
+                    "Updates wont be downloaded and installed automatically.\n" +
+                    "This may be due to this version being a test build.");
 
             // Check if our themes exist
             CheckThemesInstall();

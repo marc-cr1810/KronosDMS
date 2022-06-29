@@ -26,6 +26,8 @@ namespace KronosDMS_Client
             Fonts = new List<Font>();
 
             DirectoryInfo root = new DirectoryInfo(FontsDir);
+            if (!root.Exists)
+                root.Create();
             foreach (DirectoryInfo subdir in root.GetDirectories())
             {
                 foreach (FileInfo file in subdir.GetFiles())
