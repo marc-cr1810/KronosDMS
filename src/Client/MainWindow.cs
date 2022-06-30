@@ -79,8 +79,22 @@ namespace KronosDMS_Client
             }
             catch (Exception ex)
             {
-                Logger.LogException("Failed to create window and graphics device", ex, LogLevel.FATAL, details);
-                return false;
+                if (_gd.BackendType == GraphicsBackend.Direct3D11 && _gd.ApiVersion.Major < 11)
+                {
+                    Logger.Log("Unsupported DirectX version", LogLevel.ERROR, $"DirectX Version: {_gd.ApiVersion.Major}.{_gd.ApiVersion.Minor}\n" +
+                        "Minimum Required: 11.0\n" +
+                        "Switching from DirectX to OpenGL and saving changes to the config");
+                    Client.Config.GraphicsBackend = "OpenGL";
+                    Client.Config.Save();
+                    _window.Close();
+                    _gd.Dispose();
+                    goto CreateWindowAndGD;
+                }
+                else
+                {
+                    Logger.LogException("Failed to create window and graphics device", ex, LogLevel.FATAL, details);
+                    return false;
+                }
             }
             details = $"Graphics Backend: \"{GetGraphicsBackendVer()}\"\nGraphics Device: \"{_gd.DeviceName}\"";
             Logger.Log("Successfully created window and setup graphics device", LogLevel.OK, details);

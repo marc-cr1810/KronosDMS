@@ -13,8 +13,6 @@ namespace KronosDMS_Client
         {
             InitializeComponent();
 
-            this.Text = $"KronosDMS v{Application.ProductVersion} | Login";
-
             this.BackColor = Client.ActiveTheme.Colors.Foreground;
             this.label1.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.label2.ForeColor = Client.ActiveTheme.Colors.Text.Default;
@@ -22,6 +20,7 @@ namespace KronosDMS_Client
             this.labelIPAddress.ForeColor = Client.ActiveTheme.Colors.Text.Default;
 
             this.textIPAddress.Text = Client.Config.IPAddress;
+            this.labelVersion.Text = Application.ProductVersion;
         }
 
         public void Login()

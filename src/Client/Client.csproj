@@ -5,7 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>KronosDMS_Client</RootNamespace>
-    <Version>0.9.99-r$([System.DateTime]::Now.ToString("hhmmss"))</Version>
+    <Version>$([System.DateTime]::Now.ToString("yy.MM.dd-rHHmm"))</Version>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>

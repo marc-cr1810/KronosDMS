@@ -38,6 +38,9 @@ namespace KronosDMS_Client
         public static void Main(string[] args)
         {
             Logger.Init();
+
+            Logger.Log("Starting KronosDMS Client application", LogLevel.INFO, $"Version: {Application.ProductVersion}");
+
             FontManager.Init();
             WindowManager.Init();
 
@@ -82,6 +85,7 @@ namespace KronosDMS_Client
             }
 
             Response logout = new AccountLogout(Credentials.Username, Credentials.PasswordHash).PerformRequestAsync().Result;
+            Logger.Log("Closed KronosDMS Client application", LogLevel.OK);
         }
 
         // Update the client application runtime

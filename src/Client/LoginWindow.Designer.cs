@@ -38,6 +38,7 @@ namespace KronosDMS_Client
             this.buttonAdvanced = new System.Windows.Forms.Button();
             this.textIPAddress = new System.Windows.Forms.TextBox();
             this.labelIPAddress = new System.Windows.Forms.Label();
+            this.labelVersion = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -129,11 +130,23 @@ namespace KronosDMS_Client
             this.labelIPAddress.TabIndex = 8;
             this.labelIPAddress.Text = "IP Address";
             // 
+            // labelVersion
+            // 
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.labelVersion.Location = new System.Drawing.Point(12, 164);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(64, 15);
+            this.labelVersion.TabIndex = 10;
+            this.labelVersion.Text = "0.0.0-r0000";
+            this.labelVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // LoginWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(236, 167);
+            this.ClientSize = new System.Drawing.Size(236, 188);
+            this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.textIPAddress);
             this.Controls.Add(this.labelIPAddress);
             this.Controls.Add(this.buttonAdvanced);
@@ -166,5 +179,6 @@ namespace KronosDMS_Client
         private System.Windows.Forms.Button buttonAdvanced;
         private System.Windows.Forms.TextBox textIPAddress;
         private System.Windows.Forms.Label labelIPAddress;
+        private System.Windows.Forms.Label labelVersion;
     }
 }

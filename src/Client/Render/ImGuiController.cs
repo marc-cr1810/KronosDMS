@@ -512,7 +512,7 @@ namespace KronosDMS_Client.Render
 
             //ImGui.Text($"Main viewport Position: {ImGui.GetPlatformIO().Viewports[0].Pos}");
             //ImGui.Text($"Main viewport Size: {ImGui.GetPlatformIO().Viewports[0].Size}");
-            //ImGui.Text($"MoouseHoveredViewport: {ImGui.GetIO().MouseHoveredViewport}");
+            //ImGui.Text($"MouseHoveredViewport: {ImGui.GetIO().MouseHoveredViewport}");
         }
 
         private unsafe void UpdateMonitors()
