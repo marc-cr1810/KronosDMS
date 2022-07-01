@@ -22,6 +22,8 @@ namespace KronosDMS_Client
         private CommandList _cl;
         private ImGuiController _controller;
 
+        private bool Sleeping = false;
+
         // UI state test stuff
         private Vector3 _clearColor = new Vector3(0.45f, 0.55f, 0.6f);
 
@@ -101,6 +103,10 @@ namespace KronosDMS_Client
 
             _window.Resized += () =>
             {
+                if (_window.WindowState == WindowState.Minimized && _gd.BackendType == GraphicsBackend.OpenGL)
+                    Sleeping = true;
+                else
+                    Sleeping = false;
                 _gd.MainSwapchain.Resize((uint)_window.Width, (uint)_window.Height);
                 _controller.WindowResized(_window.Width, _window.Height);
             };
@@ -123,6 +129,9 @@ namespace KronosDMS_Client
                     InputSnapshot snapshot = _window.PumpEvents();
                     if (!_window.Exists) { break; }
                     _controller.Update(1f / 60f, snapshot); // Feed the input events to our ImGui controller, which passes them through to ImGui.
+
+                    if (Sleeping && _gd.BackendType == GraphicsBackend.OpenGL)
+                        continue;
 
                     FontManager.PushFont(Client.ActiveTheme.Settings.Font);
 
