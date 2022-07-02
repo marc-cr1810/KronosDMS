@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KronosDMS_Client.Render.Windows
 {
-    public class ConfigWindow : Window
+    public class ConfigWindow : ImGuiWindow
     {
         private TextBox IPAddress;
         private ComboBox Theme;

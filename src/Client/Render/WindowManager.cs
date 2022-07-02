@@ -14,11 +14,11 @@ namespace KronosDMS_Client.Render
         public static bool ShowMetricsWindow = false;
         public static bool ShowServerDisconnectionMsg = false;
 
-        private static List<Window> Windows { get; set; }
+        private static List<ImGuiWindow> Windows { get; set; }
 
         public static void Init()
         {
-            Windows = new List<Window>();
+            Windows = new List<ImGuiWindow>();
             Logger.Log("Initialized window manager", LogLevel.OK);
         }
 
@@ -26,7 +26,7 @@ namespace KronosDMS_Client.Render
         {
             for (int i = 0; i < Windows.Count; i++)
             {
-                Window window = Windows[i];
+                ImGuiWindow window = Windows[i];
                 if (window != null)
                 {
                     if (!window.Open)
@@ -56,7 +56,7 @@ namespace KronosDMS_Client.Render
             }
         }
 
-        public static void Open(Window window)
+        public static void Open(ImGuiWindow window)
         {
             if (window == null)
             {
@@ -65,7 +65,7 @@ namespace KronosDMS_Client.Render
             Windows.Add(window);
         }
 
-        public static void Close(Window window)
+        public static void Close(ImGuiWindow window)
         {
             if (window == null)
             {

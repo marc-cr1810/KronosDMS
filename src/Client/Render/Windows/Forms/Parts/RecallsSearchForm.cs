@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KronosDMS_Client.Render.Windows.Forms.Parts
 {
-    public class RecallsSearchForm : Window
+    public class RecallsSearchForm : ImGuiWindow
     {
         private TextBox RecallNumber;
         private TextBox RecallDescription;

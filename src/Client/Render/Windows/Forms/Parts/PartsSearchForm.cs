@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace KronosDMS_Client.Render.Windows.Forms.Parts
 {
-    public class PartsSearchForm : Window
+    public class PartsSearchForm : ImGuiWindow
     {
         private TextBox PartNumber;
         private TextBox PartDescription;

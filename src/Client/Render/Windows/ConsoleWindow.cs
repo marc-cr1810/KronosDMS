@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KronosDMS_Client.Render.Windows
 {
-    public class ConsoleWindow : Window
+    public class ConsoleWindow : ImGuiWindow
     {
         public ConsoleWindow() : base("Console")
         {

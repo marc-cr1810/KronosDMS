@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KronosDMS_Client.Render.Windows.Forms.Parts
 {
-    public class RecallForm : Window
+    public class RecallForm : ImGuiWindow
     {
         private bool NewRecall = false;
         private Recall SelectedRecall = new Recall();
