@@ -74,8 +74,18 @@ namespace KronosDMS_Client
 
             // Run main app window
             Logger.Log("Launching main client window");
-            MainWindow = new MainWindow();
-            if (!MainWindow.Show())
+            //MainWindow = new MainWindow();
+            //if (!MainWindow.Show())
+            //{
+            //    LoggerItem log = Logger.Get(Logger.Count() - 1);
+            //    if (log.Level == LogLevel.FATAL)
+            //    {
+            //        MessageBox.Show(log.Message + "\n" + log.Details, "FATAL ERROR");
+            //    }
+            //}
+
+            Window window = new AppWindow("KronosDMS Client");
+            if (!window.Show())
             {
                 LoggerItem log = Logger.Get(Logger.Count() - 1);
                 if (log.Level == LogLevel.FATAL)

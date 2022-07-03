@@ -12,18 +12,18 @@ namespace KronosDMS_Client.Render
 {
     public class Window
     {
-        private Sdl2Window SDLWindow;
-        private GraphicsDevice GD;
-        private CommandList CL;
-        private ImGuiController Controller;
+        protected Sdl2Window SDLWindow;
+        protected GraphicsDevice GD;
+        protected CommandList CL;
+        protected ImGuiController Controller;
 
         private bool InitializedImGui = false;
         private bool Sleeping = false;
 
         private Vector3 ClearColor = Vector3.Zero;
 
-        private WindowCreateInfo WindowCreationInfo;
-        private GraphicsDeviceOptions GDOptions;
+        protected WindowCreateInfo WindowCreationInfo;
+        protected GraphicsDeviceOptions GDOptions;
 
         public Window(string title, int width = 1280, int height = 720)
         {
@@ -55,6 +55,7 @@ namespace KronosDMS_Client.Render
 
                     FontManager.PushFont(Client.ActiveTheme.Settings.Font);
                     Draw();
+                    Update();
                     FontManager.PopFont();
 
                     CL.Begin();
@@ -83,7 +84,7 @@ namespace KronosDMS_Client.Render
                 }
             }
 
-            Dispose();
+            Close();
             return true;
         }
 
@@ -111,6 +112,7 @@ namespace KronosDMS_Client.Render
         protected virtual void OnClose() { }
 
         protected virtual void Draw() { }
+        protected virtual void Update() { }
 
         private bool Create()
         {
