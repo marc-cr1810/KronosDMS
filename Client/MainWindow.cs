@@ -83,7 +83,12 @@ namespace KronosDMS_Client
                     Client.Disconnected = false;
                     Client.ActiveAccount = response.Account;
                     Requester.AccessToken = response.Account.AccessToken;
+                    Logger.Log($"Logged into the server", LogLevel.OK, $"Username: {Client.Credentials.Username}\nPassword Hash: {Client.Credentials.PasswordHash.Substring(0, 4)}****");
                     SetStatusTitle($"Currently logged in as {Client.ActiveAccount.FirstName} {Client.ActiveAccount.LastName} ({Client.ActiveAccount.Username})");
+                }
+                else
+                {
+                    Logger.Log("Failed to validate account login!", LogLevel.ERROR, $"Username: {Client.Credentials.Username}\nPassword Hash: {Client.Credentials.PasswordHash.Substring(0, 4)}****");
                 }
             }
             catch { }
@@ -97,9 +102,10 @@ namespace KronosDMS_Client
             {
                 if (!Client.Disconnected)
                 {
+                    Logger.Log("Failed to connect to the server", LogLevel.ERROR, $"IP Address: {Client.Config.IPAddress}");
+                    Client.Disconnected = true;
                     SetStatusTitle("Disconnected");
                     MessageBox.Show("Failed to connect to the server");
-                    Client.Disconnected = true;
                 }
                 return;
             }
