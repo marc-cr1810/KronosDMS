@@ -52,6 +52,9 @@ namespace KronosDMS_Client
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            TestWindow testWindow = new TestWindow("test");
+            testWindow.Show();
+
             Login(args);
 
             // If the user is not logged in, exit

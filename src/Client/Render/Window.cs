@@ -80,7 +80,10 @@ namespace KronosDMS_Client.Render
                     Logger.LogException(msg, ex, level);
 
                     if (level == LogLevel.FATAL)
+                    {
+                        Close();
                         return false;
+                    }
                 }
             }
 
