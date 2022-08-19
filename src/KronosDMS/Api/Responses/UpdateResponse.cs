@@ -1,4 +1,6 @@
-﻿namespace KronosDMS.Api.Responses
+﻿using KronosDMS.Utils;
+
+namespace KronosDMS.Api.Responses
 {
     public class GetUpdateInfoResponse : Response
     {

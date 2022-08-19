@@ -1,7 +1,9 @@
 using KronosDMS.Api;
 using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
+using KronosDMS.Http.Server;
 using KronosDMS.Objects;
+using KronosDMS.Utils;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -89,6 +91,10 @@ namespace KronosDMS_Client
                     MessageBox.Show("Failed to connect to the server");
                     return;
                 }
+
+                // Get server info if we can connect to the server to try and login
+                ServerGetInfo serverGetInfo = new ServerGetInfo();
+                Common.ServerInfo = serverGetInfo.PerformRequestAsync().Result.ServerInfo;
 
                 AccountLoginResponse response = new AccountLogin(args[0], args[1], true).PerformRequestAsync().Result;
 

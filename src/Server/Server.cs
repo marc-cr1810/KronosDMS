@@ -3,6 +3,7 @@ using KronosDMS.Http.Server;
 using KronosDMS.Http.Server.Models;
 using KronosDMS.Objects;
 using KronosDMS.Security;
+using KronosDMS.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -33,6 +34,7 @@ namespace KronosDMS_Server
 
             KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
 
+            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"   Use Encryption: {Config.ServerInfo.UseEncryption}");
             KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"   Client version: {UpdateConfig.UpdateInfo.Client.Version}");
             KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"  Updater version: {UpdateConfig.UpdateInfo.Updater.Version}");
             KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"      Makes count: {Makes.Makes.Count}");

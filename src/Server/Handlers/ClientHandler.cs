@@ -11,6 +11,7 @@ namespace KronosDMS_Server.Handlers
             Name = "Client Update Handler",
             UrlRegex = @"^/api/v1/client/update$",
             Method = "GET",
+            UsesEncryption = false,
             Callable = (HttpRequest request) =>
             {
 
@@ -43,6 +44,7 @@ namespace KronosDMS_Server.Handlers
             Name = "Client Updater Download Handler",
             UrlRegex = @"^/api/v1/client/updater$",
             Method = "GET",
+            UsesEncryption = false,
             Callable = (HttpRequest request) =>
             {
 
@@ -75,6 +77,7 @@ namespace KronosDMS_Server.Handlers
             Name = "Client Themes Handler",
             UrlRegex = @"^/api/v1/client/themes$",
             Method = "GET",
+            UsesEncryption = false,
             Callable = (HttpRequest request) =>
             {
                 bool download = Routes.GetArgValue(request, "download") == "1";

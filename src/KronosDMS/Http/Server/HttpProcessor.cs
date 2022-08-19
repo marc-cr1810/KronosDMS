@@ -1,4 +1,6 @@
-﻿using KronosDMS.Http.Server.Models;
+﻿using KronosDMS.Encryption;
+using KronosDMS.Http.Server.Models;
+using KronosDMS.Utils;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -147,13 +149,29 @@ namespace KronosDMS.Http.Server
 
         protected virtual HttpResponse RouteRequest(Stream inputStream, Stream outputStream, HttpRequest request)
         {
+            int separator = request.Url.IndexOf('?');
+            string url = request.Url;
+            if (separator > 0)
+            {
+                url = request.Url.Substring(0, separator);
+            }
+            List<Route> routes = this.Routes.Where(x => Regex.Match(url, x.UrlRegex).Success).ToList();
+
+            if (!routes.Any())
+                return HttpBuilder.NotFound();
+
+            Route route = routes.SingleOrDefault(x => x.Method == request.Method);
+
             // Split GET request arguments
             if (request.Method == "GET")
             {
-                int separator = request.Url.IndexOf('?');
                 if (separator > 0)
                 {
-                    string[] args = HttpUtility.UrlDecode(request.Url.Substring(separator + 1, request.Url.Length - (separator + 1))).Split('&');
+                    string getData = request.Url.Substring(separator + 1, request.Url.Length - (separator + 1));
+                    string getStr = (Common.ServerInfo.UseEncryption && route.UsesEncryption) ? CustomEncryption.Decrypt(getData) :
+                        getData;
+
+                    string[] args = HttpUtility.UrlDecode(getStr).Split('&');
                     foreach (string arg in args)
                     {
                         string[] kvPair = arg.Split('=');
@@ -163,19 +181,11 @@ namespace KronosDMS.Http.Server
                 }
             }
 
-            List<Route> routes = this.Routes.Where(x => Regex.Match(request.Url, x.UrlRegex).Success).ToList();
-
-            if (!routes.Any())
-                return HttpBuilder.NotFound();
-
-            Route route = routes.SingleOrDefault(x => x.Method == request.Method);
-
             if (route == null)
                 return new HttpResponse()
                 {
                     ReasonPhrase = "Method Not Allowed",
                     StatusCode = "405",
-
                 };
 
             // extract the path if there is one
@@ -193,14 +203,16 @@ namespace KronosDMS.Http.Server
             request.Route = route;
             try
             {
-                return route.Callable(request);
+                HttpResponse response = route.Callable(request);
+                if (Common.ServerInfo.UseEncryption && route.UsesEncryption)
+                    response.ContentAsUTF8 = Base64.To(LZMAHelper.CompressLZMA(response.Content));
+                return response;
             }
             catch (Exception ex)
             {
                 log.Error(ex);
                 return HttpBuilder.InternalServerError();
             }
-
         }
 
         private HttpRequest GetRequest(Stream inputStream, Stream outputStream)

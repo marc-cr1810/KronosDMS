@@ -22,6 +22,11 @@ namespace KronosDMS.Api.Endpoints
         public Response Response { get; set; }
 
         /// <summary>
+        /// If the response is encrypted if enabled by the server
+        /// </summary>
+        public bool UsesEncryption { get; set; } = true;
+
+        /// <summary>
         /// Arguments to be sent.
         /// </summary>
         public List<string> Arguments

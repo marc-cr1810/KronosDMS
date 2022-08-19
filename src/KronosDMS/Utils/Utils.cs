@@ -1,9 +1,10 @@
 ﻿using KronosDMS.Objects;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace KronosDMS
+namespace KronosDMS.Utils
 {
     public struct PartQuantityPair
     {
@@ -12,8 +13,8 @@ namespace KronosDMS
 
         public PartQuantityPair(string number, int quantity)
         {
-            this.Number = number;
-            this.Quantity = quantity;
+            Number = number;
+            Quantity = quantity;
         }
     }
     public struct PartQuantityPairNote
@@ -24,9 +25,9 @@ namespace KronosDMS
 
         public PartQuantityPairNote(string number, int quantity, string note)
         {
-            this.Number = number;
-            this.Quantity = quantity;
-            this.Note = note;
+            Number = number;
+            Quantity = quantity;
+            Note = note;
         }
     }
 

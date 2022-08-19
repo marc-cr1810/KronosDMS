@@ -1,4 +1,5 @@
 ﻿using KronosDMS.Api.Responses;
+using KronosDMS.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace KronosDMS.Api.Endpoints
     {
         public GetUpdateInfo()
         {
+            this.UsesEncryption = false;
             this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/client/update");
         }
 
@@ -41,6 +43,7 @@ namespace KronosDMS.Api.Endpoints
 
         public DownloadUpdate(string baseDir = "./updater/")
         {
+            this.UsesEncryption = false;
             this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/client/update");
             this.BaseDir = baseDir;
         }
@@ -75,6 +78,7 @@ namespace KronosDMS.Api.Endpoints
 
         public DownloadUpdater(string baseDir = "./")
         {
+            this.UsesEncryption = false;
             this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/client/updater");
             this.BaseDir = baseDir;
         }
@@ -109,6 +113,7 @@ namespace KronosDMS.Api.Endpoints
 
         public DownloadThemes(string baseDir = "./themes/")
         {
+            this.UsesEncryption = false;
             this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/client/themes");
             this.BaseDir = baseDir;
         }

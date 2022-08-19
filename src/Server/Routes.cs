@@ -13,6 +13,7 @@ namespace KronosDMS_Server
         public static List<Route> GetRoutes()
         {
             return new List<Route>() {
+                ServerHandler.GetServerInfo,
                 ServerHandler.Reload,
 
                 ClientHandler.Update,

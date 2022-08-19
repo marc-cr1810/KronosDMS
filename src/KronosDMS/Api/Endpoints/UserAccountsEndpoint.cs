@@ -21,7 +21,7 @@ namespace KronosDMS.Api.Endpoints
             this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/auth/login");
 
             this.Username = username;
-            this.PasswordHash = !hashed ? Utils.SHA256Hash(password) : password;
+            this.PasswordHash = !hashed ? Utils.Utils.SHA256Hash(password) : password;
         }
 
         public override async Task<AccountLoginResponse> PerformRequestAsync()
@@ -182,8 +182,8 @@ namespace KronosDMS.Api.Endpoints
         {
             this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/accounts/set/password");
 
-            this.OldPassword = Utils.SHA256Hash(oldPassword);
-            this.NewPassword = Utils.SHA256Hash(newPassword);
+            this.OldPassword = Utils.Utils.SHA256Hash(oldPassword);
+            this.NewPassword = Utils.Utils.SHA256Hash(newPassword);
             this.ID = id;
         }
 

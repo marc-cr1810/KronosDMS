@@ -7,7 +7,6 @@ using System.Threading;
 
 namespace KronosDMS.Http.Server
 {
-
     public class HttpServer
     {
         #region Fields

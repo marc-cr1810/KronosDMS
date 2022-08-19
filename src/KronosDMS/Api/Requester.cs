@@ -1,5 +1,7 @@
 ﻿using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
+using KronosDMS.Encryption;
+using KronosDMS.Utils;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -95,14 +97,19 @@ namespace KronosDMS.Api
 
             try
             {
+                string args = "";
                 // If there is a token to be given
                 for (int i = 0; i < endpoint.Arguments.Count; i++)
                 {
                     //application/x-www-form-urlencoded
-                    endpoint.Address = new Uri(endpoint.Address.OriginalString +
-                        (i == 0 ? "?" : "") +
-                        endpoint.Arguments[i] +
-                        (i < endpoint.Arguments.Count - 1 ? "&" : ""));
+                    args += endpoint.Arguments[i] +
+                        (i < endpoint.Arguments.Count - 1 ? "&" : "");
+                }
+                if (args.Length > 0)
+                {
+                    if (Common.ServerInfo.UseEncryption && endpoint.UsesEncryption)
+                        args = CustomEncryption.Encrypt(args);
+                    endpoint.Address = new Uri(endpoint.Address.OriginalString + "?" + args);
                 }
 
                 Requester.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
@@ -126,19 +133,16 @@ namespace KronosDMS.Api
                 httpResponse = new HttpResponseMessage(HttpStatusCode.RequestTimeout);
                 rawMessage = "";
             }
+
+            if (IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error) && Common.ServerInfo.UseEncryption && endpoint.UsesEncryption)
+            {
+                rawMessage = Encoding.UTF8.GetString(WSHelper.UnWrap(rawMessage));
+            }
             return new Response()
             {
                 Code = httpResponse.StatusCode,
                 RawMessage = rawMessage,
-                IsSuccess = httpResponse.IsSuccessStatusCode && (
-                            httpResponse.StatusCode == HttpStatusCode.Accepted ||
-                            httpResponse.StatusCode == HttpStatusCode.Continue ||
-                            httpResponse.StatusCode == HttpStatusCode.Created ||
-                            httpResponse.StatusCode == HttpStatusCode.Found ||
-                            httpResponse.StatusCode == HttpStatusCode.OK ||
-                            httpResponse.StatusCode == HttpStatusCode.PartialContent ||
-                            httpResponse.StatusCode == HttpStatusCode.NoContent) &&
-                            error == null,
+                IsSuccess = IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error),
                 Error = error
             };
 
@@ -166,7 +170,7 @@ namespace KronosDMS.Api
 
                 StringContent contents = new StringContent(endpoint.PostContent, Requester.Encoding, "application/json");
                 httpResponse = await Requester.Client.PostAsync($"{endpoint.Address}", contents);
-                //Console.WriteLine(httpResponse.RequestMessage);
+
                 rawMessage = await httpResponse.Content.ReadAsStringAsync();
                 httpResponse.EnsureSuccessStatusCode();
             }
@@ -180,18 +184,15 @@ namespace KronosDMS.Api
                 };
             }
 
+            if (IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error) && Common.ServerInfo.UseEncryption && endpoint.UsesEncryption)
+            {
+                rawMessage = Encoding.UTF8.GetString(WSHelper.UnWrap(rawMessage));
+            }
             return new Response()
             {
                 Code = httpResponse.StatusCode,
                 RawMessage = rawMessage,
-                IsSuccess = httpResponse.IsSuccessStatusCode && (
-                            httpResponse.StatusCode == HttpStatusCode.Accepted ||
-                            httpResponse.StatusCode == HttpStatusCode.Continue ||
-                            httpResponse.StatusCode == HttpStatusCode.Created ||
-                            httpResponse.StatusCode == HttpStatusCode.Found ||
-                            httpResponse.StatusCode == HttpStatusCode.OK ||
-                            httpResponse.StatusCode == HttpStatusCode.PartialContent) &&
-                            error == null,
+                IsSuccess = IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error),
                 Error = error
             };
         }
@@ -248,18 +249,15 @@ namespace KronosDMS.Api
 
             }
 
+            if (IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error) && Common.ServerInfo.UseEncryption && endpoint.UsesEncryption)
+            {
+                rawMessage = Encoding.UTF8.GetString(WSHelper.UnWrap(rawMessage));
+            }
             return new Response()
             {
                 Code = httpResponse.StatusCode,
                 RawMessage = rawMessage,
-                IsSuccess = httpResponse.IsSuccessStatusCode && (
-                            httpResponse.StatusCode == HttpStatusCode.Accepted ||
-                            httpResponse.StatusCode == HttpStatusCode.Continue ||
-                            httpResponse.StatusCode == HttpStatusCode.Created ||
-                            httpResponse.StatusCode == HttpStatusCode.Found ||
-                            httpResponse.StatusCode == HttpStatusCode.OK ||
-                            httpResponse.StatusCode == HttpStatusCode.PartialContent) &&
-                            error == null,
+                IsSuccess = IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error),
                 Error = error
             };
         }
@@ -327,18 +325,15 @@ namespace KronosDMS.Api
 
             }
 
+            if (IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error) && Common.ServerInfo.UseEncryption && endpoint.UsesEncryption)
+            {
+                rawMessage = Encoding.UTF8.GetString(WSHelper.UnWrap(rawMessage));
+            }
             return new Response()
             {
                 Code = httpResponse.StatusCode,
                 RawMessage = rawMessage,
-                IsSuccess = httpResponse.IsSuccessStatusCode && (
-                            httpResponse.StatusCode == HttpStatusCode.Accepted ||
-                            httpResponse.StatusCode == HttpStatusCode.Continue ||
-                            httpResponse.StatusCode == HttpStatusCode.Created ||
-                            httpResponse.StatusCode == HttpStatusCode.Found ||
-                            httpResponse.StatusCode == HttpStatusCode.OK ||
-                            httpResponse.StatusCode == HttpStatusCode.PartialContent) &&
-                            error == null,
+                IsSuccess = IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error),
                 Error = error
             };
         }
@@ -393,20 +388,29 @@ namespace KronosDMS.Api
 
             }
 
+            if (IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error) && Common.ServerInfo.UseEncryption && endpoint.UsesEncryption)
+            {
+                rawMessage = Encoding.UTF8.GetString(WSHelper.UnWrap(rawMessage));
+            }
             return new Response()
             {
                 Code = httpResponse.StatusCode,
                 RawMessage = rawMessage,
-                IsSuccess = httpResponse.IsSuccessStatusCode && (
-                            httpResponse.StatusCode == HttpStatusCode.Accepted ||
-                            httpResponse.StatusCode == HttpStatusCode.Continue ||
-                            httpResponse.StatusCode == HttpStatusCode.Created ||
-                            httpResponse.StatusCode == HttpStatusCode.Found ||
-                            httpResponse.StatusCode == HttpStatusCode.OK ||
-                            httpResponse.StatusCode == HttpStatusCode.PartialContent) &&
-                            error == null,
+                IsSuccess = IsSuccessCode(httpResponse.IsSuccessStatusCode, httpResponse.StatusCode, error),
                 Error = error
             };
+        }
+
+        private static bool IsSuccessCode(bool isSuccessStatusCode, HttpStatusCode statusCode, Error error)
+        {
+            return isSuccessStatusCode && (
+                            statusCode == HttpStatusCode.Accepted ||
+                            statusCode == HttpStatusCode.Continue ||
+                            statusCode == HttpStatusCode.Created ||
+                            statusCode == HttpStatusCode.Found ||
+                            statusCode == HttpStatusCode.OK ||
+                            statusCode == HttpStatusCode.PartialContent) &&
+                            error == null;
         }
     }
 }

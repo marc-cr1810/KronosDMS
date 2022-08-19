@@ -1,4 +1,6 @@
-﻿using KronosDMS.Objects;
+﻿using KronosDMS.Http.Server;
+using KronosDMS.Objects;
+using KronosDMS.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,18 @@ namespace KronosDMS_Server
         public int Port { get; set; } = 8080;
         public string DefaultGroup { get; set; } = "Default";
         public int MaxSearchResults { get; set; } = 100;
+
+        public ServerInfo ServerInfo
+        {
+            get
+            {
+                return Common.ServerInfo;
+            }
+            set
+            {
+                Common.ServerInfo = value;
+            }
+        }
         
         public void Save()
         {
