@@ -4,6 +4,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+	<BaseOutputPath>..\..\bin\$(AssemblyName)\</BaseOutputPath>
+	<BaseIntermediateOutputPath>..\..\bin-int\$(AssemblyName)\</BaseIntermediateOutputPath>
     <ApplicationIcon />
     <StartupObject />
   </PropertyGroup>

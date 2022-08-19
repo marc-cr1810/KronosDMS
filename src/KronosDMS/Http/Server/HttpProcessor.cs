@@ -80,7 +80,6 @@ namespace KronosDMS.Http.Server
 
             inputStream.Close();
             inputStream = null;
-
         }
 
         // this formats the HTTP response...

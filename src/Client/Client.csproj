@@ -6,6 +6,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>KronosDMS_Client</RootNamespace>
     <Version>$([System.DateTime]::Now.ToString("yy.MM.dd-rHHmm"))</Version>
+	<BaseOutputPath>..\..\bin\$(AssemblyName)\</BaseOutputPath>
+	<BaseIntermediateOutputPath>..\..\bin-int\$(AssemblyName)\</BaseIntermediateOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
