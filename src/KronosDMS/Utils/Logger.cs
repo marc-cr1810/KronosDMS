@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KronosDMS_Client
+namespace KronosDMS.Utils
 {
     public static class Logger
     {
@@ -32,7 +32,18 @@ namespace KronosDMS_Client
             item.Source = source;
 
             LogList.Add(item);
+
+            ConsoleColor currentColor = Console.ForegroundColor;
+            Console.ForegroundColor = level == LogLevel.OK ? ConsoleColor.Green :
+                                      level == LogLevel.WARN ? ConsoleColor.Yellow :
+                                      level == LogLevel.ERROR ? ConsoleColor.Red :
+                                      level == LogLevel.FATAL ? ConsoleColor.DarkRed :
+                                      ConsoleColor.White;
+
             Console.WriteLine(item.ToString());
+            foreach (string s in item.Details.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                Console.WriteLine("\t" + s);
+            Console.ForegroundColor = currentColor;
 
             string logFile = $"{LogPath}/{DateTime.Now.ToString("yyyy-MM-dd")}.log";
 

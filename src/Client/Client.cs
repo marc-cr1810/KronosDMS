@@ -28,7 +28,7 @@ namespace KronosDMS_Client
         public static Theme ActiveTheme;
 
         public static bool Disconnected = true;
-        public static readonly bool AutoUpdate = false;
+        public static readonly bool AutoUpdate = true;
         public static MainWindow MainWindow { get; private set; }
 
         /// <summary>

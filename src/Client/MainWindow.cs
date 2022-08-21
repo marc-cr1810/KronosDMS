@@ -1,6 +1,7 @@
 ﻿using KronosDMS.Api;
 using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
+using KronosDMS.Utils;
 using KronosDMS_Client.Forms;
 using System;
 using System.Collections.Generic;

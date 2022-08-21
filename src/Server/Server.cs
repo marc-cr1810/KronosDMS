@@ -28,42 +28,41 @@ namespace KronosDMS_Server
 
         public static void Main(string[] args)
         {
-            KConsole.WriteColored(System.ConsoleColor.DarkCyan, "[KronosDMS Server] Initializing server... ");
+            Logger.Init();
+
+            Logger.Log("Initializing server... ");
 
             Load();
 
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
+            Logger.Log($"   Use Encryption: {Config.ServerInfo.UseEncryption}");
+            Logger.Log($"   Client version: {UpdateConfig.UpdateInfo.Client.Version}");
+            Logger.Log($"  Updater version: {UpdateConfig.UpdateInfo.Updater.Version}");
+            Logger.Log($"      Makes count: {Makes.Makes.Count}");
+            Logger.Log($"      Parts count: {Parts.Parts.Count}");
+            Logger.Log($"       Kits count");
+            Logger.Log($"       ├─── General: {Kits.Kits.Count}");
+            Logger.Log($"       └─── Recalls: {Recalls.Recalls.Count}");
 
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"   Use Encryption: {Config.ServerInfo.UseEncryption}");
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"   Client version: {UpdateConfig.UpdateInfo.Client.Version}");
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"  Updater version: {UpdateConfig.UpdateInfo.Updater.Version}");
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"      Makes count: {Makes.Makes.Count}");
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"      Parts count: {Parts.Parts.Count}");
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"       Kits count");
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"       ├─── General: {Kits.Kits.Count}");
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"       └─── Recalls: {Recalls.Recalls.Count}");
+            Logger.Log("Initialized server", LogLevel.OK);
 
-            log4net.Config.XmlConfigurator.Configure();
-
-            KConsole.WriteColored(System.ConsoleColor.DarkCyan, "[KronosDMS Server] Configuring URL routes... ");
+            Logger.Log("Configuring URL routes... ");
             List<Route> route_config = Routes.GetRoutes();
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
 
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"  Routes");
+            Logger.Log($"  Routes");
             for (int i = 0; i < route_config.Count; i++)
             {
                 string prefix = i < route_config.Count - 1 ? "  ├─── " : "  └─── ";
-                KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"{prefix}{route_config[i].Name}\t{route_config[i].UrlRegex}");
+                Logger.Log($"{prefix}{route_config[i].Name}\t{route_config[i].UrlRegex}");
             }
 
-            KConsole.WriteColored(System.ConsoleColor.DarkCyan, "[KronosDMS Server] Starting server... ");
+            Logger.Log("Configured routes successfully", LogLevel.OK);
+
+            Logger.Log("Starting server... ");
             HttpServer httpServer = new HttpServer(Config.Port, route_config);
 
             Thread thread = new Thread(new ThreadStart(httpServer.Listen));
             thread.Start();
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGreen, "Done");
-
-            KConsole.WriteColoredLine(System.ConsoleColor.DarkGray, $"  Running server on port: {Config.Port}");
+            Logger.Log("Server started", LogLevel.OK, $"Running server on port: {Config.Port}");
         }
 
         public static void Load()

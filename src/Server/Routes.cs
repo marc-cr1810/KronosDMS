@@ -2,6 +2,7 @@
 using KronosDMS.Http.Server.RouteHandlers;
 using KronosDMS.Objects;
 using KronosDMS.Security;
+using KronosDMS.Utils;
 using KronosDMS_Server.Handlers;
 using System.Collections.Generic;
 using System.IO;
@@ -115,7 +116,7 @@ namespace KronosDMS_Server
             UserAccount user = GetUserFromKey(request);
             if (!PermissionHandler.Has(user, permission))
             {
-                KConsole.WriteColoredLine(System.ConsoleColor.DarkRed, $"[KronosDMS Auth] User Account \"{user.Username}\" lacks permission {permission}");
+                Logger.Log($"User Account \"{user.Username}\" lacks permission {permission}", LogLevel.WARN, "", "Authentication");
                 return false;
             }
             return true;
