@@ -50,20 +50,12 @@ namespace KronosDMS.Http.Server
             {
                 try
                 {
-                    Console.WriteLine("[{0}] {1} {2} {3} \"{4}\"", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
-                        response.StatusCode,
-                        request.Url,
-                        response.ReasonPhrase,
-                        Encoding.UTF8.GetString(response.Content));
+                    Logger.Log($"{response.StatusCode} {request.Url} {response.ReasonPhrase} \"{Encoding.UTF8.GetString(response.Content)}\"");
                 } catch (Exception ex)
                 {
-                    Console.WriteLine("[{0}] {1} {2} {3}", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
-                        response.StatusCode,
-                        request.Url,
-                        response.ReasonPhrase);
+                    Logger.Log($"{response.StatusCode} {request.Url} {response.ReasonPhrase}");
                 }
             }
-
 
             // build a default response for errors
             if (response.Content == null)

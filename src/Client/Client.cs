@@ -81,7 +81,6 @@ namespace KronosDMS_Client
         {
             if (args.Count() == 2)
             {
-                Logger.Log("Logging in with account details from startup arguments", LogLevel.INFO, $"Username: {args[0]}\nPassword Hash: {args[1].Substring(0, 4)}****");
                 Requester.BaseAPIAddr = $"http://{Config.IPAddress}";
 
                 PingResponse ping = new Ping().PerformRequestAsync().Result;
@@ -96,6 +95,13 @@ namespace KronosDMS_Client
                 ServerGetInfo serverGetInfo = new ServerGetInfo();
                 Common.ServerInfo = serverGetInfo.PerformRequestAsync().Result.ServerInfo;
 
+                if (!Common.ServerInfo.UseEncryption)
+                    Logger.Log("This server does not use encrypted messages!", LogLevel.WARN, 
+                        "This means that all messages to and from the server\n" +
+                        "can be visible to anyone peeking around on the\n" +
+                        "network");
+
+                Logger.Log("Logging in with account details from startup arguments", LogLevel.INFO, $"Username: {args[0]}\nPassword Hash: {args[1].Substring(0, 4)}****");
                 AccountLoginResponse response = new AccountLogin(args[0], args[1], true).PerformRequestAsync().Result;
 
                 try

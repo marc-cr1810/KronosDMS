@@ -1,4 +1,5 @@
 ﻿using KronosDMS.Files;
+using KronosDMS.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -131,10 +132,7 @@ namespace KronosDMS.Objects
 
                     AccessTokenAccounts.Add(user.AccessToken, user.ID);
 
-                    Console.WriteLine("[{0}] User Account {1} \"{2} {3}\" logged in", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
-                        user.Username,
-                        user.FirstName,
-                        user.LastName);
+                    Logger.Log($"User Account {user.Username} \"{user.FirstName} {user.LastName}\" logged in");
 
                     return JsonConvert.SerializeObject(user);
                 }
@@ -164,10 +162,8 @@ namespace KronosDMS.Objects
                     File.Accounts[a.Key] = user;
                     File.Write();
 
-                    Console.WriteLine("[{0}] User Account {1} \"{2} {3}\" logged out", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
-                        user.Username,
-                        user.FirstName,
-                        user.LastName);
+
+                    Logger.Log($"User Account {user.Username} \"{user.FirstName} {user.LastName}\" logged out");
 
                     return "{}";
                 }
