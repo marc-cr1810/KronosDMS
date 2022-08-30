@@ -1,0 +1,6 @@
+[submodule "deps/ImGui.NET"]
+	path = deps/ImGui.NET
+	url = https://github.com/mellinoe/ImGui.NET.git
+[submodule "deps/veldrid"]
+	path = deps/veldrid
+	url = https://github.com/marc-cr1810/veldrid.git

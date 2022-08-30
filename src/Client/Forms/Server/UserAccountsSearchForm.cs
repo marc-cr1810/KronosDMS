@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Server
 {
-    public partial class UserAccountsSearchForm : Window
+    public partial class UserAccountsSearchForm : FormWindow
     {
         public UserAccount Result;
 
@@ -71,7 +71,7 @@ namespace KronosDMS_Client.Forms.Server
 
             UserAccountsSearchResponse response = new UserAccountsSearch(id).PerformRequestAsync().Result;
             Result = response.UserAccounts[id];
-            Client.MainWindow.CloseForm(this);
+            Client.MainFormWindow.CloseForm(this);
         }
     }
 }

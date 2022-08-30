@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Server
 {
-    public partial class UserGroupsForm : Window
+    public partial class UserGroupsForm : FormWindow
     {
         private bool NewGroup = false;
         private string GroupName = null;
@@ -85,7 +85,7 @@ namespace KronosDMS_Client.Forms.Server
                 else
                 {
                     UserGroupsSearchForm form = new UserGroupsSearchForm(this.textGroupName.Text);
-                    Client.MainWindow.OpenFormDialog(form);
+                    Client.MainFormWindow.OpenFormDialog(form);
                     FillDetails(form.GroupName, form.Result);
                     form.Dispose();
                 }
@@ -96,7 +96,7 @@ namespace KronosDMS_Client.Forms.Server
         private KeyValuePair<string, Group> SearchForGroup(string id)
         {
             UserGroupsSearchForm form = new UserGroupsSearchForm(this.textGroupName.Text);
-            Client.MainWindow.OpenFormDialog(form);
+            Client.MainFormWindow.OpenFormDialog(form);
             KeyValuePair<string, Group> g = new KeyValuePair<string, Group>(form.GroupName, form.Result);
             form.Dispose();
             return g;

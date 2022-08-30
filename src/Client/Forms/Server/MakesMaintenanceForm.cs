@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Server
 {
-    public partial class MakesMaintenanceForm : Window
+    public partial class MakesMaintenanceForm : FormWindow
     {
         private bool Dialog = false;
         private bool NewMake = false;
@@ -92,7 +92,7 @@ namespace KronosDMS_Client.Forms.Server
                 else
                 {
                     MakesSearchForm form = new MakesSearchForm(this.textMakeID.Text);
-                    Client.MainWindow.OpenFormDialog(form);
+                    Client.MainFormWindow.OpenFormDialog(form);
                     FillDetails(form.Result);
                     form.Dispose();
                 }
@@ -103,7 +103,7 @@ namespace KronosDMS_Client.Forms.Server
         private Make SearchForMake(string id)
         {
             MakesSearchForm form = new MakesSearchForm(id);
-            Client.MainWindow.OpenFormDialog(form);
+            Client.MainFormWindow.OpenFormDialog(form);
             Make m = form.Result;
             form.Dispose();
             return m;

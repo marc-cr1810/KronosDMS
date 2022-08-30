@@ -1,12 +1,31 @@
-﻿using Newtonsoft.Json;
+﻿using ImGuiNET;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Numerics;
 
 namespace KronosDMS_Client
 {
     public struct Theme
     {
+        public struct ThemeSettings
+        {
+            public struct RenderSettings
+            {
+                public bool WindowBorder;
+                public bool FrameBorder;
+                public bool PopupBorder;
+
+                public bool AntiAliasedLines;
+                public bool AntiAliasedLinesUseTex;
+                public bool AntiAliasedFill;
+            }
+
+            public string Font;
+            public RenderSettings Render;
+        }
+
         public struct ThemeColors
         {
             public struct TextColours
@@ -28,45 +47,106 @@ namespace KronosDMS_Client
 
             public ButtonColors Button;
 
+            public Dictionary<string, Vector4> ImGuiColors;
         }
 
         public string Name;
+        public ThemeSettings Settings;
         public ThemeColors Colors;
+
+        public void Load()
+        {
+            bool edited = false;
+            ImGuiStylePtr style = ImGui.GetStyle();
+
+            SetImGuiStyle();
+
+            if (Colors.ImGuiColors == null)
+                Colors.ImGuiColors = new Dictionary<string, Vector4>();
+
+            for (int i = 0; i < style.Colors.Count; i++)
+            {
+                string name = ImGui.GetStyleColorName((ImGuiCol)i);
+                if (Colors.ImGuiColors.ContainsKey(name))
+                {
+                    style.Colors[i] = Colors.ImGuiColors[name];
+                }
+                else
+                {
+                    Colors.ImGuiColors.Add(name, style.Colors[i]);
+                    edited = true;
+                }
+            }
+
+            if (edited)
+                Save();
+        }
 
         public void Save()
         {
+            ImGuiStylePtr style = ImGui.GetStyle();
+
+            Settings.Render.WindowBorder = style.WindowBorderSize > 0.0f ? true : false;
+            Settings.Render.FrameBorder = style.FrameBorderSize > 0.0f ? true : false;
+            Settings.Render.PopupBorder = style.PopupBorderSize > 0.0f ? true : false;
+            Settings.Render.AntiAliasedLines = style.AntiAliasedLines;
+            Settings.Render.AntiAliasedLinesUseTex = style.AntiAliasedLinesUseTex;
+            Settings.Render.AntiAliasedFill = style.AntiAliasedFill;
+
+            if (Colors.ImGuiColors == null)
+                Colors.ImGuiColors = new Dictionary<string, Vector4>();
+            for (int i = 0; i < style.Colors.Count; i++)
+            {
+                string name = ImGui.GetStyleColorName((ImGuiCol)i);
+                if (Colors.ImGuiColors.ContainsKey(name))
+                {
+                    Colors.ImGuiColors[name] = style.Colors[i];
+                }
+                else
+                {
+                    Colors.ImGuiColors.Add(name, style.Colors[i]);
+                }
+            }
             ThemeManager.SaveTheme(this);
         }
-    }
 
-    public class ThemeManager
-    {
-        public static Theme LoadTheme(string theme)
+        public void SetImGuiStyle()
         {
-            Theme loadedTheme = new Theme();
-            try
+            ImGuiStylePtr style = ImGui.GetStyle();
+
+            style.WindowBorderSize = Settings.Render.WindowBorder ? 1.0f : 0.0f;
+            style.FrameBorderSize = Settings.Render.FrameBorder ? 1.0f : 0.0f;
+            style.PopupBorderSize = Settings.Render.PopupBorder ? 1.0f : 0.0f;
+
+            style.AntiAliasedLines = Settings.Render.AntiAliasedLines;
+            style.AntiAliasedLinesUseTex = Settings.Render.AntiAliasedLinesUseTex;
+            style.AntiAliasedFill = Settings.Render.AntiAliasedFill;
+        }
+
+        public void SetImGuiColors()
+        {
+            if (Colors.ImGuiColors == null)
+                return;
+
+            ImGuiStylePtr style = ImGui.GetStyle();
+            for (int i = 0; i < style.Colors.Count; i++)
             {
-                loadedTheme = JsonConvert.DeserializeObject<Theme>(File.ReadAllText($"themes/{theme}.json"));
+                string name = ImGui.GetStyleColorName((ImGuiCol)i);
+                if (Colors.ImGuiColors.ContainsKey(name))
+                {
+                    style.Colors[i] = Colors.ImGuiColors[name];
+                }
             }
-            catch { }
-            return loadedTheme;
         }
 
-        public static void SaveTheme(Theme theme)
+        public static Vector4 ColorToVec4(Color color)
         {
-            File.WriteAllText($"themes/{theme.Name}.json", JsonConvert.SerializeObject(theme, Formatting.Indented));
-        }
+            float r = (float)color.R / 255;
+            float g = (float)color.G / 255;
+            float b = (float)color.B / 255;
+            float a = (float)color.A / 255;
 
-        public static string[] GetThemes()
-        {
-            List<string> result = new List<string>();
-
-            DirectoryInfo d = new DirectoryInfo("themes");
-
-            foreach (FileInfo file in d.GetFiles("*.json"))
-                result.Add(file.Name.Split('.')[0]);
-
-            return result.ToArray();
+            return new Vector4(r, g, b, a);
         }
     }
 }

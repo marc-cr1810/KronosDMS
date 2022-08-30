@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class KitsSearchForm : Window
+    public partial class KitsSearchForm : FormWindow
     {
         private bool IsDialog;
         public Kit Result;
@@ -94,8 +94,8 @@ namespace KronosDMS_Client.Forms.Parts
             KitsSearchResponse response = new KitsSearch(make, model, number, description).PerformRequestAsync().Result;
             Result = response.Kits[id];
             if (!IsDialog)
-                Client.MainWindow.OpenForm(new KitForm(Result));
-            Client.MainWindow.CloseForm(this);
+                Client.MainFormWindow.OpenForm(new KitForm(Result));
+            Client.MainFormWindow.CloseForm(this);
         }
     }
 }

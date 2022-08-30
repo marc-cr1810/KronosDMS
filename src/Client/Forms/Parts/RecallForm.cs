@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class RecallForm : Window
+    public partial class RecallForm : FormWindow
     {
         private bool NewRecall = false;
         private Recall SelectedRecall = new Recall();
@@ -48,7 +48,7 @@ namespace KronosDMS_Client.Forms.Parts
                 if (response.Parts.Count != 1)
                 {
                     PartsSearchForm form = new PartsSearchForm(partNumber);
-                    Client.MainWindow.OpenFormDialog(form);
+                    Client.MainFormWindow.OpenFormDialog(form);
                     part = form.Result;
                     form.Dispose();
                 }
@@ -226,7 +226,7 @@ namespace KronosDMS_Client.Forms.Parts
                 else
                 {
                     RecallsSearchForm form = new RecallsSearchForm(this.textRecallNumber.Text);
-                    Client.MainWindow.OpenFormDialog(form);
+                    Client.MainFormWindow.OpenFormDialog(form);
                     FillDetails(form.Result);
                     form.Dispose();
                 }
@@ -247,7 +247,7 @@ namespace KronosDMS_Client.Forms.Parts
             if (response.Parts.Count != 1)
             {
                 PartsSearchForm form = new PartsSearchForm(textPartNumber.Text);
-                Client.MainWindow.OpenFormDialog(form);
+                Client.MainFormWindow.OpenFormDialog(form);
                 part = form.Result;
                 form.Dispose();
             }
@@ -372,7 +372,7 @@ namespace KronosDMS_Client.Forms.Parts
                     if (response.Parts.Count != 1)
                     {
                         PartsMaintenanceForm pmf = new PartsMaintenanceForm(part.Key, true, true);
-                        Client.MainWindow.OpenFormDialog(pmf);
+                        Client.MainFormWindow.OpenFormDialog(pmf);
                         if (!pmf.Saved)
                             continue;
                         p = pmf.SelectedPart;
@@ -394,7 +394,7 @@ namespace KronosDMS_Client.Forms.Parts
         private void buttonRecallSearch_Click(object sender, EventArgs e)
         {
             RecallsSearchForm form = new RecallsSearchForm();
-            Client.MainWindow.OpenFormDialog(form);
+            Client.MainFormWindow.OpenFormDialog(form);
             FillDetails(form.Result);
             form.Dispose();
         }

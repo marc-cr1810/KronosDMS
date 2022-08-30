@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{6591FEE2-A52B-4D98-9604-F77AC3CA424A}"
 EndProject
@@ -13,7 +13,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientUpdater", "ClientUpdater\ClientUpdater.csproj", "{0B04436A-ACEE-49EF-B071-B53740AD3AEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientInstaller", "ClientInstaller\ClientInstaller.csproj", "{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientInstaller", "ClientInstaller\ClientInstaller.csproj", "{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veldrid", "..\deps\veldrid\src\Veldrid\Veldrid.csproj", "{CE7FB262-6AFF-4A36-82C6-033C523513AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veldrid.StartupUtilities", "..\deps\veldrid\src\Veldrid.StartupUtilities\Veldrid.StartupUtilities.csproj", "{79D72231-1CE5-4183-96EA-D32D2929D5EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImGui.NET", "..\deps\ImGui.NET\src\ImGui.NET\ImGui.NET.csproj", "{93A08712-AA59-4206-AE46-10390A36E23E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veldrid.MetalBindings", "..\deps\veldrid\src\Veldrid.MetalBindings\Veldrid.MetalBindings.csproj", "{C2E1AD78-3869-4344-B0DE-FB624CEBE705}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veldrid.SDL2", "..\deps\veldrid\src\Veldrid.SDL2\Veldrid.SDL2.csproj", "{99344AC8-1804-4AE6-94FC-AF884A9388DF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Veldrid.OpenGLBindings", "..\deps\veldrid\src\Veldrid.OpenGLBindings\Veldrid.OpenGLBindings.csproj", "{6992A47E-EF49-45AD-9BD9-CBCDC7B92D0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +57,30 @@ Global
 		{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8AADCEB-D083-4AF4-9869-EB73B10A9B18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE7FB262-6AFF-4A36-82C6-033C523513AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE7FB262-6AFF-4A36-82C6-033C523513AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE7FB262-6AFF-4A36-82C6-033C523513AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE7FB262-6AFF-4A36-82C6-033C523513AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79D72231-1CE5-4183-96EA-D32D2929D5EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79D72231-1CE5-4183-96EA-D32D2929D5EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79D72231-1CE5-4183-96EA-D32D2929D5EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79D72231-1CE5-4183-96EA-D32D2929D5EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93A08712-AA59-4206-AE46-10390A36E23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93A08712-AA59-4206-AE46-10390A36E23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93A08712-AA59-4206-AE46-10390A36E23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93A08712-AA59-4206-AE46-10390A36E23E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2E1AD78-3869-4344-B0DE-FB624CEBE705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2E1AD78-3869-4344-B0DE-FB624CEBE705}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2E1AD78-3869-4344-B0DE-FB624CEBE705}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2E1AD78-3869-4344-B0DE-FB624CEBE705}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99344AC8-1804-4AE6-94FC-AF884A9388DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99344AC8-1804-4AE6-94FC-AF884A9388DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99344AC8-1804-4AE6-94FC-AF884A9388DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99344AC8-1804-4AE6-94FC-AF884A9388DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6992A47E-EF49-45AD-9BD9-CBCDC7B92D0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6992A47E-EF49-45AD-9BD9-CBCDC7B92D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6992A47E-EF49-45AD-9BD9-CBCDC7B92D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6992A47E-EF49-45AD-9BD9-CBCDC7B92D0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

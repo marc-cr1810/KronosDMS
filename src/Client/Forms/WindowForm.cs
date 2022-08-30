@@ -2,13 +2,13 @@
 
 namespace KronosDMS_Client.Forms
 {
-    public partial class Window : Form
+    public partial class FormWindow : Form
     {
         private FormWindowState PrevState = FormWindowState.Normal;
         public FormWindowState CurrentWindowState = FormWindowState.Normal;
         public bool IsDialog = false;
 
-        public Window()
+        public FormWindow()
         {
             this.InitializeComponent();
 
@@ -44,7 +44,7 @@ namespace KronosDMS_Client.Forms
 
         private void Window_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Client.MainWindow.CloseForm(this);
+            Client.MainFormWindow.CloseForm(this);
         }
 
         public virtual void Save() { }

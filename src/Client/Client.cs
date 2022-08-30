@@ -4,6 +4,8 @@ using KronosDMS.Api.Responses;
 using KronosDMS.Http.Server;
 using KronosDMS.Objects;
 using KronosDMS.Utils;
+using KronosDMS_Client.Forms;
+using KronosDMS_Client.Render;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -28,8 +30,10 @@ namespace KronosDMS_Client
         public static Theme ActiveTheme;
 
         public static bool Disconnected = true;
-        public static readonly bool AutoUpdate = true;
+        public static readonly bool AutoUpdate = false;
+
         public static MainWindow MainWindow { get; private set; }
+        public static MainFormWindow MainFormWindow { get; private set; }
 
         /// <summary>
         ///  The main entry point for the application.
@@ -70,8 +74,19 @@ namespace KronosDMS_Client
             CheckThemesInstall();
 
             // Run main app window
+
+            MainWindow = new MainWindow("Test Window");
+            if (!MainWindow.Show())
+            {
+                if (Logger.Get(Logger.Count() - 1).Level == LogLevel.ERROR)
+                {
+                    // Show the windows forms window instead if the Render window crashes
+                }
+                Exit();
+            }
+
             Logger.Log("Launching main client window");
-            Application.Run(MainWindow = new MainWindow());
+            Application.Run(MainFormWindow = new MainFormWindow());
 
             Response logout = new AccountLogout(Credentials.Username, Credentials.PasswordHash).PerformRequestAsync().Result;
             Logger.Log("Closed KronosDMS Client application", LogLevel.OK);

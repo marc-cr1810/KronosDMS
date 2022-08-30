@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class ROCheckedForm : Window
+    public partial class ROCheckedForm : FormWindow
     {
         public ROCheckedForm()
         {
@@ -51,7 +51,7 @@ namespace KronosDMS_Client.Forms.Parts
         private void addToolStripButton_Click(object sender, EventArgs e)
         {
             ROCheckedSubmitForm form = new ROCheckedSubmitForm();
-            Client.MainWindow.OpenFormDialog(form);
+            Client.MainFormWindow.OpenFormDialog(form);
             form.Dispose();
             return;
         }

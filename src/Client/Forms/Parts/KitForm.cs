@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class KitForm : Window
+    public partial class KitForm : FormWindow
     {
         private bool NewKit = true;
         private Kit SelectedKit = new Kit();
@@ -53,7 +53,7 @@ namespace KronosDMS_Client.Forms.Parts
                 if (response.Parts.Count != 1)
                 {
                     PartsSearchForm form = new PartsSearchForm(partNumber);
-                    Client.MainWindow.OpenFormDialog(form);
+                    Client.MainFormWindow.OpenFormDialog(form);
                     part = form.Result;
                     form.Dispose();
                 }
@@ -154,7 +154,7 @@ namespace KronosDMS_Client.Forms.Parts
         private void SearchForKit(string number)
         {
             KitsSearchForm form = new KitsSearchForm(number);
-            Client.MainWindow.OpenFormDialog(form);
+            Client.MainFormWindow.OpenFormDialog(form);
             FillDetails(form.Result);
             form.Dispose();
             return;
@@ -171,7 +171,7 @@ namespace KronosDMS_Client.Forms.Parts
                 if (response.Kits.Count != 1)
                 {
                     KitsSearchForm form = new KitsSearchForm(this.textKitNumber.Text);
-                    Client.MainWindow.OpenFormDialog(form);
+                    Client.MainFormWindow.OpenFormDialog(form);
                     FillDetails(form.Result);
                     form.Dispose();
                     return;
@@ -201,7 +201,7 @@ namespace KronosDMS_Client.Forms.Parts
             if (response.Parts.Count != 1)
             {
                 PartsSearchForm form = new PartsSearchForm(textPartNumber.Text);
-                Client.MainWindow.OpenFormDialog(form);
+                Client.MainFormWindow.OpenFormDialog(form);
                 part = form.Result;
                 form.Dispose();
             }
@@ -321,7 +321,7 @@ namespace KronosDMS_Client.Forms.Parts
                     if (response.Parts.Count != 1)
                     {
                         PartsMaintenanceForm pmf = new PartsMaintenanceForm(part.Key, true, true);
-                        Client.MainWindow.OpenFormDialog(pmf);
+                        Client.MainFormWindow.OpenFormDialog(pmf);
                         if (!pmf.Saved)
                             continue;
                         p = pmf.SelectedPart;

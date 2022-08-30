@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Server
 {
-    public partial class UserGroupsSearchForm : Window
+    public partial class UserGroupsSearchForm : FormWindow
     {
         private bool IsDialog;
         public string GroupName;
@@ -73,8 +73,8 @@ namespace KronosDMS_Client.Forms.Server
             GroupName = ListGroups.SelectedItems[0].Text;
             Result = response.Groups[id];
             if (!IsDialog)
-                Client.MainWindow.OpenForm(new UserGroupsForm(GroupName, Result));
-            Client.MainWindow.CloseForm(this);
+                Client.MainFormWindow.OpenForm(new UserGroupsForm(GroupName, Result));
+            Client.MainFormWindow.CloseForm(this);
         }
     }
 }

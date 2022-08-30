@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Server
 {
-    public partial class UserAccountsForm : Window
+    public partial class UserAccountsForm : FormWindow
     {
         bool NewUserAccount = false;
         UserAccount SelectedAccount = new UserAccount();
@@ -112,7 +112,7 @@ namespace KronosDMS_Client.Forms.Server
                 else
                 {
                     UserAccountsSearchForm form = new UserAccountsSearchForm("", this.textUsername.Text);
-                    Client.MainWindow.OpenFormDialog(form);
+                    Client.MainFormWindow.OpenFormDialog(form);
                     FillDetails(form.Result);
                     form.Dispose();
                 }
@@ -124,7 +124,7 @@ namespace KronosDMS_Client.Forms.Server
         private void buttonSearchID_Click(object sender, EventArgs e)
         {
             UserAccountsSearchForm form = new UserAccountsSearchForm(textUserID.Text, "");
-            Client.MainWindow.OpenFormDialog(form);
+            Client.MainFormWindow.OpenFormDialog(form);
             FillDetails(form.Result);
             form.Dispose();
         }
@@ -132,7 +132,7 @@ namespace KronosDMS_Client.Forms.Server
         private void buttonSearchUsername_Click(object sender, EventArgs e)
         {
             UserAccountsSearchForm form = new UserAccountsSearchForm("", textUsername.Text);
-            Client.MainWindow.OpenFormDialog(form);
+            Client.MainFormWindow.OpenFormDialog(form);
             FillDetails(form.Result);
             form.Dispose();
         }

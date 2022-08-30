@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Account
 {
-    public partial class ChangePassword : Window
+    public partial class ChangePassword : FormWindow
     {
         public ChangePassword()
         {

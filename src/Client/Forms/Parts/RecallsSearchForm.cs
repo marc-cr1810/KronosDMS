@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class RecallsSearchForm : Window
+    public partial class RecallsSearchForm : FormWindow
     {
         private bool IsDialog;
         public Recall Result;
@@ -94,8 +94,8 @@ namespace KronosDMS_Client.Forms.Parts
             RecallsSearchResponse response = new RecallsSearch(make, model, number, description).PerformRequestAsync().Result;
             Result = response.Recalls[id];
             if (!IsDialog)
-                Client.MainWindow.OpenForm(new RecallForm(Result));
-            Client.MainWindow.CloseForm(this);
+                Client.MainFormWindow.OpenForm(new RecallForm(Result));
+            Client.MainFormWindow.CloseForm(this);
         }
     }
 }

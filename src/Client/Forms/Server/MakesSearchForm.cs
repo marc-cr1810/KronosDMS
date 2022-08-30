@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Server
 {
-    public partial class MakesSearchForm : Window
+    public partial class MakesSearchForm : FormWindow
     {
         private bool IsDialog;
         public Make Result;
@@ -71,8 +71,8 @@ namespace KronosDMS_Client.Forms.Server
             MakesSearchResponse response = new MakesSearch(id).PerformRequestAsync().Result;
             Result = response.Makes[id];
             if (!IsDialog)
-                Client.MainWindow.OpenForm(new MakesMaintenanceForm(Result));
-            Client.MainWindow.CloseForm(this);
+                Client.MainFormWindow.OpenForm(new MakesMaintenanceForm(Result));
+            Client.MainFormWindow.CloseForm(this);
         }
     }
 }

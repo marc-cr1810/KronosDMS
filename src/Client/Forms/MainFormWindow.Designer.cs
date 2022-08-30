@@ -1,7 +1,7 @@
 ﻿
-namespace KronosDMS_Client
+namespace KronosDMS_Client.Forms
 {
-    partial class MainWindow
+    partial class MainFormWindow
     {
         /// <summary>
         ///  Required designer variable.

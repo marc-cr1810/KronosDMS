@@ -8,11 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace KronosDMS_Client
+namespace KronosDMS_Client.Forms
 {
-    public partial class MainWindow : Form
+    public partial class MainFormWindow : Form
     {
-        public MainWindow()
+        public MainFormWindow()
         {
             InitializeComponent();
 
@@ -43,7 +43,7 @@ namespace KronosDMS_Client
                 this.Text = $"KronosDMS v{Application.ProductVersion} | {status}";
         }
 
-        public void OpenForm(Window window)
+        public void OpenForm(FormWindow window)
         {
             //window.StartPosition = FormStartPosition.CenterParent;
             window.MdiParent = this;
@@ -54,13 +54,13 @@ namespace KronosDMS_Client
             FileMenuWindowClose.Enabled = true;
         }
 
-        public void OpenFormDialog(Window window)
+        public void OpenFormDialog(FormWindow window)
         {
             window.IsDialog = true;
             window.ShowDialog();
         }
 
-        public void CloseForm(Window window)
+        public void CloseForm(FormWindow window)
         {
             //window.Close();
             window.Dispose();
@@ -188,7 +188,7 @@ namespace KronosDMS_Client
         {
             if (this.ActiveMdiChild is null)
                 return;
-            Window w = (Window)this.ActiveMdiChild;
+            FormWindow w = (FormWindow)this.ActiveMdiChild;
             w.Save();
         }
 
@@ -196,7 +196,7 @@ namespace KronosDMS_Client
         {
             if (this.ActiveMdiChild is null)
                 return;
-            Window w = (Window)this.ActiveMdiChild;
+            FormWindow w = (FormWindow)this.ActiveMdiChild;
             w.Delete();
         }
 
@@ -204,7 +204,7 @@ namespace KronosDMS_Client
         {
             if (this.ActiveMdiChild is null)
                 return;
-            Window w = (Window)this.ActiveMdiChild;
+            FormWindow w = (FormWindow)this.ActiveMdiChild;
             w.ImportCSV();
         }
 
@@ -212,7 +212,7 @@ namespace KronosDMS_Client
         {
             if (this.ActiveMdiChild is null)
                 return;
-            Window w = (Window)this.ActiveMdiChild;
+            FormWindow w = (FormWindow)this.ActiveMdiChild;
             w.ExportCSV();
         }
 
@@ -241,7 +241,7 @@ namespace KronosDMS_Client
             if (this.ActiveMdiChild is null)
                 return;
 
-            Window w = (Window)this.ActiveMdiChild;
+            FormWindow w = (FormWindow)this.ActiveMdiChild;
             if (w.CurrentWindowState == FormWindowState.Normal)
                 w.WindowState = FormWindowState.Minimized;
             else if (w.CurrentWindowState == FormWindowState.Maximized)
@@ -253,7 +253,7 @@ namespace KronosDMS_Client
             if (this.ActiveMdiChild is null)
                 return;
 
-            Window w = (Window)this.ActiveMdiChild;
+            FormWindow w = (FormWindow)this.ActiveMdiChild;
             if (w.CurrentWindowState == FormWindowState.Normal)
                 w.WindowState = FormWindowState.Maximized;
             else if (w.CurrentWindowState == FormWindowState.Minimized)
@@ -264,7 +264,7 @@ namespace KronosDMS_Client
         {
             if (this.ActiveMdiChild is null)
                 return;
-            Window w = (Window)this.ActiveMdiChild;
+            FormWindow w = (FormWindow)this.ActiveMdiChild;
             w.Close();
         }
     }

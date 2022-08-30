@@ -8,6 +8,7 @@
     <Version>$([System.DateTime]::Now.ToString("yy.MM.dd-rHHmm"))</Version>
 	<BaseOutputPath>..\..\bin\$(AssemblyName)\</BaseOutputPath>
 	<BaseIntermediateOutputPath>..\..\bin-int\$(AssemblyName)\</BaseIntermediateOutputPath>
+	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +17,28 @@
   </ItemGroup>
 
   <ItemGroup>
+	<ProjectReference Include="..\..\deps\ImGui.NET\src\ImGui.NET\ImGui.NET.csproj" />
+	<ProjectReference Include="..\..\deps\veldrid\src\Veldrid.StartupUtilities\Veldrid.StartupUtilities.csproj" />
+	<ProjectReference Include="..\..\deps\veldrid\src\Veldrid\Veldrid.csproj" />
     <ProjectReference Include="..\KronosDMS\KronosDMS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Shaders/GLSL/imgui-vertex.glsl" LogicalName="imgui-vertex.glsl" />
+    <EmbeddedResource Include="Shaders/GLSL/imgui-frag.glsl" LogicalName="imgui-frag.glsl" />
+    <EmbeddedResource Include="Shaders/HLSL/imgui-vertex.hlsl.bytes" LogicalName="imgui-vertex.hlsl.bytes" />
+    <EmbeddedResource Include="Shaders/HLSL/imgui-frag.hlsl.bytes" LogicalName="imgui-frag.hlsl.bytes" />
+    <EmbeddedResource Include="Shaders/SPIR-V/imgui-vertex.spv" LogicalName="imgui-vertex.spv" />
+    <EmbeddedResource Include="Shaders/SPIR-V/imgui-frag.spv" LogicalName="imgui-frag.spv" />
+    <EmbeddedResource Include="Shaders/Metal/imgui-vertex.metallib" LogicalName="imgui-vertex.metallib" />
+    <EmbeddedResource Include="Shaders/Metal/imgui-frag.metallib" LogicalName="imgui-frag.metallib" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\deps\veldrid\src\Veldrid.SDL2\native\win-x64\SDL2.dll" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\deps\ImGui.NET\deps\cimgui\win-x64\cimgui.dll" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\deps\ImGui.NET\deps\cimgui\osx-x64\cimgui.dylib" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\deps\ImGui.NET\deps\cimgui\linux-x64\cimgui.so" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

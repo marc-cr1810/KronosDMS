@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class ROCheckedSubmitForm : Window
+    public partial class ROCheckedSubmitForm : FormWindow
     {
         private List<RepairOrder> RepairOrders = new List<RepairOrder>();
 
@@ -65,7 +65,7 @@ namespace KronosDMS_Client.Forms.Parts
 
         private void CloseForm()
         {
-            Client.MainWindow.CloseForm(this);
+            Client.MainFormWindow.CloseForm(this);
         }
 
         //

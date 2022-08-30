@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace KronosDMS_Client.Forms.Parts
 {
-    public partial class PartsMaintenanceForm : Window
+    public partial class PartsMaintenanceForm : FormWindow
     {
         private bool Dialog = false;
         private bool NewPart = false;
@@ -113,7 +113,7 @@ namespace KronosDMS_Client.Forms.Parts
                 else
                 {
                     PartsSearchForm form = new PartsSearchForm(this.textPartNumber.Text);
-                    Client.MainWindow.OpenFormDialog(form);
+                    Client.MainFormWindow.OpenFormDialog(form);
                     FillDetails(form.Result);
                     form.Dispose();
                 }
@@ -124,7 +124,7 @@ namespace KronosDMS_Client.Forms.Parts
         private Part SearchForPart(string number)
         {
             PartsSearchForm form = new PartsSearchForm(number);
-            Client.MainWindow.OpenFormDialog(form);
+            Client.MainFormWindow.OpenFormDialog(form);
             Part p = form.Result;
             form.Dispose();
             return p;
