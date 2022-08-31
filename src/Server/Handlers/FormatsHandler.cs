@@ -23,7 +23,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = Server.CSVFormats.Get(name),
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else if (name == "")
@@ -34,7 +34,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = JsonConvert.SerializeObject(formats),
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
 
@@ -42,7 +42,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = "Invalid CSV Format",
                     ReasonPhrase = "NotFound",
-                    StatusCode = "404"
+                    StatusCode = HttpStatusCode.NotFound
                 };
             }
         };

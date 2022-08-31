@@ -13,7 +13,7 @@ namespace KronosDMS.Security
         {
             ContentAsUTF8 = "Incorrect permissions",
             ReasonPhrase = "Forbidden",
-            StatusCode = "403"
+            StatusCode = HttpStatusCode.Forbidden
         };
 
         public static bool Has(UserAccount user, string permission)

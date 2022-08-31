@@ -1,5 +1,6 @@
 ﻿using KronosDMS.Http.Server.Models;
 using KronosDMS.Security;
+using KronosDMS.Utils;
 
 namespace KronosDMS_Server.Handlers
 {
@@ -19,7 +20,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = result,
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -28,7 +29,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Incorrect username or password",
                         ReasonPhrase = "Unauthorized",
-                        StatusCode = "561"
+                        StatusCode = HttpStatusCode.Unauthorized
                     };
                 }
             }
@@ -48,7 +49,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = result,
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -57,7 +58,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Incorrect username or password",
                         ReasonPhrase = "Unauthorized",
-                        StatusCode = "561"
+                        StatusCode = HttpStatusCode.Unauthorized
                     };
                 }
             }
@@ -79,7 +80,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -88,7 +89,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Invalid token",
                         ReasonPhrase = "InvalidToken",
-                        StatusCode = "498"
+                        StatusCode = HttpStatusCode.InvalidToken
                     };
                 }
             }
@@ -115,7 +116,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = Server.AccountManager.Search(username, firstname, lastname, id),
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
@@ -136,7 +137,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -145,7 +146,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "User Account not modified",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -173,7 +174,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -182,7 +183,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Failed to change password",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -204,7 +205,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -213,7 +214,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "USer Account already exists",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -237,7 +238,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -246,7 +247,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "User Account already does not exist",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }

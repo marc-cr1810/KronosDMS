@@ -8,6 +8,7 @@ namespace KronosDMS.Api.Endpoints
     {
         public Ping()
         {
+            this.UsesEncryption = false;
             this.Address = new Uri(Requester.BaseAPIAddr + "/api/v1/ping");
         }
 

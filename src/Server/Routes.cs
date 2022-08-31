@@ -65,12 +65,13 @@ namespace KronosDMS_Server
                     Name = "Ping Handler",
                     UrlRegex = @"^/api/v1/ping$",
                     Method = "GET",
+                    //UsesEncryption = false,
                     Callable = (HttpRequest request) => {
                         return new HttpResponse()
                         {
                             ContentAsUTF8 = "{}",
                             ReasonPhrase = "OK",
-                            StatusCode = "200"
+                            StatusCode = HttpStatusCode.OK
                         };
                      }
                 },
@@ -79,11 +80,12 @@ namespace KronosDMS_Server
                     Name = "Installer Downloader Handler",
                     UrlRegex = @"^/installer",
                     Method = "GET",
+                    UsesEncryption = false,
                     Callable = (HttpRequest request) => {
                         if (File.Exists("data/client/installer.zip"))
                         {
                             var response = new HttpResponse();
-                            response.StatusCode = "200";
+                            response.StatusCode = HttpStatusCode.OK;
                             response.ReasonPhrase = "Ok";
                             response.Headers["Content-Type"] = QuickMimeTypeMapper.GetMimeType(".zip");
                             response.Content = File.ReadAllBytes("data/client/installer.zip");
@@ -96,7 +98,7 @@ namespace KronosDMS_Server
                             {
                                 ContentAsUTF8 = "Bad Request",
                                 ReasonPhrase = "BadRequest",
-                                StatusCode = "400"
+                                StatusCode = HttpStatusCode.BadRequest
                             };
                         }
                     }

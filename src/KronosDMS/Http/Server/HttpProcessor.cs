@@ -46,21 +46,21 @@ namespace KronosDMS.Http.Server
             HttpResponse response = RouteRequest(inputStream, outputStream, request);
 
             // just print requests that return non success codes
-            if (response.StatusCode != "200")
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 try
                 {
-                    Logger.Log($"{response.StatusCode} {request.Url} {response.ReasonPhrase} \"{Encoding.UTF8.GetString(response.Content)}\"");
+                    Logger.Log($"{response.StatusCode} {request.Url} {response.ReasonPhrase} \"{Encoding.UTF8.GetString(response.Content)}\"", LogLevel.ERROR);
                 } catch (Exception ex)
                 {
-                    Logger.Log($"{response.StatusCode} {request.Url} {response.ReasonPhrase}");
+                    Logger.Log($"{response.StatusCode} {request.Url} {response.ReasonPhrase}", LogLevel.ERROR);
                 }
             }
 
             // build a default response for errors
             if (response.Content == null)
             {
-                if (response.StatusCode != "200")
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     response.ContentAsUTF8 = string.Format("{0} {1} {2}", response.StatusCode, request.Url, response.ReasonPhrase);
                 }
@@ -92,7 +92,7 @@ namespace KronosDMS.Http.Server
 
             response.Headers["Content-Length"] = response.Content.Length.ToString();
 
-            Write(stream, string.Format("HTTP/1.0 {0} {1}\r\n", response.StatusCode, response.ReasonPhrase));
+            Write(stream, string.Format("HTTP/1.0 {0} {1}\r\n", (int)response.StatusCode, response.ReasonPhrase));
             Write(stream, string.Join("\r\n", response.Headers.Select(x => string.Format("{0}: {1}", x.Key, x.Value))));
             Write(stream, "\r\n\r\n");
 
@@ -177,7 +177,7 @@ namespace KronosDMS.Http.Server
                 return new HttpResponse()
                 {
                     ReasonPhrase = "Method Not Allowed",
-                    StatusCode = "405",
+                    StatusCode = HttpStatusCode.MethodNotAllowed,
                 };
 
             // extract the path if there is one
@@ -196,7 +196,7 @@ namespace KronosDMS.Http.Server
             try
             {
                 HttpResponse response = route.Callable(request);
-                if (Common.ServerInfo.UseEncryption && route.UsesEncryption)
+                if (Common.ServerInfo.UseEncryption && route.UsesEncryption && IsSuccessCode(response.StatusCode))
                     response.ContentAsUTF8 = Base64.To(LZMAHelper.CompressLZMA(response.Content));
                 return response;
             }
@@ -274,6 +274,17 @@ namespace KronosDMS.Http.Server
                 Headers = headers,
                 Content = content
             };
+        }
+
+        private static bool IsSuccessCode(HttpStatusCode statusCode)
+        {
+            return ((int)statusCode >= 200 && (int)statusCode <= 299) && (
+                            statusCode == HttpStatusCode.Accepted ||
+                            statusCode == HttpStatusCode.Continue ||
+                            statusCode == HttpStatusCode.Created ||
+                            statusCode == HttpStatusCode.Found ||
+                            statusCode == HttpStatusCode.OK ||
+                            statusCode == HttpStatusCode.PartialContent);
         }
 
         #endregion

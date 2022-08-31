@@ -1,4 +1,5 @@
 ﻿using KronosDMS.Objects;
+using KronosDMS.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -44,6 +45,11 @@ namespace KronosDMS.Files
 
             Parts.Add(part.Number, part);
             Write();
+
+            Logger.Log("Added a new part to file", LogLevel.INFO,
+                $"Make: {part.Make}\n" +
+                $"Number: {part.Number}\n" +
+                $"Description: {part.Description}");
             return true;
         }
 
@@ -51,6 +57,7 @@ namespace KronosDMS.Files
         {
             if (!Parts.ContainsKey(id))
                 return false;
+            Logger.Log("Removed part from file", LogLevel.INFO, $"Number: {id}");
             Parts.Remove(id);
             Write();
             return true;
@@ -69,6 +76,7 @@ namespace KronosDMS.Files
             if (!Parts.ContainsKey(part.Number))
                 return false;
 
+            Logger.Log("Modified part on file", LogLevel.INFO, $"Number: {part.Number}");
             Parts[part.Number] = part;
             Write();
             return true;

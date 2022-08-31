@@ -27,7 +27,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = Server.ROChecked.Search(number, date),
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
@@ -48,7 +48,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -57,7 +57,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "RO's already exists",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }

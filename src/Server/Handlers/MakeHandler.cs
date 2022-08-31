@@ -21,7 +21,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = Server.Makes.Search(name),
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
@@ -42,7 +42,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -51,7 +51,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Make does not exist",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -73,7 +73,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -82,7 +82,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Make already exists",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -106,7 +106,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -115,7 +115,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Make does not already exist",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }

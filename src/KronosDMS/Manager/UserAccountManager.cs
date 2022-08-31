@@ -138,6 +138,9 @@ namespace KronosDMS.Objects
                 }
             }
 
+            Logger.Log("Invalid username or password", LogLevel.WARN,
+                $"Username: {credentials.Username}\n" +
+                $"Password: {credentials.Password}");
             return "";
         }
 

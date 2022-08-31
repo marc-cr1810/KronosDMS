@@ -35,6 +35,9 @@ namespace KronosDMS.Files
 
             Recalls.Add(recall.Number, recall);
             Write();
+            Logger.Log("Created a new recall", LogLevel.INFO,
+                $"Number: {recall.Number}\n" +
+                $"Description: {recall.Description}");
             return true;
         }
 
@@ -57,6 +60,7 @@ namespace KronosDMS.Files
 
             Recalls.Remove(id);
             Write();
+            Logger.Log("Deleted a recall from file", LogLevel.INFO, $"Number: {id}");
             return true;
         }
 
@@ -79,6 +83,8 @@ namespace KronosDMS.Files
 
             Recalls[recall.Number] = recall;
             Write();
+
+            Logger.Log("Modified a recall on file", LogLevel.INFO, $"Number: {recall.Number}");
             return true;
         }
 
@@ -90,6 +96,9 @@ namespace KronosDMS.Files
             r.Locked = locked;
             Recalls[id] = r;
             Write();
+            Logger.Log("Changed the lock state on a recall", LogLevel.INFO,
+                $"Number: {id}\n" +
+                $"State: {(locked ? "Locked" : "Unlocked")}");
             return true;
         }
 

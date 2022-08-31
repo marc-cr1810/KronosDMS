@@ -17,9 +17,10 @@ namespace KronosDMS.Http.Server.Models
 
         Continue = 100,
 
-        Ok = 200,
+        OK = 200,
         Created = 201,
         Accepted = 202,
+        PartialContent = 206,
         MovedPermanently = 301,
         Found = 302,
         NotModified = 304,
@@ -27,12 +28,14 @@ namespace KronosDMS.Http.Server.Models
         Forbidden = 403,
         NotFound = 404,
         MethodNotAllowed = 405,
-        InternalServerError = 500
+        InvalidToken = 498,
+        InternalServerError = 500,
+        Unauthorized = 561
     }
 
     public class HttpResponse
     {
-        public string StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
         public string ReasonPhrase { get; set; }
         public byte[] Content { get; set; }
 

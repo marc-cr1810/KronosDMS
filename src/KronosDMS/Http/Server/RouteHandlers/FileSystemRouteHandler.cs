@@ -51,7 +51,7 @@ namespace KronosDMS.Http.Server.RouteHandlers
             {
                 return new HttpResponse
                 {
-                    StatusCode = "404",
+                    StatusCode = HttpStatusCode.NotFound,
                     ReasonPhrase = string.Format("Not Found ({0}) handler({1})", local_path, request.Route.Name),
                 };
             }
@@ -62,7 +62,7 @@ namespace KronosDMS.Http.Server.RouteHandlers
             var file_extension = Path.GetExtension(local_path);
 
             var response = new HttpResponse();
-            response.StatusCode = "200";
+            response.StatusCode = HttpStatusCode.OK;
             response.ReasonPhrase = "Ok";
             response.Headers["Content-Type"] = QuickMimeTypeMapper.GetMimeType(file_extension);
             response.Content = File.ReadAllBytes(local_path);
@@ -85,7 +85,7 @@ namespace KronosDMS.Http.Server.RouteHandlers
 
             return new HttpResponse()
             {
-                StatusCode = "200",
+                StatusCode = HttpStatusCode.OK,
                 ReasonPhrase = "Ok",
                 ContentAsUTF8 = output.ToString(),
             };

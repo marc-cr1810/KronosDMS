@@ -24,7 +24,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = PermissionHandler.GroupsFile.Search(name, level, id),
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
@@ -45,7 +45,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -54,7 +54,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "User Group already exists",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -76,7 +76,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -85,7 +85,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "User Group does not exist",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -109,7 +109,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -118,7 +118,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "User Group does not already exist",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }

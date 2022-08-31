@@ -11,7 +11,7 @@ namespace KronosDMS.Http.Server
             return new HttpResponse()
             {
                 ReasonPhrase = "InternalServerError",
-                StatusCode = "500",
+                StatusCode = HttpStatusCode.InternalServerError,
                 ContentAsUTF8 = content
             };
         }
@@ -23,7 +23,7 @@ namespace KronosDMS.Http.Server
             return new HttpResponse()
             {
                 ReasonPhrase = "NotFound",
-                StatusCode = "404",
+                StatusCode = HttpStatusCode.NotFound,
                 ContentAsUTF8 = content
             };
         }

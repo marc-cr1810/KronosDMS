@@ -43,6 +43,9 @@ namespace KronosDMS.Files
             Kit.Number = $"K{num:D6}";
             Kits.Add(Kit.Number, Kit);
             Write();
+            Logger.Log("Created a new kit", LogLevel.INFO,
+                $"Number: {Kit.Number}\n" +
+                $"Description: {Kit.Description}");
             return true;
         }
 
@@ -65,6 +68,7 @@ namespace KronosDMS.Files
 
             Kits.Remove(id);
             Write();
+            Logger.Log("Deleted a kit from file", LogLevel.INFO, $"Number: {id}");
             return true;
         }
 
@@ -87,6 +91,8 @@ namespace KronosDMS.Files
 
             Kits[kit.Number] = kit;
             Write();
+            Logger.Log("Modified a kit on file", LogLevel.INFO,
+                $"Number: {kit.Number}\n");
             return true;
         }
 
@@ -98,6 +104,9 @@ namespace KronosDMS.Files
             k.Locked = locked;
             Kits[id] = k;
             Write();
+            Logger.Log("Changed the lock state on a kit", LogLevel.INFO,
+                $"Number: {id}\n" +
+                $"State: {(locked ? "Locked" : "Unlocked")}");
             return true;
         }
 

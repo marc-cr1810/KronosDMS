@@ -25,7 +25,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = Server.Recalls.Search(make, model, number, description, id),
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
@@ -46,7 +46,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -55,7 +55,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Recall does not exist",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -77,7 +77,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -86,7 +86,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Recall already exists",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -110,7 +110,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -119,7 +119,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Recall does not already exist",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }
@@ -147,7 +147,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "{}",
                         ReasonPhrase = "OK",
-                        StatusCode = "200"
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
                 else
@@ -156,7 +156,7 @@ namespace KronosDMS_Server.Handlers
                     {
                         ContentAsUTF8 = "Recall does not exist",
                         ReasonPhrase = "NotModified",
-                        StatusCode = "304"
+                        StatusCode = HttpStatusCode.NotModified
                     };
                 }
             }

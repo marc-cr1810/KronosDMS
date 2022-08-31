@@ -19,7 +19,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = Server.Config.ServerInfo.ToJson(),
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
@@ -45,7 +45,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = "{}",
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };

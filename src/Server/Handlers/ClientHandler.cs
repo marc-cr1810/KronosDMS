@@ -22,7 +22,7 @@ namespace KronosDMS_Server.Handlers
                     if (File.Exists("data/client/update/client.zip"))
                     {
                         var response = new HttpResponse();
-                        response.StatusCode = "200";
+                        response.StatusCode = HttpStatusCode.OK;
                         response.ReasonPhrase = "Ok";
                         response.Headers["Content-Type"] = QuickMimeTypeMapper.GetMimeType(".zip");
                         response.Content = File.ReadAllBytes("data/client/update/client.zip");
@@ -34,7 +34,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = Server.UpdateConfig.ToJSON(),
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
@@ -55,7 +55,7 @@ namespace KronosDMS_Server.Handlers
                     if (File.Exists("data/client/update/updater.zip"))
                     {
                         var response = new HttpResponse();
-                        response.StatusCode = "200";
+                        response.StatusCode = HttpStatusCode.OK;
                         response.ReasonPhrase = "Ok";
                         response.Headers["Content-Type"] = QuickMimeTypeMapper.GetMimeType(".zip");
                         response.Content = File.ReadAllBytes("data/client/update/updater.zip");
@@ -67,7 +67,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = "{}",
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
@@ -87,7 +87,7 @@ namespace KronosDMS_Server.Handlers
                     if (File.Exists("data/client/themes.zip"))
                     {
                         var response = new HttpResponse();
-                        response.StatusCode = "200";
+                        response.StatusCode = HttpStatusCode.OK;
                         response.ReasonPhrase = "Ok";
                         response.Headers["Content-Type"] = QuickMimeTypeMapper.GetMimeType(".zip");
                         response.Content = File.ReadAllBytes("data/client/themes.zip");
@@ -99,7 +99,7 @@ namespace KronosDMS_Server.Handlers
                 {
                     ContentAsUTF8 = "{}",
                     ReasonPhrase = "OK",
-                    StatusCode = "200"
+                    StatusCode = HttpStatusCode.OK
                 };
             }
         };
