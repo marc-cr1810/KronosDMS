@@ -80,6 +80,8 @@ namespace KronosDMS.Objects
             }
             File.Accounts[account.ID] = account;
             File.Write();
+            Logger.Log("Changed user account information", LogLevel.INFO,
+                $"Username: {account.Username}");
             return true;
         }
 
@@ -92,6 +94,7 @@ namespace KronosDMS.Objects
             {
                 user.PasswordHash = newPasswordHash;
                 File.Accounts[id] = user;
+                Logger.Log($"User \"{user.Username}\" changed their password");
                 return true;
             }
             return false;
@@ -103,9 +106,13 @@ namespace KronosDMS.Objects
                 return false;
             UserAccount account = File.Accounts[id];
             if (account.ID == 1000)
+            {
+                Logger.Log("Cannot remove the system administrator account", LogLevel.WARN);
                 return false;
+            }
             File.Accounts.Remove(id);
             File.Write();
+            Logger.Log($"Removed user \"{id}\" from file");
             return true;
         }
 
@@ -140,7 +147,7 @@ namespace KronosDMS.Objects
 
             Logger.Log("Invalid username or password", LogLevel.WARN,
                 $"Username: {credentials.Username}\n" +
-                $"Password: {credentials.Password}");
+                $"Password: {credentials.Password.Substring(0, 4)}****");
             return "";
         }
 

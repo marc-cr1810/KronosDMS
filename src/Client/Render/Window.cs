@@ -139,21 +139,27 @@ namespace KronosDMS_Client.Render
                 // Check if the DirectX version on Windows is supported (aka DirectX 11 or newer)
                 if (GD != null)
                 {
-                    if (GD.BackendType == GraphicsBackend.Direct3D11 && GD.ApiVersion.Major < 11)
-                    {
-                        Logger.Log("Unsupported DirectX version", LogLevel.ERROR, $"DirectX Version: {GD.ApiVersion.Major}.{GD.ApiVersion.Minor}\n" +
-                            "Minimum Required: 11.0\n" +
-                            "Switching from DirectX to OpenGL and saving changes to the config");
-                        Client.Config.GraphicsBackend = "OpenGL";
-                        Client.Config.Save();
-                        SDLWindow.Close();
-                        GD.Dispose();
-                        return Create();
-                    }
+                    //if (GD.BackendType == GraphicsBackend.Direct3D11 && GD.ApiVersion.Major < 11)
+                    //{
+                    //    Logger.Log("Unsupported DirectX version", LogLevel.ERROR, $"DirectX Version: {GD.ApiVersion.Major}.{GD.ApiVersion.Minor}\n" +
+                    //        "Minimum Required: 11.0\n" +
+                    //        "Switching from DirectX to OpenGL and saving changes to the config");
+                    //    Client.Config.GraphicsBackend = "OpenGL";
+                    //    Client.Config.Save();
+                    //    SDLWindow.Close();
+                    //    GD.Dispose();
+                    //    return Create();
+                    //}
                 }
             }
             catch (Exception ex)
             {
+                if (GD == null)
+                {
+                    Logger.LogException("Failed to create window and graphics device", ex, LogLevel.FATAL, details);
+                    return false;
+                }
+
                 if (GD.BackendType == GraphicsBackend.Direct3D11 && GD.ApiVersion.Major < 11)
                 {
                     Logger.Log("Unsupported DirectX version", LogLevel.ERROR, $"DirectX Version: {GD.ApiVersion.Major}.{GD.ApiVersion.Minor}\n" +

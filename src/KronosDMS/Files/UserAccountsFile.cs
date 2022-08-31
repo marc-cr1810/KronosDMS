@@ -1,4 +1,5 @@
 ﻿using KronosDMS.Objects;
+using KronosDMS.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -34,6 +35,9 @@ namespace KronosDMS.Files
             }
             Accounts.Add(user.ID, user);
             Write();
+            Logger.Log("Added a new user", LogLevel.INFO,
+                $"Username: {user.Username}\n" +
+                $"Name: {user.FirstName} {user.LastName}");
             return true;
         }
 

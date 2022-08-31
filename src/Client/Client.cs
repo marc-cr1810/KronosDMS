@@ -75,18 +75,21 @@ namespace KronosDMS_Client
 
             // Run main app window
 
-            MainWindow = new MainWindow("Test Window");
-            if (!MainWindow.Show())
+            // Check DirectX version to see if it is 11 or greater
+            Vortice.Direct3D.FeatureLevel directXVer = Vortice.Direct3D11.D3D11.GetSupportedFeatureLevel();
+            if (directXVer >= Vortice.Direct3D.FeatureLevel.Level_11_0)
             {
-                if (Logger.Get(Logger.Count() - 1).Level == LogLevel.ERROR)
-                {
-                    // Show the windows forms window instead if the Render window crashes
-                }
-                Exit();
+                MainWindow = new MainWindow("Test Window");
+                MainWindow.Show();
             }
-
-            Logger.Log("Launching main client window");
-            Application.Run(MainFormWindow = new MainFormWindow());
+            else
+            {
+                Logger.Log("DirectX version is incompatible, running legacy client", LogLevel.WARN,
+                    $"The new client only supports DirectX version 11 or greater.\n" +
+                    $"{Vortice.Direct3D11.D3D11.GetSupportedFeatureLevel()} < {Vortice.Direct3D.FeatureLevel.Level_11_0}");
+                Logger.Log("Launching main client window");
+                Application.Run(MainFormWindow = new MainFormWindow());
+            }
 
             Response logout = new AccountLogout(Credentials.Username, Credentials.PasswordHash).PerformRequestAsync().Result;
             Logger.Log("Closed KronosDMS Client application", LogLevel.OK);

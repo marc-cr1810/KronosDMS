@@ -48,12 +48,21 @@ namespace KronosDMS_Server
             Logger.Log("Configuring URL routes... ");
             List<Route> route_config = Routes.GetRoutes();
 
-            Logger.Log($"  Routes");
+            int longest = 0;
+            Dictionary<string, string> routes = new Dictionary<string, string>();
             for (int i = 0; i < route_config.Count; i++)
             {
-                string prefix = i < route_config.Count - 1 ? "  ├─── " : "  └─── ";
-                Logger.Log($"{prefix}{route_config[i].Name}\t{route_config[i].UrlRegex}");
+                if (longest < route_config[i].Name.Length)
+                    longest = route_config[i].Name.Length;
+                routes.Add(route_config[i].UrlRegex, route_config[i].Name);
             }
+            string routeStrList = "";
+            foreach (KeyValuePair<string, string> route in routes)
+            {
+                string prefix = route.Key != routes.Last().Key ? "  ├─── " : "  └─── ";
+                routeStrList += $"{prefix}{route.Value.PadRight(longest)} -> {route.Key}" + (route.Key != routes.Last().Key ? "\n" : "");
+            }
+            Logger.Log($"  Routes", LogLevel.INFO, routeStrList);
 
             Logger.Log("Configured routes successfully", LogLevel.OK);
 
