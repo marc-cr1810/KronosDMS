@@ -18,9 +18,9 @@ namespace KronosDMS_Client.Render.ImGUI
         public uint ID { get; private set; }
         public string Title { get; set; }
         public bool Open = true;
+        public bool Disabled { get; set; } = false;
 
         private Vector2 Size { get; set; }
-        private bool Disabled { get; set; } = true;
 
         public ImGuiWindow(string title = "Window", int width = 640, int height = 468)
         {
@@ -30,7 +30,8 @@ namespace KronosDMS_Client.Render.ImGUI
             Size = new Vector2(width, height);
 
             OnLoad();
-            Log($"Loaded ImGui window \"{Name}\"", LogLevel.INFO, $"Window ID: {Name}#{ID}\n" +
+            Log($"Loaded ImGui window \"{Name}\"", LogLevel.INFO, 
+                $"Window ID: {Name}#{ID}\n" +
                 $"Window title: {title}\n" +
                 $"Window width: {width}\n" +
                 $"Window height: {height}");
@@ -38,8 +39,19 @@ namespace KronosDMS_Client.Render.ImGUI
 
         public void Show()
         {
+            ImGuiWindowFlags flags = ImGuiWindowFlags.NoSavedSettings;
+
+            if (Disabled)
+            {
+                flags |= ImGuiWindowFlags.NoResize
+                      | ImGuiWindowFlags.NoMove
+                      | ImGuiWindowFlags.NoMouseInputs
+                      | ImGuiWindowFlags.NoCollapse
+                      | ImGuiWindowFlags.NoScrollWithMouse;
+            }
+
             ImGui.SetNextWindowSize(Size, ImGuiCond.FirstUseEver);
-            if (ImGui.Begin($"{Title}##{ID}", ref Open, ImGuiWindowFlags.NoSavedSettings))
+            if (ImGui.Begin($"{Title}##{ID}", ref Open, flags))
             {
                 Draw();
                 ImGui.End();
@@ -49,7 +61,8 @@ namespace KronosDMS_Client.Render.ImGUI
         public void Close()
         {
             OnClose();
-            Log($"Closed ImGui window \"{Name}\"", LogLevel.INFO, $"Window ID: {Name}##{ID}\n" +
+            Log($"Closed ImGui window \"{Name}\"", LogLevel.INFO, 
+                $"Window ID: {Name}##{ID}\n" +
                 $"Window title: {Title}");
         }
 

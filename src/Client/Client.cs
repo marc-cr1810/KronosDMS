@@ -45,6 +45,8 @@ namespace KronosDMS_Client
 
             Logger.Log("Starting KronosDMS Client application", LogLevel.INFO, $"Version: {Application.ProductVersion}");
 
+            WindowManager.Init();
+
             Config = Config.LoadConfig();
 
             ActiveTheme = ThemeManager.LoadTheme(Config.Theme);
