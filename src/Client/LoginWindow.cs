@@ -20,8 +20,10 @@ namespace KronosDMS_Client
             this.label2.ForeColor = Client.ActiveTheme.Colors.Text.Default;
             this.labelInvalid.ForeColor = Client.ActiveTheme.Colors.Text.Error;
             this.labelIPAddress.ForeColor = Client.ActiveTheme.Colors.Text.Default;
+            this.labelClientType.ForeColor = Client.ActiveTheme.Colors.Text.Default;
 
             this.textIPAddress.Text = Client.Config.IPAddress;
+            this.comboClientType.SelectedItem = Client.Config.ClientType.ToString();
         }
 
         public void Login()
@@ -76,6 +78,16 @@ namespace KronosDMS_Client
         private void buttonAdvanced_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboClientType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ClientType clientType = ClientType.Current;
+            if (Enum.TryParse<ClientType>(comboClientType.Text, out clientType))
+            {
+                Client.Config.ClientType = clientType;
+            }
+            Client.Config.Save();
         }
     }
 }

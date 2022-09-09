@@ -50,6 +50,7 @@ namespace KronosDMS_Client
             Config = Config.LoadConfig();
 
             ActiveTheme = ThemeManager.LoadTheme(Config.Theme);
+            ActiveTheme.Save();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -79,7 +80,7 @@ namespace KronosDMS_Client
 
             // Check DirectX version to see if it is 11 or greater
             Vortice.Direct3D.FeatureLevel directXVer = Vortice.Direct3D11.D3D11.GetSupportedFeatureLevel();
-            if (directXVer >= Vortice.Direct3D.FeatureLevel.Level_11_0)
+            if (directXVer >= Vortice.Direct3D.FeatureLevel.Level_11_0 && Config.ClientType == ClientType.Current)
             {
                 MainWindow = new MainWindow("Test Window");
                 MainWindow.Show();

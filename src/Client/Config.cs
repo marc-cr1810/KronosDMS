@@ -4,12 +4,18 @@ using Veldrid;
 
 namespace KronosDMS_Client
 {
+    public enum ClientType
+    {
+        Current, Legacy
+    }
+
     public class Config
     {
         public string IPAddress { get; set; } = "127.0.0.1:8080";
         public string Theme { get; set; } = "Dark";
         public bool StartMaximized { get; set; } = true;
         public string GraphicsBackend { get; set; } = "Platform Default";
+        public ClientType ClientType { get; set; } = ClientType.Current;
 
         public void Save()
         {

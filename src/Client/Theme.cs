@@ -1,5 +1,7 @@
 ﻿using ImGuiNET;
+using KronosDMS.Utils;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -34,6 +36,15 @@ namespace KronosDMS_Client
                 public Color Error;
             }
 
+            public struct ConsoleColors
+            {
+                public Color Info;
+                public Color Ok;
+                public Color Warning;
+                public Color Error;
+                public Color Fatal;
+            }
+
             public struct ButtonColors
             {
                 public Color Unfocused;
@@ -44,7 +55,7 @@ namespace KronosDMS_Client
             public Color Background;
 
             public TextColours Text;
-
+            public ConsoleColors Console;
             public ButtonColors Button;
 
             public Dictionary<string, Vector4> ImGuiColors;
@@ -84,28 +95,38 @@ namespace KronosDMS_Client
 
         public void Save()
         {
-            ImGuiStylePtr style = ImGui.GetStyle();
-
-            Settings.Render.WindowBorder = style.WindowBorderSize > 0.0f ? true : false;
-            Settings.Render.FrameBorder = style.FrameBorderSize > 0.0f ? true : false;
-            Settings.Render.PopupBorder = style.PopupBorderSize > 0.0f ? true : false;
-            Settings.Render.AntiAliasedLines = style.AntiAliasedLines;
-            Settings.Render.AntiAliasedLinesUseTex = style.AntiAliasedLinesUseTex;
-            Settings.Render.AntiAliasedFill = style.AntiAliasedFill;
-
-            if (Colors.ImGuiColors == null)
-                Colors.ImGuiColors = new Dictionary<string, Vector4>();
-            for (int i = 0; i < style.Colors.Count; i++)
+            try
             {
-                string name = ImGui.GetStyleColorName((ImGuiCol)i);
-                if (Colors.ImGuiColors.ContainsKey(name))
+                ImGuiStylePtr style = ImGui.GetStyle();
+
+                Settings.Render.WindowBorder = style.WindowBorderSize > 0.0f ? true : false;
+                Settings.Render.FrameBorder = style.FrameBorderSize > 0.0f ? true : false;
+                Settings.Render.PopupBorder = style.PopupBorderSize > 0.0f ? true : false;
+                Settings.Render.AntiAliasedLines = style.AntiAliasedLines;
+                Settings.Render.AntiAliasedLinesUseTex = style.AntiAliasedLinesUseTex;
+                Settings.Render.AntiAliasedFill = style.AntiAliasedFill;
+
+                if (Colors.ImGuiColors == null)
+                    Colors.ImGuiColors = new Dictionary<string, Vector4>();
+                for (int i = 0; i < style.Colors.Count; i++)
                 {
-                    Colors.ImGuiColors[name] = style.Colors[i];
+                    string name = ImGui.GetStyleColorName((ImGuiCol)i);
+                    if (Colors.ImGuiColors.ContainsKey(name))
+                    {
+                        Colors.ImGuiColors[name] = style.Colors[i];
+                    }
+                    else
+                    {
+                        Colors.ImGuiColors.Add(name, style.Colors[i]);
+                    }
                 }
-                else
-                {
-                    Colors.ImGuiColors.Add(name, style.Colors[i]);
-                }
+            }
+            catch (NullReferenceException ex)
+            {
+                Logger.Log("Failed to save ImGui theme settings", LogLevel.ERROR,
+                    $"ImGui is probably not initialized\n" +
+                    $"{ex.Message}\n" +
+                    $"{ex.StackTrace}");
             }
             ThemeManager.SaveTheme(this);
         }

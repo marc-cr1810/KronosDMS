@@ -38,6 +38,8 @@ namespace KronosDMS_Client
             this.buttonAdvanced = new System.Windows.Forms.Button();
             this.textIPAddress = new System.Windows.Forms.TextBox();
             this.labelIPAddress = new System.Windows.Forms.Label();
+            this.labelClientType = new System.Windows.Forms.Label();
+            this.comboClientType = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -129,11 +131,36 @@ namespace KronosDMS_Client
             this.labelIPAddress.TabIndex = 8;
             this.labelIPAddress.Text = "IP Address";
             // 
+            // labelClientType
+            // 
+            this.labelClientType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelClientType.AutoSize = true;
+            this.labelClientType.Location = new System.Drawing.Point(19, 167);
+            this.labelClientType.Name = "labelClientType";
+            this.labelClientType.Size = new System.Drawing.Size(65, 15);
+            this.labelClientType.TabIndex = 10;
+            this.labelClientType.Text = "Client Type";
+            // 
+            // comboClientType
+            // 
+            this.comboClientType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboClientType.FormattingEnabled = true;
+            this.comboClientType.Items.AddRange(new object[] {
+            "Current",
+            "Legacy"});
+            this.comboClientType.Location = new System.Drawing.Point(92, 164);
+            this.comboClientType.Name = "comboClientType";
+            this.comboClientType.Size = new System.Drawing.Size(131, 23);
+            this.comboClientType.TabIndex = 11;
+            this.comboClientType.SelectedIndexChanged += new System.EventHandler(this.comboClientType_SelectedIndexChanged);
+            // 
             // LoginWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(236, 167);
+            this.ClientSize = new System.Drawing.Size(236, 201);
+            this.Controls.Add(this.comboClientType);
+            this.Controls.Add(this.labelClientType);
             this.Controls.Add(this.textIPAddress);
             this.Controls.Add(this.labelIPAddress);
             this.Controls.Add(this.buttonAdvanced);
@@ -166,5 +193,7 @@ namespace KronosDMS_Client
         private System.Windows.Forms.Button buttonAdvanced;
         private System.Windows.Forms.TextBox textIPAddress;
         private System.Windows.Forms.Label labelIPAddress;
+        private System.Windows.Forms.Label labelClientType;
+        private System.Windows.Forms.ComboBox comboClientType;
     }
 }
