@@ -1,7 +1,9 @@
 ﻿using ImGuiNET;
+using KronosDMS.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,6 +43,56 @@ namespace KronosDMS_Client.Render.Controls
                     item.Draw();
                 ImGui.EndMenu();
             }
+        }
+    }
+
+    public class MenuStripButton : MenuStripItem
+    {
+        private enum ButtonType
+        {
+            Text,
+            Image
+        }
+
+        private ButtonType Type = ButtonType.Text;
+        private Image Image;
+
+        public MenuStripButton(string name, string text = "") : base(name, text)
+        {
+        }
+
+        public MenuStripButton(string name, Image image) : base(name)
+        {
+            Type = ButtonType.Image;
+            Image = image;
+        }
+
+        public override void Draw()
+        {
+            bool clicked = false;
+            if (Type == ButtonType.Image)
+            {
+                ImGuiStylePtr style = ImGui.GetStyle();
+                Vector2 size = new Vector2(ImGui.GetTextLineHeightWithSpacing());
+                clicked = ImGui.ImageButton(Image.GetID(), size, Vector2.Zero, Vector2.One, 0, style.Colors[(int)ImGuiCol.MenuBarBg]);
+            }
+            else
+                clicked = ImGui.Button(Text);
+
+            if (clicked && Click != null)
+                Click();
+        }
+    }
+
+    public class MenuStripSeparator : MenuStripItem
+    {
+        public MenuStripSeparator(string name) : base(name)
+        {
+        }
+
+        public override void Draw()
+        {
+            ImGui.Separator();
         }
     }
 

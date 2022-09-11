@@ -19,6 +19,7 @@ namespace KronosDMS_Client.Render
 
         private bool InitializedImGui = false;
         private bool Sleeping = false;
+        private bool Closed = true;
 
         private Vector3 ClearColor = Vector3.Zero;
 
@@ -29,8 +30,6 @@ namespace KronosDMS_Client.Render
         {
             WindowCreationInfo = new WindowCreateInfo(50, 50, width, height, WindowState.Normal, title);
             GDOptions = new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true);
-
-            OnLoad();
         }
         public bool Show()
         {
@@ -43,6 +42,7 @@ namespace KronosDMS_Client.Render
             {
                 return false;
             }
+            Closed = false;
 
             Logger.Log("Running application loop");
             while (SDLWindow.Exists)
@@ -61,14 +61,17 @@ namespace KronosDMS_Client.Render
                     Update();
                     //FontManager.PopFont();
 
-                    CL.Begin();
-                    CL.SetFramebuffer(GD.MainSwapchain.Framebuffer);
-                    CL.ClearColorTarget(0, new RgbaFloat(ClearColor.X, ClearColor.Y, ClearColor.Z, 1f));
-                    Controller.Render(GD, CL);
-                    CL.End();
-                    GD.SubmitCommands(CL);
-                    GD.SwapBuffers(GD.MainSwapchain);
-                    Controller.SwapExtraWindows(GD);
+                    if (!Closed)
+                    {
+                        CL.Begin();
+                        CL.SetFramebuffer(GD.MainSwapchain.Framebuffer);
+                        CL.ClearColorTarget(0, new RgbaFloat(ClearColor.X, ClearColor.Y, ClearColor.Z, 1f));
+                        Controller.Render(GD, CL);
+                        CL.End();
+                        GD.SubmitCommands(CL);
+                        GD.SwapBuffers(GD.MainSwapchain);
+                        Controller.SwapExtraWindows(GD);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -102,6 +105,7 @@ namespace KronosDMS_Client.Render
             if (SDLWindow != null)
                 SDLWindow.Close();
             Dispose();
+            Closed = true;
         }
 
         private void Dispose()
@@ -114,9 +118,7 @@ namespace KronosDMS_Client.Render
         }
 
         protected virtual void OnLoad() { }
-
         protected virtual void OnClose() { }
-
         protected virtual void Draw() { }
         protected virtual void Update() { }
 
@@ -212,6 +214,8 @@ namespace KronosDMS_Client.Render
 
                 Vector4 background = Client.ActiveTheme.Colors.ImGuiColors["DockingEmptyBg"];
                 ClearColor = new Vector3(background.X, background.Y, background.Z);
+
+                OnLoad();
 
                 return true;
             }

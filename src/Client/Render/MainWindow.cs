@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using KronosDMS_Client.Render.Controls;
 using KronosDMS_Client.Render.ImGUI;
+using KronosDMS_Client.Render.Windows.Parts;
 using KronosDMS_Client.Render.Windows.Tools;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,33 @@ namespace KronosDMS_Client.Render
     {
         MenuStrip Menu;
         MenuStripMenuItem MenuFile;
+
         MenuStripMenuItem MenuParts;
+        MenuStripMenuItem MenuPartsQueries;
+        MenuStripItem MenuPartsPartSearch;
+        MenuStripItem MenuPartsMaintenance;
+
         MenuStripMenuItem MenuSetup;
+
         MenuStripMenuItem MenuTools;
+        MenuStripItem MenuToolsHelloImGui;
         MenuStripItem MenuToolsConsole;
+        MenuStripItem MenuToolsSwitchToLegacy;
 
         public MainWindow(string title, int width = 1280, int height = 720) : base(title, width, height)
         {
-            // Initialization
+            // Initialize controls
             Menu = new MenuStrip("Menu");
             MenuFile = new MenuStripMenuItem("MenuFile", "File");
             MenuParts = new MenuStripMenuItem("MenuParts", "Parts");
+            MenuPartsQueries = new MenuStripMenuItem("MenuPartsQueries", "Queries");
+            MenuPartsPartSearch = new MenuStripItem("MenuPartsPartSearch", "Parts Search");
+            MenuPartsMaintenance = new MenuStripItem("MenuPartsMaintenance", "Parts Maintenance");
             MenuSetup = new MenuStripMenuItem("MenuSetup", "Setup");
             MenuTools = new MenuStripMenuItem("MenuTools", "Tools");
+            MenuToolsHelloImGui = new MenuStripItem("MenuToolsHelloImGui", "Show Hello ImGui");
             MenuToolsConsole = new MenuStripItem("MenuToolsConsole", "Console");
+            MenuToolsSwitchToLegacy = new MenuStripItem("MenuToolsSwitchToLegacy", "Switch to Legacy");
 
             // Menu
             Menu.Items.AddRange(new MenuStripItem[]
@@ -36,11 +50,43 @@ namespace KronosDMS_Client.Render
                 MenuFile, MenuParts, MenuSetup, MenuTools
             });
 
+            // MenuParts
+            MenuParts.MenuItems.AddRange(new MenuStripItem[]
+            {
+                MenuPartsQueries, MenuPartsMaintenance
+            });
+
+            // MenuPartsQueries
+            MenuPartsQueries.MenuItems.AddRange(new MenuStripItem[]
+            {
+                MenuPartsPartSearch
+            });
+
+            // MenuPartsPartSearch
+            MenuPartsPartSearch.Click = MenuPartsPartSearch_Clicked;
+
+            // MenuPartsMaintenance
+            MenuPartsMaintenance.Click = MenuPartsMaintenance_Clicked;
+
             // MenuTools
-            MenuTools.MenuItems.Add(MenuToolsConsole);
+            MenuTools.MenuItems.AddRange(new MenuStripItem[] 
+            {
+                MenuToolsHelloImGui, MenuToolsConsole, MenuToolsSwitchToLegacy
+            });
+
+            // MenuToolsHelloImGui
+            MenuToolsHelloImGui.Click = MenuToolsHelloImGui_Clicked;
 
             // MenuToolsConsole
             MenuToolsConsole.Click = MenuToolsConsole_Clicked;
+
+            // MenuToolsSwitchToLegacy
+            MenuToolsSwitchToLegacy.Click = MenuToolsSwitchToLegacy_Clicked;
+        }
+
+        protected override void OnLoad()
+        {
+            SetStatusTitle($"Currently logged in as {Client.ActiveAccount.FirstName} {Client.ActiveAccount.LastName} ({Client.ActiveAccount.Username})");
         }
 
         protected override void Draw()
@@ -107,12 +153,40 @@ namespace KronosDMS_Client.Render
         {
             WindowManager.Update();
         }
+        public void SetStatusTitle(string status = "")
+        {
+            if (status is null || status == "")
+                SDLWindow.Title = $"KronosDMS v{Client.GetAppVersion()}";
+            else
+                SDLWindow.Title = $"KronosDMS v{Client.GetAppVersion()} | {status}";
+        }
 
         #region EventHandlers
+
+        private void MenuPartsPartSearch_Clicked()
+        {
+            WindowManager.Open(new PartsSearchForm());
+        }
+
+        private void MenuPartsMaintenance_Clicked()
+        {
+            WindowManager.Open(new PartMaintenanceForm());
+        }
+
+        private void MenuToolsHelloImGui_Clicked()
+        {
+            WindowManager.ShowImGuiDemoWindow = true;
+        }
 
         private void MenuToolsConsole_Clicked()
         {
             WindowManager.Open(new ConsoleWindow());
+        }
+
+        private void MenuToolsSwitchToLegacy_Clicked()
+        {
+            Client.SwitchClientType = true;
+            Close();
         }
 
         #endregion

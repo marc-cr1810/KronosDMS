@@ -20,6 +20,12 @@ namespace KronosDMS_Client.Render.Controls
             Text = name;
         }
 
+        public Control(string name, string text)
+        {
+            Name = name;
+            Text = text;
+        }
+
         public virtual void Draw() { }
     }
 }

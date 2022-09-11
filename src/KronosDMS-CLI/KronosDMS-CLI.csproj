@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>KronosDMS_CLI</RootNamespace>
 	  <BaseOutputPath>..\..\bin\$(AssemblyName)\</BaseOutputPath>
 	  <BaseIntermediateOutputPath>..\..\bin-int\$(AssemblyName)\</BaseIntermediateOutputPath>

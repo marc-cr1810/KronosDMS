@@ -26,6 +26,7 @@ namespace KronosDMS_Client.Render.Windows.Tools
                 Vector4 color = Theme.ColorToVec4(Client.ActiveTheme.Colors.Console.Info);
                 switch (logItem.Level)
                 {
+                    case LogLevel.DEBUG: color = Theme.ColorToVec4(Client.ActiveTheme.Colors.Console.Debug); break;
                     case LogLevel.OK: color = Theme.ColorToVec4(Client.ActiveTheme.Colors.Console.Ok); break;
                     case LogLevel.WARN: color = Theme.ColorToVec4(Client.ActiveTheme.Colors.Console.Warning); break;
                     case LogLevel.ERROR: color = Theme.ColorToVec4(Client.ActiveTheme.Colors.Console.Error); break;

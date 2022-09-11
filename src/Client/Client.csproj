@@ -18,6 +18,7 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\..\deps\ImGui.NET\src\ImGui.NET\ImGui.NET.csproj" />
+	<ProjectReference Include="..\..\deps\veldrid\src\Veldrid.ImageSharp\Veldrid.ImageSharp.csproj" />
 	<ProjectReference Include="..\..\deps\veldrid\src\Veldrid.StartupUtilities\Veldrid.StartupUtilities.csproj" />
 	<ProjectReference Include="..\..\deps\veldrid\src\Veldrid\Veldrid.csproj" />
     <ProjectReference Include="..\KronosDMS\KronosDMS.csproj" />

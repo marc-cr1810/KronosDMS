@@ -39,6 +39,7 @@ namespace KronosDMS_Client
             public struct ConsoleColors
             {
                 public Color Info;
+                public Color Debug;
                 public Color Ok;
                 public Color Warning;
                 public Color Error;

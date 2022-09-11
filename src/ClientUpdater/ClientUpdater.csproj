@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0-windows7.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
 	<BaseOutputPath>..\..\bin\$(AssemblyName)\</BaseOutputPath>
 	<BaseIntermediateOutputPath>..\..\bin-int\$(AssemblyName)\</BaseIntermediateOutputPath>
@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="mkdir $(SolutionDir)Client\bin\Debug\net5.0-windows\updater&#xD;&#xA;copy /y $(OutDir) $(SolutionDir)Client\bin\Debug\net5.0-windows\updater" />
+    <Exec Command="mkdir $(SolutionDir)bin\Debug\net6.0-windows\updater&#xD;&#xA;copy /y $(OutDir) $(SolutionDir)bin\Debug\net6.0-windows\updater" />
   </Target>
 
 </Project>

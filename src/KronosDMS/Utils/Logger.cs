@@ -84,6 +84,7 @@ namespace KronosDMS.Utils
     public enum LogLevel
     {
         INFO,
+        DEBUG,
         OK,
         WARN,
         ERROR,
@@ -100,7 +101,7 @@ namespace KronosDMS.Utils
         public override string ToString()
         {
             string time = $"[{Timestamp.ToString("yyyy/MM/dd HH:mm:ss")}]";
-            string level = $"[{((Level == LogLevel.INFO) ? "INFO" : (Level == LogLevel.OK) ? "OK" : (Level == LogLevel.WARN) ? "WARN" : (Level == LogLevel.ERROR) ? "ERROR" : "FATAL")}]";
+            string level = $"[{((Level == LogLevel.INFO) ? "INFO" : (Level == LogLevel.DEBUG) ? "DEBUG" : (Level == LogLevel.OK) ? "OK" : (Level == LogLevel.WARN) ? "WARN" : (Level == LogLevel.ERROR) ? "ERROR" : "FATAL")}]";
             string source = (Source.Length > 0) ? $" [{Source}]" : "";
 
             return $"{time} {level}{source}: {Message}";

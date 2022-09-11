@@ -35,6 +35,8 @@ namespace KronosDMS_Client
         public static MainWindow MainWindow { get; private set; }
         public static MainFormWindow MainFormWindow { get; private set; }
 
+        public static bool SwitchClientType = false; // Used to switch client type after loading one
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -50,7 +52,6 @@ namespace KronosDMS_Client
             Config = Config.LoadConfig();
 
             ActiveTheme = ThemeManager.LoadTheme(Config.Theme);
-            ActiveTheme.Save();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -82,8 +83,14 @@ namespace KronosDMS_Client
             Vortice.Direct3D.FeatureLevel directXVer = Vortice.Direct3D11.D3D11.GetSupportedFeatureLevel();
             if (directXVer >= Vortice.Direct3D.FeatureLevel.Level_11_0 && Config.ClientType == ClientType.Current)
             {
-                MainWindow = new MainWindow("Test Window");
+                MainWindow = new MainWindow("KronosDMS");
                 MainWindow.Show();
+                if (SwitchClientType)
+                {
+                    SwitchClientType = false;
+                    Logger.Log("Launching main client window");
+                    Application.Run(MainFormWindow = new MainFormWindow());
+                }
             }
             else
             {
@@ -241,6 +248,16 @@ namespace KronosDMS_Client
                 Logger.Log("Failed to download themes", LogLevel.ERROR, "The UI may have issues");
                 MessageBox.Show("Failed to download themes.\nThe UI may have issues.", "Failed Download");
             }
+        }
+
+        public static string GetAppVersion()
+        {
+            return Application.ProductVersion;
+        }
+
+        public static void SetClipboard(string text)
+        {
+            Clipboard.SetText(text);
         }
 
         public static void Exit()
