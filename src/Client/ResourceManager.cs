@@ -35,12 +35,14 @@ namespace KronosDMS_Client
     public static class ResourceManager
     {
         public static Image ImageSaveIcon;
+        public static Image ImageResetIcon;
 
         public static void Load(ImGuiController controller, GraphicsDevice gd)
         {
             Logger.Log("Loading resources");
 
             ImageSaveIcon = new Image("themes/images/save_icon.png", controller, gd);
+            ImageResetIcon = new Image("themes/images/refresh_icon.png", controller, gd);
 
             Logger.Log("Completed loading resources", LogLevel.OK);
         }

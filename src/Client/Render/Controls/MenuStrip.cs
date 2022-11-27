@@ -16,7 +16,7 @@ namespace KronosDMS_Client.Render.Controls
             Text = text == "" ? name : text;
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             if (ImGui.MenuItem(Text))
             {
@@ -35,7 +35,7 @@ namespace KronosDMS_Client.Render.Controls
 
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             if (ImGui.BeginMenu(Text))
             {
@@ -67,14 +67,14 @@ namespace KronosDMS_Client.Render.Controls
             Image = image;
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             bool clicked = false;
             if (Type == ButtonType.Image)
             {
                 ImGuiStylePtr style = ImGui.GetStyle();
                 Vector2 size = new Vector2(ImGui.GetTextLineHeightWithSpacing());
-                clicked = ImGui.ImageButton(Image.GetID(), size, Vector2.Zero, Vector2.One, 0, style.Colors[(int)ImGuiCol.MenuBarBg]);
+                clicked = ImGui.ImageButton(Image.GetID(), size, Vector2.Zero, Vector2.One, 1, style.Colors[(int)ImGuiCol.MenuBarBg]);
             }
             else
                 clicked = ImGui.Button(Text);
@@ -90,7 +90,7 @@ namespace KronosDMS_Client.Render.Controls
         {
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             ImGui.Separator();
         }
@@ -104,7 +104,7 @@ namespace KronosDMS_Client.Render.Controls
         {
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             if (ImGui.BeginMenuBar())
             {

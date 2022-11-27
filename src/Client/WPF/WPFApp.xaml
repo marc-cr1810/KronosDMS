@@ -1,0 +1,9 @@
+﻿<Application x:Class="KronosDMS_Client.WPF.WPFApp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:KronosDMS_Client.WPF"
+             StartupUri="Application_Startup">
+    <Application.Resources>
+
+    </Application.Resources>
+</Application>

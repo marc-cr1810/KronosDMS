@@ -14,7 +14,7 @@ namespace KronosDMS_Client.Render.Controls
             Text = text != "" ? text : name;
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             ImGui.Text(Text);
         }
@@ -26,7 +26,7 @@ namespace KronosDMS_Client.Render.Controls
         {
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             if (ImGui.Selectable(Text))
             {
@@ -44,7 +44,7 @@ namespace KronosDMS_Client.Render.Controls
         {
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             if (ImGui.BeginPopup(Name))
             {

@@ -10,17 +10,35 @@ using System.Threading.Tasks;
 
 namespace KronosDMS_Client.Render
 {
+    public struct WindowData
+    {
+        public ImGuiWindow Window;
+        public Action OnClosed;
+
+        public WindowData(ImGuiWindow window)
+        {
+            Window = window;
+            OnClosed = null;
+        }
+
+        public WindowData(ImGuiWindow window, Action onClosed)
+        {
+            Window = window;
+            OnClosed = onClosed;
+        }
+    }
+
     public static class WindowManager
     {
         public static bool ShowImGuiDemoWindow = false;
         public static bool ShowMetricsWindow = false;
         public static bool ShowServerDisconnectionMsg = false;
 
-        private static List<ImGuiWindow> Windows { get; set; }
+        private static List<WindowData> Windows { get; set; }
 
         public static void Init()
         {
-            Windows = new List<ImGuiWindow>();
+            Windows = new List<WindowData>();
             Logger.Log("Initialized window manager", LogLevel.OK);
         }
 
@@ -28,12 +46,15 @@ namespace KronosDMS_Client.Render
         {
             for (int i = 0; i < Windows.Count; i++)
             {
-                ImGuiWindow window = Windows[i];
+                WindowData data = Windows[i];
+                ImGuiWindow window = data.Window;
                 if (window != null)
                 {
                     if (!window.Open)
                     {
                         Close(window);
+                        if (data.OnClosed != null)
+                            data.OnClosed();
                         i--;
                     }
                     window.Show();
@@ -64,7 +85,15 @@ namespace KronosDMS_Client.Render
             {
                 Logger.Log("Failed to open a window", LogLevel.ERROR, "at WindowManager.cs void Open(Window window)\n\tValue of \"window\" is NULL");
             }
-            Windows.Add(window);
+            window.Init();
+            Windows.Add(new WindowData(window));
+        }
+
+        public static void OpenChild(ImGuiWindow parent, ImGuiWindow window, Action onClosed = null)
+        {
+            window.Parent = parent;
+            window.Init();
+            Windows.Add(new WindowData(window, onClosed));
         }
 
         public static void Close(ImGuiWindow window)
@@ -74,7 +103,8 @@ namespace KronosDMS_Client.Render
                 Logger.Log("Failed to close a window", LogLevel.ERROR, "at WindowManager.cs void Close(Window window)\n\tValue of \"window\" is NULL");
             }
             window.Close();
-            Windows.Remove(window);
+            WindowData data = Windows.First(w => w.Window.ID == window.ID);
+            Windows.Remove(data);
         }
 
         public static int GetWindowCount()

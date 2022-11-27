@@ -30,7 +30,7 @@ namespace KronosDMS_Client.Render.Controls
             MaxLength = maxlength;
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             if (Text == null)
                 Text = "";
@@ -52,7 +52,7 @@ namespace KronosDMS_Client.Render.Controls
 
             string text = Text;
             bool enter = ImGui.InputText($"##{Name}", ref text, MaxLength, flags);
-            text = Text;
+            Text = text;
 
             if (ReadOnly)
                 ImGui.PopStyleColor();

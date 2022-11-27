@@ -44,6 +44,12 @@ namespace KronosDMS_Client.Render.ImGUI
                 $"Window height: {height}");
         }
 
+        public void Init()
+        {
+            if (Parent != null)
+                Parent.Disabled = true;
+        }
+
         public void Show()
         {
             // Check to see if there is a menu bar control to stop menu bars from showing on all windows
@@ -54,6 +60,7 @@ namespace KronosDMS_Client.Render.ImGUI
                 else 
                     ShowMenuBar = 0;
             }
+
             ImGuiWindowFlags flags = ImGuiWindowFlags.NoSavedSettings;
             if (ShowMenuBar == 1)
                 flags |= ImGuiWindowFlags.MenuBar;
@@ -64,7 +71,10 @@ namespace KronosDMS_Client.Render.ImGUI
                       | ImGuiWindowFlags.NoMove
                       | ImGuiWindowFlags.NoMouseInputs
                       | ImGuiWindowFlags.NoCollapse
-                      | ImGuiWindowFlags.NoScrollWithMouse;
+                      | ImGuiWindowFlags.NoScrollWithMouse
+                      | ImGuiWindowFlags.NoDocking
+                      | ImGuiWindowFlags.NoBringToFrontOnFocus
+                      | ImGuiWindowFlags.NoFocusOnAppearing;
 
                 ImGui.BeginDisabled(true);
             }
@@ -88,6 +98,9 @@ namespace KronosDMS_Client.Render.ImGUI
                 $"Window ID: {Name}##{ID}\n" +
                 $"Window title: {Title}");
             ShowMenuBar = -1;
+
+            if (Parent != null)
+                Parent.Disabled = false;
         }
 
         protected void Log(string msg, LogLevel level = LogLevel.INFO, string details = "")

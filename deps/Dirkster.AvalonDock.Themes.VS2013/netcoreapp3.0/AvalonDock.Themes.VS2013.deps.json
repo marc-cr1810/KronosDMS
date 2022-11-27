@@ -1,0 +1,89 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.0": {
+      "AvalonDock.Themes.VS2013/4.70.3": {
+        "dependencies": {
+          "Dirkster.AvalonDock": "4.70.3"
+        },
+        "runtime": {
+          "AvalonDock.Themes.VS2013.dll": {}
+        }
+      },
+      "Dirkster.AvalonDock/4.70.3": {
+        "runtime": {
+          "AvalonDock.dll": {}
+        },
+        "resources": {
+          "ca-ES/AvalonDock.resources.dll": {
+            "locale": "ca-ES"
+          },
+          "cs-CZ/AvalonDock.resources.dll": {
+            "locale": "cs-CZ"
+          },
+          "de/AvalonDock.resources.dll": {
+            "locale": "de"
+          },
+          "es/AvalonDock.resources.dll": {
+            "locale": "es"
+          },
+          "fr/AvalonDock.resources.dll": {
+            "locale": "fr"
+          },
+          "hu/AvalonDock.resources.dll": {
+            "locale": "hu"
+          },
+          "it/AvalonDock.resources.dll": {
+            "locale": "it"
+          },
+          "ja/AvalonDock.resources.dll": {
+            "locale": "ja"
+          },
+          "ko/AvalonDock.resources.dll": {
+            "locale": "ko"
+          },
+          "nl-BE/AvalonDock.resources.dll": {
+            "locale": "nl-BE"
+          },
+          "pl/AvalonDock.resources.dll": {
+            "locale": "pl"
+          },
+          "pt/AvalonDock.resources.dll": {
+            "locale": "pt"
+          },
+          "ro/AvalonDock.resources.dll": {
+            "locale": "ro"
+          },
+          "ru/AvalonDock.resources.dll": {
+            "locale": "ru"
+          },
+          "sv/AvalonDock.resources.dll": {
+            "locale": "sv"
+          },
+          "zh-Hans/AvalonDock.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "zh-Hant/AvalonDock.resources.dll": {
+            "locale": "zh-Hant"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AvalonDock.Themes.VS2013/4.70.3": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Dirkster.AvalonDock/4.70.3": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

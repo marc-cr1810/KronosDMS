@@ -47,7 +47,7 @@ namespace KronosDMS_Client.Render.Controls
             SelectedIndex = 0;
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             ImGui.AlignTextToFramePadding();
             ImGui.Text(Name);

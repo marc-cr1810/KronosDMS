@@ -17,7 +17,7 @@ namespace KronosDMS_Client.Render.Controls
             Text = text == "" ? name : text;
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             ImGui.Text(Text);
         }

@@ -1,3 +1,4 @@
+using iText.Commons.Actions.Confirmations;
 using KronosDMS.Api;
 using KronosDMS.Api.Endpoints;
 using KronosDMS.Api.Responses;
@@ -6,6 +7,7 @@ using KronosDMS.Objects;
 using KronosDMS.Utils;
 using KronosDMS_Client.Forms;
 using KronosDMS_Client.Render;
+using KronosDMS_Client.WPF;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -34,6 +36,8 @@ namespace KronosDMS_Client
 
         public static MainWindow MainWindow { get; private set; }
         public static MainFormWindow MainFormWindow { get; private set; }
+        public static WPFApplication WPFApp { get; private set; }
+        public static DocumentDesktop MainWPFWindow { get; private set; }
 
         public static bool SwitchClientType = false; // Used to switch client type after loading one
 
@@ -89,8 +93,18 @@ namespace KronosDMS_Client
                 {
                     SwitchClientType = false;
                     Logger.Log("Launching main client window");
-                    Application.Run(MainFormWindow = new MainFormWindow());
+                    WPFApp = new WPFApplication();
+                    WPFApp.InitializeComponent();
+                    WPFApp.Run();
+                    //Application.Run(MainFormWindow = new MainFormWindow());
                 }
+            }
+            else if (Config.ClientType == ClientType.WPF)
+            {
+                Logger.Log("Launching main client window");
+                WPFApp = new WPFApplication();
+                WPFApp.InitializeComponent();
+                WPFApp.Run();
             }
             else
             {
@@ -115,7 +129,7 @@ namespace KronosDMS_Client
                 if (!ping.Success)
                 {
                     Logger.Log("Failed to connect to the server", LogLevel.ERROR, $"IP Address: {Config.IPAddress}");
-                    MessageBox.Show("Failed to connect to the server");
+                    System.Windows.Forms.MessageBox.Show("Failed to connect to the server");
                     return;
                 }
 
@@ -143,7 +157,7 @@ namespace KronosDMS_Client
                     }
                     else
                     {
-                        MessageBox.Show($"Failed to login to the server\n{response.RawMessage}");
+                        System.Windows.Forms.MessageBox.Show($"Failed to login to the server\n{response.RawMessage}");
                         Logger.Log($"Failed to login to the server", LogLevel.ERROR, response.RawMessage);
                         return;
                     }
@@ -192,7 +206,7 @@ namespace KronosDMS_Client
                 else
                 {
                     Logger.Log("Failed to download update", LogLevel.ERROR);
-                    MessageBox.Show("Failed to download update", "Failed Download");
+                    System.Windows.Forms.MessageBox.Show("Failed to download update", "Failed Download");
                 }
             }
         }
@@ -218,7 +232,7 @@ namespace KronosDMS_Client
             else
             {
                 Logger.Log("Failed to download updater", LogLevel.ERROR, "Manually install the updater to maintain the latest version");
-                MessageBox.Show("Failed to download updater.\nManually install the updater to maintain the latest version", "Failed Download");
+                System.Windows.Forms.MessageBox.Show("Failed to download updater.\nManually install the updater to maintain the latest version", "Failed Download");
             }
         }
 
@@ -246,7 +260,7 @@ namespace KronosDMS_Client
             else
             {
                 Logger.Log("Failed to download themes", LogLevel.ERROR, "The UI may have issues");
-                MessageBox.Show("Failed to download themes.\nThe UI may have issues.", "Failed Download");
+                System.Windows.Forms.MessageBox.Show("Failed to download themes.\nThe UI may have issues.", "Failed Download");
             }
         }
 

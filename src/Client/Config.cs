@@ -6,7 +6,7 @@ namespace KronosDMS_Client
 {
     public enum ClientType
     {
-        Current, Legacy
+        Current, Legacy, WPF
     }
 
     public class Config

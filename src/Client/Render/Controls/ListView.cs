@@ -25,7 +25,7 @@ namespace KronosDMS_Client.Render.Controls
             Name = name;
         }
 
-        public override void Draw()
+        protected override void Render()
         {
             ImGuiTableFlags flags =
                 ImGuiTableFlags.Resizable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.Hideable

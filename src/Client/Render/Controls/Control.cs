@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImGuiNET;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace KronosDMS_Client.Render.Controls
     {
         public string Name { get; set; }
         public string Text { get; set; }
+        public bool Disabled = false;
 
         // Action event functions
         public Action Click = null;
@@ -26,6 +28,16 @@ namespace KronosDMS_Client.Render.Controls
             Text = text;
         }
 
-        public virtual void Draw() { }
+        public void Draw() 
+        {
+            if (Disabled)
+                ImGui.BeginDisabled();
+
+            Render();
+
+            if (Disabled)
+                ImGui.EndDisabled();
+        }
+        protected virtual void Render() { }
     }
 }

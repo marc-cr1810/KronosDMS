@@ -1,0 +1,47 @@
+﻿<Window x:Class="KronosDMS_Client.WPF.DocumentDesktop"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KronosDMS_Client.WPF"
+        mc:Ignorable="d"
+        Title="DocumentDesktop" Height="450" Width="800">
+    <Grid x:Name="layoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Menu x:Name="menuStrip" Grid.Row="0" Background="#FF484848" Foreground="#FFE4E4E4">
+            <MenuItem Header="File" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848">
+                <MenuItem Header="Save" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+                <MenuItem Header="Delete" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+                <Separator />
+                <MenuItem Header="Import" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+                <MenuItem Header="Export" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+                <Separator />
+                <MenuItem Header="Minimize" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+                <MenuItem Header="Maximize" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+                <MenuItem Header="Close" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+                <Separator />
+                <MenuItem Header="Exit" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+            </MenuItem>
+            <MenuItem Header="Parts">
+                <MenuItem Header="Part Search" Click="PartSearch_Click" Background="#FF484848" Foreground="#FFE4E4E4" BorderBrush="#FF484848" />
+            </MenuItem>
+            <MenuItem Header="Setup">
+            </MenuItem>
+        </Menu>
+
+        <DockingManager x:Name="dockManager"
+            Grid.Row="1"
+            AllowMixedOrientation="True"
+            AutoWindowSizeWhenOpened="True"
+            IsVirtualizingAnchorable="True"
+            IsVirtualizingDocument="True">
+            <DockingManager.Theme>
+                <Vs2013DarkTheme />
+            </DockingManager.Theme>
+        </DockingManager>
+    </Grid>
+</Window>

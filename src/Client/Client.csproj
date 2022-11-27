@@ -9,6 +9,8 @@
 	<BaseOutputPath>..\..\bin\$(AssemblyName)\</BaseOutputPath>
 	<BaseIntermediateOutputPath>..\..\bin-int\$(AssemblyName)\</BaseIntermediateOutputPath>
 	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<UseWPF>True</UseWPF>
+	<StartupObject>KronosDMS_Client.Client</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,6 +42,15 @@
     <Content Include="..\..\deps\ImGui.NET\deps\cimgui\win-x64\cimgui.dll" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\deps\ImGui.NET\deps\cimgui\osx-x64\cimgui.dylib" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\deps\ImGui.NET\deps\cimgui\linux-x64\cimgui.so" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AvalonDock">
+      <HintPath>..\..\deps\Dirkster.AvalonDock\net5.0-windows\AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="AvalonDock.Themes.VS2013">
+      <HintPath>..\..\deps\Dirkster.AvalonDock.Themes.VS2013\net5.0-windows\AvalonDock.Themes.VS2013.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

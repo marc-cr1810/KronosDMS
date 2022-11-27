@@ -34,7 +34,7 @@ namespace KronosDMS_Client.Render.Windows.Parts
                 makes.Add(make.Value.Name);
             }
 
-            MinSize = new Vector2(458, 278);
+            MinSize = new Vector2(458, 360);
 
             // Initialize controls
             MakesComboBox = new ComboBox("Make", makes.ToArray());
@@ -82,6 +82,12 @@ namespace KronosDMS_Client.Render.Windows.Parts
             Controls.Add(PartListMenu);
         }
 
+        public PartsSearchForm(string number) : this()
+        {
+            PartNumber.Text = number;
+            Search();
+        }
+
         protected override void Draw()
         {
             MakesComboBox.Draw();
@@ -119,7 +125,9 @@ namespace KronosDMS_Client.Render.Windows.Parts
 
         private void PartListMenuEdit_Click()
         {
-            Logger.Log($"Edit Part {PartList.GetItem(PartList.SelectedIndex).Text}", LogLevel.DEBUG);
+            ListViewItem part = PartList.GetItem(PartList.SelectedIndex);
+            Logger.Log($"Edit Part {part.Text}", LogLevel.DEBUG);
+            WindowManager.Open(new PartMaintenanceForm(part.Text, part.SubItems[0].Text));
         }
 
         private void PartListMenuDelete_Click()

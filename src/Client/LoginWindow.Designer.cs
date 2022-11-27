@@ -147,7 +147,8 @@ namespace KronosDMS_Client
             this.comboClientType.FormattingEnabled = true;
             this.comboClientType.Items.AddRange(new object[] {
             "Current",
-            "Legacy"});
+            "Legacy",
+            "WPF"});
             this.comboClientType.Location = new System.Drawing.Point(92, 164);
             this.comboClientType.Name = "comboClientType";
             this.comboClientType.Size = new System.Drawing.Size(131, 23);
