@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>KronosDMS_Client</RootNamespace>
@@ -11,6 +10,14 @@
 	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	<UseWPF>True</UseWPF>
 	<StartupObject>KronosDMS_Client.Client</StartupObject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	  <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	  <OutputType>WinExe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
